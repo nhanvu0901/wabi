@@ -10,9 +10,10 @@ create table therapists (
   sort_order int not null,
   name text not null,
   title text not null,
-  description text not null,
   specialties text not null,
+  therapies text not null,
   price text not null,
+  location text not null,
   photo_url text
 );
 

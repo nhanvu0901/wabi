@@ -10,8 +10,9 @@ export type Therapist = {
   sort_order: number
   name: string
   title: string
-  description: string
   specialties: string
+  therapies: string
   price: string
+  location: string
   photo_url: string | null
 }
