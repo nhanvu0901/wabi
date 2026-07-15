@@ -1,6 +1,7 @@
 import './globals.css'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
+import RevealInit from '../components/RevealInit'
 
 export const metadata = { title: 'Wabi Therapy' }
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <div id="wabi" style={{ position: 'relative' }}>
+          <RevealInit />
           <Nav />
           {children}
           <Footer />
