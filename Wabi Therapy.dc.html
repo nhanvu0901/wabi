@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400;1,6..72,500&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="./image-slot.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:#F7F2E9;color:#33302A;line-height:1.72;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--accent,#5A6647);text-decoration:none;transition:color .2s}
+a:hover{color:var(--accent-deep,#434D35)}
+img{max-width:100%;display:block}
+input,textarea,button,select{font-family:inherit;font-size:1rem}
+::selection{background:#DDE2CF;color:#33302A}
+.wburger{display:none}
+@media(max-width:860px){
+  .wnav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:#FBF7EF;border-bottom:1px solid #E2D8C6;padding:14px;gap:6px;box-shadow:0 24px 40px -28px rgba(51,48,42,.5)}
+  .wnav-links.open{display:flex}
+  .wnav-links a{width:100%;text-align:left}
+  .wburger{display:inline-flex}
+}
+</style>
+</helmet>
+
+<div id="wabi" style="position:relative">
+
+  <!-- ===================== NAV ===================== -->
+  <header style="position:sticky;top:0;z-index:200;background:rgba(247,242,233,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #E7DECE">
+    <div style="max-width:1160px;margin:0 auto;padding:0 clamp(20px,5vw,40px);height:74px;display:flex;align-items:center;justify-content:space-between;position:relative">
+      <a onClick="{{ go }}" data-p="home" style="display:flex;align-items:center;gap:11px;cursor:pointer;color:#33302A">
+        <span style="width:12px;height:12px;border-radius:50%;background:#B67A5E;box-shadow:0 0 0 5px #EEDFD3"></span>
+        <span style="font-family:'Newsreader',serif;font-size:1.55rem;letter-spacing:-.01em;line-height:1">Wabi <span style="font-style:italic;color:#8A8072;font-size:.92em">Therapy</span></span>
+      </a>
+      <nav class="wnav-links" id="wmenu" style="display:flex;align-items:center;gap:4px">
+        <a onClick="{{ go }}" data-p="home" style="font-size:.92rem;padding:9px 16px;border-radius:100px;cursor:pointer;transition:.2s;background:var(--accent,#5A6647);color:#FCFAF4">Home</a>
+        <a onClick="{{ go }}" data-p="services" style="font-size:.92rem;padding:9px 16px;border-radius:100px;cursor:pointer;transition:.2s;background:transparent;color:#6B6459">Dịch vụ</a>
+        <a onClick="{{ go }}" data-p="team" style="font-size:.92rem;padding:9px 16px;border-radius:100px;cursor:pointer;transition:.2s;background:transparent;color:#6B6459">Đội ngũ Therapist</a>
+        <a onClick="{{ go }}" data-p="contact" style="font-size:.92rem;padding:9px 16px;border-radius:100px;cursor:pointer;transition:.2s;background:transparent;color:#6B6459">Contact</a>
+      </nav>
+      <button class="wburger" onClick="{{ toggleMenu }}" aria-label="Mở menu" style="background:transparent;border:1px solid #E2D8C6;border-radius:12px;width:44px;height:44px;align-items:center;justify-content:center;cursor:pointer;color:#33302A"><i data-lucide="menu" style="width:22px;height:22px"></i></button>
+    </div>
+  </header>
+
+  <!-- ===================== HOME ===================== -->
+  <div id="page-home">
+
+    <!-- HERO — Direction A: Stillness (centered, text-forward) -->
+    <div id="hero-still" style="position:relative;overflow:hidden;padding:clamp(72px,11vw,132px) 0 clamp(56px,8vw,96px)">
+      <div style="position:absolute;width:min(560px,80vw);height:min(560px,80vw);border-radius:47% 53% 60% 40%/45% 50% 50% 55%;background:radial-gradient(circle at 40% 40%,#E7EADD,#DFE4D0);filter:blur(8px);top:-16%;right:-12%;opacity:.7;z-index:0"></div>
+      <div style="position:absolute;width:min(400px,60vw);height:min(400px,60vw);border-radius:60% 40% 45% 55%/55% 45% 55% 45%;background:radial-gradient(circle at 50% 50%,#EEDFD3,#EAD7C8);filter:blur(10px);bottom:-24%;left:-10%;opacity:.55;z-index:0"></div>
+      <div style="max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,40px);position:relative;z-index:2;text-align:center">
+        <span data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;display:inline-block;font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-deep,#434D35);font-weight:600">Tham vấn · Trị liệu · Đánh giá tâm lý</span>
+        <h1 data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s ease .05s,transform .9s ease .05s;font-family:'Newsreader',serif;font-weight:400;letter-spacing:-.015em;line-height:1.08;font-size:clamp(2.6rem,7vw,5rem);margin:20px 0 26px">Một khoảng lặng để bạn được <span style="font-style:italic;color:var(--accent-deep,#434D35)">là chính mình.</span></h1>
+        <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s ease .12s,transform .9s ease .12s;font-size:clamp(1.05rem,2.1vw,1.24rem);color:#645D53;max-width:620px;margin:0 auto 38px">Wabi là không gian an toàn, riêng tư và thấu cảm — nơi bạn bắt đầu hành trình chăm sóc sức khỏe tinh thần một cách nhẹ nhàng, đúng với chính mình. Online &amp; offline tại Hà Nội và TP.HCM.</p>
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s ease .18s,transform .9s ease .18s;display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
+          <a onClick="{{ go }}" data-p="contact" style="display:inline-flex;align-items:center;gap:9px;padding:15px 30px;border-radius:100px;font-weight:500;cursor:pointer;background:var(--accent,#5A6647);color:#FCFAF4;box-shadow:0 16px 34px -18px rgba(90,102,71,.9)"><i data-lucide="calendar-heart" style="width:18px;height:18px"></i> Đặt lịch tham vấn</a>
+          <a onClick="{{ go }}" data-p="services" style="display:inline-flex;align-items:center;gap:9px;padding:15px 28px;border-radius:100px;font-weight:500;cursor:pointer;background:#FCFAF4;border:1px solid #E2D8C6;color:#33302A"><i data-lucide="compass" style="width:18px;height:18px"></i> Khám phá dịch vụ</a>
+        </div>
+        <div style="max-width:720px;margin:56px auto 0;position:relative;z-index:2">
+          <div style="border-radius:26px;overflow:hidden;aspect-ratio:16/7;border:1px solid #E7DECE;box-shadow:0 40px 70px -46px rgba(51,48,42,.6)"><image-slot id="hero-still-img" shape="rect" placeholder="Ảnh thiên nhiên tĩnh lặng — đá cuội, rêu, ánh sáng dịu"></image-slot></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO — Direction B: Editorial (asymmetric split, image-forward) -->
+    <div id="hero-editorial" style="display:none;position:relative;overflow:hidden;padding:clamp(32px,5vw,56px) 0 clamp(48px,7vw,88px)">
+      <div style="max-width:1160px;margin:0 auto;padding:0 clamp(20px,5vw,40px);display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(28px,4vw,56px);align-items:center">
+        <div style="position:relative;z-index:2">
+          <span data-reveal style="opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;display:inline-block;font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-deep,#434D35);font-weight:600">Tham vấn · Trị liệu · Đánh giá tâm lý</span>
+          <h1 data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s ease .05s,transform .9s ease .05s;font-family:'Newsreader',serif;font-weight:400;letter-spacing:-.015em;line-height:1.06;font-size:clamp(2.5rem,6vw,4.4rem);margin:18px 0 24px">Một khoảng lặng để bạn được <span style="font-style:italic;color:var(--accent-deep,#434D35)">là chính mình.</span></h1>
+          <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s ease .12s,transform .9s ease .12s;font-size:clamp(1.02rem,1.8vw,1.18rem);color:#645D53;max-width:520px;margin-bottom:34px">Wabi là không gian an toàn, riêng tư và thấu cảm — nơi bạn bắt đầu hành trình chăm sóc sức khỏe tinh thần một cách nhẹ nhàng, đúng với chính mình. Online &amp; offline tại Hà Nội và TP.HCM.</p>
+          <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s ease .18s,transform .9s ease .18s;display:flex;gap:14px;flex-wrap:wrap">
+            <a onClick="{{ go }}" data-p="contact" style="display:inline-flex;align-items:center;gap:9px;padding:15px 30px;border-radius:100px;font-weight:500;cursor:pointer;background:var(--accent,#5A6647);color:#FCFAF4;box-shadow:0 16px 34px -18px rgba(90,102,71,.9)"><i data-lucide="calendar-heart" style="width:18px;height:18px"></i> Đặt lịch tham vấn</a>
+            <a onClick="{{ go }}" data-p="services" style="display:inline-flex;align-items:center;gap:9px;padding:15px 28px;border-radius:100px;font-weight:500;cursor:pointer;background:#FCFAF4;border:1px solid #E2D8C6;color:#33302A"><i data-lucide="compass" style="width:18px;height:18px"></i> Khám phá dịch vụ</a>
+          </div>
+        </div>
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity 1s ease .1s,transform 1s ease .1s;position:relative">
+          <div style="position:absolute;inset:-6% -6% 8% 8%;border-radius:48% 52% 55% 45%/50% 45% 55% 50%;background:radial-gradient(circle at 40% 40%,#E7EADD,#DDE3CE);filter:blur(6px);z-index:0"></div>
+          <div style="position:relative;z-index:1;border-radius:30px;overflow:hidden;aspect-ratio:4/5;border:1px solid #E7DECE;box-shadow:0 44px 80px -50px rgba(51,48,42,.7)"><image-slot id="hero-editorial-img" shape="rect" placeholder="Ảnh chân dung / thiên nhiên dịu, chiều dọc"></image-slot></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRUST STRIP -->
+    <div style="max-width:1160px;margin:0 auto;padding:0 clamp(20px,5vw,40px)">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px;padding:34px 0 clamp(40px,6vw,64px);border-top:1px solid #E7DECE">
+        <div style="display:flex;flex-direction:column;gap:4px"><b style="font-family:'Newsreader',serif;font-weight:500;font-size:2.1rem;color:var(--accent-deep,#434D35);line-height:1">15+</b><span style="font-size:.86rem;color:#7A7266">Thạc sĩ Tâm lý Lâm sàng</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><b style="font-family:'Newsreader',serif;font-weight:500;font-size:2.1rem;color:var(--accent-deep,#434D35);line-height:1">10+</b><span style="font-size:.86rem;color:#7A7266">Liệu pháp trị liệu</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><b style="font-family:'Newsreader',serif;font-weight:500;font-size:2.1rem;color:var(--accent-deep,#434D35);line-height:1">4</b><span style="font-size:.86rem;color:#7A7266">Ngôn ngữ: Việt · Anh · Hàn · Trung</span></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><b style="font-family:'Newsreader',serif;font-weight:500;font-size:1.5rem;color:var(--accent-deep,#434D35);line-height:1;margin-top:6px">Linh hoạt</b><span style="font-size:.86rem;color:#7A7266">Không cọc · không ép số buổi</span></div>
+      </div>
+    </div>
+
+    <!-- VALUE / WHY -->
+    <section style="padding:clamp(56px,8vw,96px) 0">
+      <div style="max-width:1160px;margin:0 auto;padding:0 clamp(20px,5vw,40px)">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease;max-width:640px;margin-bottom:48px">
+          <span style="font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-deep,#434D35);font-weight:600">Vì sao chọn Wabi</span>
+          <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(2rem,4vw,2.7rem);letter-spacing:-.01em;line-height:1.14;margin-top:14px">Ba điều bạn luôn được đảm bảo</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px">
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:24px;padding:34px">
+            <div style="width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:#E7EADD;color:var(--accent-deep,#434D35);margin-bottom:20px"><i data-lucide="shield-check" style="width:25px;height:25px"></i></div>
+            <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.4rem;margin-bottom:10px">An toàn &amp; riêng tư</h3>
+            <p style="color:#6B6459;font-size:.97rem">Mọi chia sẻ của bạn được giữ kín tuyệt đối. Không phán xét, chỉ có lắng nghe và thấu hiểu.</p>
+          </div>
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease .08s,transform .8s ease .08s;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:24px;padding:34px">
+            <div style="width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:#ECE6F0;color:#7A6A82;margin-bottom:20px"><i data-lucide="graduation-cap" style="width:25px;height:25px"></i></div>
+            <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.4rem;margin-bottom:10px">Chuyên môn sâu</h3>
+            <p style="color:#6B6459;font-size:.97rem">Đội ngũ tốt nghiệp Thạc sĩ Tâm lý học Lâm sàng, đào tạo bài bản trong nước &amp; quốc tế (Anh, Úc, Nga…).</p>
+          </div>
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease .16s,transform .8s ease .16s;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:24px;padding:34px">
+            <div style="width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:#EEDFD3;color:#A05F41;margin-bottom:20px"><i data-lucide="heart-handshake" style="width:25px;height:25px"></i></div>
+            <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.4rem;margin-bottom:10px">Đồng hành linh hoạt</h3>
+            <p style="color:#6B6459;font-size:.97rem">Không quy định số buổi cố định, không cọc trước. Bạn hẹn theo nhịp của mình — tuần, tháng, hay khi cần.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES PREVIEW -->
+    <section style="padding:0 0 clamp(56px,8vw,96px)">
+      <div style="max-width:1160px;margin:0 auto;padding:0 clamp(20px,5vw,40px)">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease;max-width:640px;margin-bottom:48px">
+          <span style="font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-deep,#434D35);font-weight:600">Dịch vụ</span>
+          <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(2rem,4vw,2.7rem);letter-spacing:-.01em;line-height:1.14;margin-top:14px">Chúng mình có thể đồng hành cùng bạn ở đâu?</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px">
+          <a onClick="{{ go }}" data-p="services" data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;display:block;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:24px;padding:34px;cursor:pointer;color:inherit">
+            <div style="width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:#E7EADD;color:var(--accent-deep,#434D35);margin-bottom:20px"><i data-lucide="messages-square" style="width:25px;height:25px"></i></div>
+            <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.4rem;margin-bottom:10px">Tham vấn &amp; Trị liệu</h3>
+            <p style="color:#6B6459;font-size:.97rem">Cho các vấn đề về bản ngã, lòng tự trọng, gắn bó, và bệnh lý: trầm cảm, lo âu, ADHD, BPD, PTSD…</p>
+          </a>
+          <a onClick="{{ go }}" data-p="services" data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease .08s,transform .8s ease .08s;display:block;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:24px;padding:34px;cursor:pointer;color:inherit">
+            <div style="width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:#ECE6F0;color:#7A6A82;margin-bottom:20px"><i data-lucide="clipboard-list" style="width:25px;height:25px"></i></div>
+            <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.4rem;margin-bottom:10px">Đánh giá tâm lý</h3>
+            <p style="color:#6B6459;font-size:.97rem">Buổi 60 phút cùng nhà tâm lý + báo cáo PDF chuyên sâu qua email trong 7–10 ngày.</p>
+          </a>
+          <a onClick="{{ go }}" data-p="services" data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease .16s,transform .8s ease .16s;display:block;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:24px;padding:34px;cursor:pointer;color:inherit">
+            <div style="width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:#EEDFD3;color:#A05F41;margin-bottom:20px"><i data-lucide="users" style="width:25px;height:25px"></i></div>
+            <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.4rem;margin-bottom:10px">Cặp đôi · Art · Hướng nghiệp</h3>
+            <p style="color:#6B6459;font-size:.97rem">Tham vấn cặp đôi, trị liệu bằng nghệ thuật và định hướng nghề nghiệp cho tuổi trẻ.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHILOSOPHY -->
+    <section style="padding:0 0 clamp(56px,8vw,96px)">
+      <div style="max-width:1160px;margin:0 auto;padding:0 clamp(20px,5vw,40px)">
+        <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease;background:#EFE7D8;border-radius:32px;padding:clamp(40px,7vw,72px) clamp(28px,6vw,64px);text-align:center;position:relative;overflow:hidden">
+          <span style="font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-deep,#434D35);font-weight:600">Tinh thần Wabi</span>
+          <p style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(1.5rem,3.4vw,2.2rem);line-height:1.4;max-width:760px;margin:22px auto 0">Mỗi vết thương tâm hồn đều xứng đáng được <span style="font-style:italic;color:var(--accent-deep,#434D35)">lắng nghe và chăm sóc.</span> Wabi có những nhà trị liệu sẵn sàng ở đây, đi cùng bạn nhẹ nhàng từng bước.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEAM GLIMPSE -->
+    <section style="padding:0 0 clamp(56px,8vw,96px)">
+      <div style="max-width:1160px;margin:0 auto;padding:0 clamp(20px,5vw,40px)">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:40px">
+          <div style="max-width:560px">
+            <span style="font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-deep,#434D35);font-weight:600">Đội ngũ</span>
+            <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(2rem,4vw,2.7rem);letter-spacing:-.01em;line-height:1.14;margin-top:14px">Những người sẽ đồng hành cùng bạn</h2>
+          </div>
+          <a onClick="{{ go }}" data-p="team" style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;color:var(--accent-deep,#434D35)">Xem tất cả therapist <i data-lucide="arrow-right" style="width:17px;height:17px"></i></a>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px">
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:24px;padding:20px;text-align:center">
+            <div style="width:104px;height:104px;margin:0 auto 16px;border-radius:50%;overflow:hidden;border:1px solid #E7DECE"><image-slot id="glimpse-1" shape="circle" placeholder="Ảnh"></image-slot></div>
+            <h4 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.2rem">ThS. Ngọc Mai</h4>
+            <div style="font-size:.82rem;color:#8A8072;margin-top:4px">Thạc sĩ Tâm lý Lâm sàng</div>
+          </div>
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease .08s,transform .8s ease .08s;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:24px;padding:20px;text-align:center">
+            <div style="width:104px;height:104px;margin:0 auto 16px;border-radius:50%;overflow:hidden;border:1px solid #E7DECE"><image-slot id="glimpse-2" shape="circle" placeholder="Ảnh"></image-slot></div>
+            <h4 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.2rem">ThS. Hà Trang</h4>
+            <div style="font-size:.82rem;color:#8A8072;margin-top:4px">Thạc sĩ Tâm lý Lâm sàng · ĐH Xã hội Nga</div>
+          </div>
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease .16s,transform .8s ease .16s;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:24px;padding:20px;text-align:center">
+            <div style="width:104px;height:104px;margin:0 auto 16px;border-radius:50%;overflow:hidden;border:1px solid #E7DECE"><image-slot id="glimpse-3" shape="circle" placeholder="Ảnh"></image-slot></div>
+            <h4 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.2rem">ThS. Ly Đinh</h4>
+            <div style="font-size:.82rem;color:#8A8072;margin-top:4px">Thạc sĩ Tâm lý</div>
+          </div>
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease .24s,transform .8s ease .24s;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:24px;padding:20px;text-align:center">
+            <div style="width:104px;height:104px;margin:0 auto 16px;border-radius:50%;overflow:hidden;border:1px solid #E7DECE"><image-slot id="glimpse-4" shape="circle" placeholder="Ảnh"></image-slot></div>
+            <h4 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.2rem">ThS. Đức Minh</h4>
+            <div style="font-size:.82rem;color:#8A8072;margin-top:4px">Trị liệu &amp; Tư vấn · ĐH Western Sydney</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING CTA -->
+    <section style="padding:0 0 clamp(64px,9vw,110px)">
+      <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s ease;max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,40px);text-align:center">
+        <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:-.01em;line-height:1.16;margin-bottom:16px">Bạn không cần phải chờ đến khi “đủ tệ”.</h2>
+        <p style="color:#645D53;max-width:520px;margin:0 auto 30px;font-size:1.06rem">Hãy đi therapy khi bạn sẵn sàng. Nhắn cho tụi mình bất cứ khi nào bạn muốn bắt đầu.</p>
+        <a onClick="{{ go }}" data-p="contact" style="display:inline-flex;align-items:center;gap:9px;padding:15px 32px;border-radius:100px;font-weight:500;cursor:pointer;background:var(--accent,#5A6647);color:#FCFAF4;box-shadow:0 16px 34px -18px rgba(90,102,71,.9)"><i data-lucide="calendar-heart" style="width:18px;height:18px"></i> Bắt đầu ngay</a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== DỊCH VỤ ===================== -->
+  <div id="page-services" style="display:none">
+    <section style="padding:clamp(56px,8vw,96px) 0">
+      <div style="max-width:1000px;margin:0 auto;padding:0 clamp(20px,5vw,40px)">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease;max-width:680px;margin-bottom:52px">
+          <span style="font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-deep,#434D35);font-weight:600">Dịch vụ</span>
+          <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(2.2rem,5vw,3.2rem);letter-spacing:-.01em;line-height:1.1;margin:14px 0 14px">Chọn hình thức phù hợp với bạn</h2>
+          <p style="color:#645D53;font-size:1.06rem">Online qua Google Meet hoặc trực tiếp tại địa điểm của therapist (HN &amp; TP.HCM). Một buổi khoảng 60 phút. Không quy định số buổi cố định.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:20px">
+
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:26px;padding:clamp(28px,4vw,40px);display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,32px)">
+            <div style="font-family:'Newsreader',serif;font-size:1.7rem;color:#B39BC0;font-weight:500;line-height:1">01</div>
+            <div>
+              <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:clamp(1.4rem,2.6vw,1.75rem);margin-bottom:8px">Tham vấn &amp; Trị liệu tâm lý</h3>
+              <div style="display:inline-block;font-size:.74rem;font-weight:500;color:var(--accent-deep,#434D35);background:#E7EADD;padding:5px 13px;border-radius:100px;margin-bottom:16px">Counseling / Psychotherapy</div>
+              <p style="color:#6B6459;margin-bottom:18px">Quá trình điều trị liên tục nhằm giải quyết vấn đề tâm lý, cải thiện sức khỏe tinh thần và phát triển cá nhân, thông qua đối thoại và các kỹ thuật chuyên biệt. Phù hợp cho vấn đề về bản ngã (phát triển bản thân, lòng tự trọng, phong cách gắn bó) và các bệnh lý.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:9px">
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Trầm cảm · Lo âu</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">ADHD · BPD · PTSD</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Attachment styles</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Childhood trauma</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Lòng tự trọng</span>
+              </div>
+            </div>
+          </div>
+
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:26px;padding:clamp(28px,4vw,40px);display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,32px)">
+            <div style="font-family:'Newsreader',serif;font-size:1.7rem;color:#B39BC0;font-weight:500;line-height:1">02</div>
+            <div>
+              <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:clamp(1.4rem,2.6vw,1.75rem);margin-bottom:8px">Đánh giá tâm lý</h3>
+              <div style="display:inline-block;font-size:.74rem;font-weight:500;color:var(--accent-deep,#434D35);background:#E7EADD;padding:5px 13px;border-radius:100px;margin-bottom:16px">Psychological Assessment</div>
+              <p style="color:#6B6459;margin-bottom:18px">Sử dụng các bài kiểm tra và công cụ chuẩn hóa để thu thập thông tin về nhận thức, tính cách, cảm xúc và hành vi. Buổi 60 phút làm việc trực tiếp với therapist — họ chọn bài test phù hợp, kết luận ngay trong buổi và gửi báo cáo PDF chi tiết qua email trong <b style="color:#33302A;font-weight:500">7–10 ngày</b>.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:9px">
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Test nhân cách Big5</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Đa trí thông minh</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Lòng tự trọng (Sorensen)</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Cảm nhận hạnh phúc (Ryff)</span>
+              </div>
+            </div>
+          </div>
+
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:26px;padding:clamp(28px,4vw,40px);display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,32px)">
+            <div style="font-family:'Newsreader',serif;font-size:1.7rem;color:#B39BC0;font-weight:500;line-height:1">03</div>
+            <div>
+              <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:clamp(1.4rem,2.6vw,1.75rem);margin-bottom:8px">Tham vấn cặp đôi</h3>
+              <div style="display:inline-block;font-size:.74rem;font-weight:500;color:var(--accent-deep,#434D35);background:#E7EADD;padding:5px 13px;border-radius:100px;margin-bottom:16px">Couple Therapy</div>
+              <p style="color:#6B6459;margin-bottom:18px">Cùng nhau xây dựng mối quan hệ tốt đẹp hơn và làm rõ các vấn đề về giao tiếp, cách thể hiện cảm xúc. Buổi đầu khám phá nhu cầu riêng của mỗi người (30 phút/người), các buổi sau cả hai tham gia cùng nhau (90 phút). Có thể sắp xếp buổi riêng khi cần.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:9px">
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Đánh giá mối quan hệ</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Chuẩn bị làm cha mẹ</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Couple Hàn–Việt (tiếng Hàn)</span>
+              </div>
+            </div>
+          </div>
+
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:26px;padding:clamp(28px,4vw,40px);display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,32px)">
+            <div style="font-family:'Newsreader',serif;font-size:1.7rem;color:#B39BC0;font-weight:500;line-height:1">04</div>
+            <div>
+              <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:clamp(1.4rem,2.6vw,1.75rem);margin-bottom:8px">Art Therapy</h3>
+              <div style="display:inline-block;font-size:.74rem;font-weight:500;color:var(--accent-deep,#434D35);background:#E7EADD;padding:5px 13px;border-radius:100px;margin-bottom:16px">Trị liệu bằng nghệ thuật</div>
+              <p style="color:#6B6459;margin-bottom:18px">Dùng công cụ nghệ thuật để khám phá và chữa lành cảm xúc — dành cho những ai muốn thể hiện bản thân theo cách không chỉ bằng lời nói. 60 phút mỗi buổi, có nhiều lựa chọn tiếp cận.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:9px">
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Art as Therapy</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Khám phá cảm xúc</span>
+              </div>
+            </div>
+          </div>
+
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:26px;padding:clamp(28px,4vw,40px);display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,32px)">
+            <div style="font-family:'Newsreader',serif;font-size:1.7rem;color:#B39BC0;font-weight:500;line-height:1">05</div>
+            <div>
+              <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:clamp(1.4rem,2.6vw,1.75rem);margin-bottom:8px">Hướng nghiệp</h3>
+              <div style="display:inline-block;font-size:.74rem;font-weight:500;color:var(--accent-deep,#434D35);background:#E7EADD;padding:5px 13px;border-radius:100px;margin-bottom:16px">Career Counseling</div>
+              <p style="color:#6B6459;margin-bottom:18px">Làm test năng lực + trò chuyện với therapist về định hướng. Gói <b style="color:#33302A;font-weight:500">Cơ bản</b> (2 buổi) gồm test và tư vấn kết quả; gói <b style="color:#33302A;font-weight:500">Chuyên sâu</b> (3 buổi) có thêm buổi lên kế hoạch thực hiện định hướng.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:9px">
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Test đa trí thông minh</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Định hướng nghề</span>
+                <span style="font-size:.83rem;background:#F7F2E9;border:1px solid #E7DECE;padding:6px 14px;border-radius:100px;color:#6B6459">Lập kế hoạch</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease;text-align:center;margin-top:48px">
+          <a onClick="{{ go }}" data-p="team" style="display:inline-flex;align-items:center;gap:9px;padding:15px 30px;border-radius:100px;font-weight:500;cursor:pointer;background:var(--accent,#5A6647);color:#FCFAF4"><i data-lucide="users" style="width:18px;height:18px"></i> Gặp đội ngũ therapist</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== ĐỘI NGŨ ===================== -->
+  <div id="page-team" style="display:none">
+    <section style="padding:clamp(56px,8vw,96px) 0">
+      <div style="max-width:1160px;margin:0 auto;padding:0 clamp(20px,5vw,40px)">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease;max-width:720px;margin-bottom:52px">
+          <span style="font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-deep,#434D35);font-weight:600">Đội ngũ Therapist</span>
+          <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(2.2rem,5vw,3.2rem);letter-spacing:-.01em;line-height:1.1;margin:14px 0 14px">Những người sẽ đồng hành cùng bạn</h2>
+          <p style="color:#645D53;font-size:1.06rem">Mỗi therapist có chuyên môn, liệu pháp và mức phí riêng. Chia sẻ với admin về tuổi, nơi sống và vấn đề bạn gặp — tụi mình sẽ tư vấn người phù hợp nhất. Bạn hoàn toàn có thể đổi therapist nếu thấy cần.</p>
+        </div>
+        <div id="team-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px"></div>
+        <p style="text-align:center;color:#7A7266;margin-top:36px;font-size:.94rem">…và nhiều chuyên viên khác. Nhắn admin để nhận danh sách đầy đủ phù hợp với nhu cầu của bạn.</p>
+        <div style="text-align:center;margin-top:26px">
+          <a onClick="{{ go }}" data-p="contact" style="display:inline-flex;align-items:center;gap:9px;padding:15px 30px;border-radius:100px;font-weight:500;cursor:pointer;background:var(--accent,#5A6647);color:#FCFAF4"><i data-lucide="message-circle" style="width:18px;height:18px"></i> Nhờ tư vấn chọn therapist</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== CONTACT ===================== -->
+  <div id="page-contact" style="display:none">
+    <section style="padding:clamp(56px,8vw,96px) 0">
+      <div style="max-width:1160px;margin:0 auto;padding:0 clamp(20px,5vw,40px)">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease;max-width:720px;margin-bottom:48px">
+          <span style="font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-deep,#434D35);font-weight:600">Contact</span>
+          <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(2.2rem,5vw,3.2rem);letter-spacing:-.01em;line-height:1.1;margin:14px 0 14px">Hãy nhắn cho tụi mình khi bạn sẵn sàng</h2>
+          <p style="color:#645D53;font-size:1.06rem">Cứ thoải mái suy nghĩ. Bao giờ muốn lên lịch, chỉ cần nhắn — admin sẽ book giúp bạn sớm nhất. Nếu có câu hỏi ngoài tham vấn hay tình huống cần giúp đỡ, cũng cứ nhắn nhé.</p>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;align-items:start">
+          <!-- CONNECT CARD -->
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;background:#3A342C;color:#F7F2E9;border-radius:28px;padding:clamp(30px,4vw,44px)">
+            <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.7rem;color:#F7F2E9;margin-bottom:12px">Kết nối với Wabi</h3>
+            <p style="color:rgba(247,242,233,.72);margin-bottom:28px">Chia sẻ một chút về tuổi, nơi sống và điều bạn đang gặp phải — tụi mình sẽ tư vấn therapist &amp; dịch vụ phù hợp.</p>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <a href="https://www.instagram.com/wabi.therapy/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:15px;padding:15px 18px;background:rgba(247,242,233,.08);border-radius:16px;color:#F7F2E9"><i class="fa-brands fa-instagram" style="width:22px;font-size:1.2rem;text-align:center;color:#D9A88C"></i><span><b style="display:block;font-weight:500">wabi.therapy</b><span style="font-size:.82rem;color:rgba(247,242,233,.6)">Instagram</span></span></a>
+              <a href="https://www.facebook.com/profile.php?id=61556380754645" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:15px;padding:15px 18px;background:rgba(247,242,233,.08);border-radius:16px;color:#F7F2E9"><i class="fa-brands fa-facebook" style="width:22px;font-size:1.2rem;text-align:center;color:#D9A88C"></i><span><b style="display:block;font-weight:500">Wabi Therapy</b><span style="font-size:.82rem;color:rgba(247,242,233,.6)">Facebook</span></span></a>
+              <div style="display:flex;align-items:center;gap:15px;padding:15px 18px;background:rgba(247,242,233,.08);border-radius:16px"><i class="fa-solid fa-location-dot" style="width:22px;font-size:1.2rem;text-align:center;color:#D9A88C"></i><span><b style="display:block;font-weight:500">4 Ngõ 46A Phạm Ngọc Thạch</b><span style="font-size:.82rem;color:rgba(247,242,233,.6)">Onion Cafe · Hà Nội</span></span></div>
+            </div>
+          </div>
+
+          <!-- FORM -->
+          <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease .08s,transform .8s ease .08s;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:28px;padding:clamp(30px,4vw,44px)">
+            <form id="cform" onSubmit="{{ submitForm }}" style="display:flex;flex-direction:column;gap:18px">
+              <div>
+                <label for="f-name" style="display:block;font-size:.86rem;font-weight:500;margin-bottom:7px">Họ tên</label>
+                <input id="f-name" name="name" type="text" required autocomplete="name" style="width:100%;padding:13px 16px;border:1px solid #E2D8C6;border-radius:14px;background:#F7F2E9;color:#33302A;outline:none">
+              </div>
+              <div>
+                <label for="f-contact" style="display:block;font-size:.86rem;font-weight:500;margin-bottom:7px">Email hoặc số điện thoại</label>
+                <input id="f-contact" name="contact" type="text" required autocomplete="email" style="width:100%;padding:13px 16px;border:1px solid #E2D8C6;border-radius:14px;background:#F7F2E9;color:#33302A;outline:none">
+              </div>
+              <div>
+                <label for="f-msg" style="display:block;font-size:.86rem;font-weight:500;margin-bottom:7px">Bạn muốn chia sẻ điều gì?</label>
+                <textarea id="f-msg" name="message" rows="4" style="width:100%;padding:13px 16px;border:1px solid #E2D8C6;border-radius:14px;background:#F7F2E9;color:#33302A;outline:none;resize:vertical"></textarea>
+              </div>
+              <button type="submit" style="display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:15px 24px;border-radius:100px;font-weight:500;cursor:pointer;background:var(--accent,#5A6647);color:#FCFAF4;border:none;margin-top:4px"><i data-lucide="send" style="width:17px;height:17px"></i> Gửi lời nhắn</button>
+              <p style="font-size:.8rem;color:#8A8072;text-align:center">Tụi mình sẽ phản hồi qua thông tin bạn để lại. Mọi chia sẻ đều được giữ kín.</p>
+            </form>
+            <div id="cform-ok" style="display:none;text-align:center;padding:24px 0">
+              <div style="width:60px;height:60px;border-radius:50%;background:#E7EADD;color:var(--accent-deep,#434D35);display:grid;place-items:center;margin:0 auto 18px"><i data-lucide="check" style="width:28px;height:28px"></i></div>
+              <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.5rem;margin-bottom:8px">Cảm ơn bạn đã nhắn.</h3>
+              <p style="color:#6B6459">Tụi mình đã nhận lời nhắn của bạn và sẽ phản hồi sớm nhất. Cứ thở nhẹ nhàng nhé.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- HOTLINE -->
+        <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;background:#F1E2D7;border:1px solid #E7CFC1;border-radius:28px;padding:clamp(30px,4vw,44px);margin-top:22px">
+          <div style="display:flex;align-items:center;gap:10px;color:#A0573C;font-weight:600;margin-bottom:8px"><i data-lucide="life-buoy" style="width:20px;height:20px"></i> Cần hỗ trợ khẩn cấp?</div>
+          <h3 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.5rem;margin-bottom:6px">Đường dây nóng</h3>
+          <p style="font-size:.95rem;color:#6B6459;margin-bottom:22px;max-width:640px">Nếu bạn đang trong khủng hoảng, hãy liên hệ ngay các đường dây dưới đây — luôn có người sẵn sàng lắng nghe.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0 40px">
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px dashed #DDBFB0;font-size:.94rem"><span>Đường dây nóng Ngày Mai</span><b style="color:#A0573C;font-weight:600;white-space:nowrap">096 306 1414</b></div>
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px dashed #DDBFB0;font-size:.94rem"><span>Tổng đài Bảo vệ Trẻ em Quốc gia</span><b style="color:#A0573C;font-weight:600;white-space:nowrap">111</b></div>
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px dashed #DDBFB0;font-size:.94rem"><span>Hội Tâm lý Trị liệu Việt Nam</span><b style="color:#A0573C;font-weight:600;white-space:nowrap">1900 63 644</b></div>
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px dashed #DDBFB0;font-size:.94rem"><span>Ngôi nhà Bình yên (PN &amp; trẻ em)</span><b style="color:#A0573C;font-weight:600;white-space:nowrap">1900 96 96 80</b></div>
+            <div style="display:flex;justify-content:space-between;gap:14px;padding:12px 0;font-size:.94rem"><span>Bệnh viện Việt Pháp (Hà Nội)</span><b style="color:#A0573C;font-weight:600;white-space:nowrap">024 3574 1111</b></div>
+          </div>
+        </div>
+
+        <!-- MAP PLACEHOLDER -->
+        <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;margin-top:22px;border-radius:28px;overflow:hidden;border:1px solid #E2D8C6;position:relative;height:280px;background:linear-gradient(135deg,#E7EADD,#EAE1D2)">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(#DDD6C6 1px,transparent 1px),linear-gradient(90deg,#DDD6C6 1px,transparent 1px);background-size:44px 44px;opacity:.5"></div>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;color:#5A5346">
+            <div style="width:52px;height:52px;border-radius:50%;background:var(--accent,#5A6647);color:#FCFAF4;display:grid;place-items:center;box-shadow:0 12px 24px -12px rgba(90,102,71,.9)"><i data-lucide="map-pin" style="width:24px;height:24px"></i></div>
+            <b style="font-family:'Newsreader',serif;font-weight:500;font-size:1.2rem">Onion Cafe · Hà Nội</b>
+            <span style="font-size:.9rem;color:#7A7266">4 Ngõ 46A Phạm Ngọc Thạch</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer style="background:#EFE7D8;border-top:1px solid #E2D8C6;padding:clamp(40px,6vw,60px) 0 36px">
+    <div style="max-width:1160px;margin:0 auto;padding:0 clamp(20px,5vw,40px);display:flex;justify-content:space-between;align-items:flex-start;gap:26px;flex-wrap:wrap">
+      <div style="max-width:380px">
+        <div style="display:flex;align-items:center;gap:11px;margin-bottom:12px">
+          <span style="width:12px;height:12px;border-radius:50%;background:#B67A5E;box-shadow:0 0 0 5px #EAD9CB"></span>
+          <span style="font-family:'Newsreader',serif;font-size:1.4rem">Wabi Therapy</span>
+        </div>
+        <p style="font-size:.92rem;color:#6B6459">Không gian an toàn, riêng tư và thấu cảm cho sức khỏe tinh thần của bạn.</p>
+      </div>
+      <div style="display:flex;gap:12px">
+        <a href="https://www.instagram.com/wabi.therapy/" target="_blank" rel="noopener" aria-label="Instagram" style="width:44px;height:44px;border-radius:50%;border:1px solid #DDD1BE;display:grid;place-items:center;color:#6B6459;background:#FBF7EF"><i class="fa-brands fa-instagram" style="font-size:1.15rem"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61556380754645" target="_blank" rel="noopener" aria-label="Facebook" style="width:44px;height:44px;border-radius:50%;border:1px solid #DDD1BE;display:grid;place-items:center;color:#6B6459;background:#FBF7EF"><i class="fa-brands fa-facebook" style="font-size:1.15rem"></i></a>
+      </div>
+    </div>
+    <div style="max-width:1160px;margin:28px auto 0;padding:22px clamp(20px,5vw,40px) 0;border-top:1px solid #E2D8C6;font-size:.82rem;color:#8A8072">© 2026 Wabi Therapy · Tham vấn · Trị liệu · Đánh giá tâm lý</div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;heroVariant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;still&quot;,&quot;editorial&quot;],&quot;default&quot;:&quot;still&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Trang chủ&quot;,&quot;label&quot;:&quot;Kiểu Hero&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:[&quot;#5A6647&quot;,&quot;#434D35&quot;],&quot;options&quot;:[[&quot;#5A6647&quot;,&quot;#434D35&quot;],[&quot;#B67A5E&quot;,&quot;#93583D&quot;],[&quot;#7C8968&quot;,&quot;#5A6647&quot;],[&quot;#7A6A82&quot;,&quot;#5C4E63&quot;]],&quot;tsType&quot;:&quot;string[]&quot;,&quot;section&quot;:&quot;Giao diện&quot;,&quot;label&quot;:&quot;Màu nhấn&quot;},&quot;reduceMotion&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Giao diện&quot;,&quot;label&quot;:&quot;Giảm chuyển động&quot;}}">
+class Component extends DCLogic {
+  componentDidMount(){
+    this.buildTeam();
+    this.applyAccent();
+    this.applyHero();
+    this.initReveal();
+    this.initIcons();
+  }
+  componentDidUpdate(){
+    this.applyAccent();
+    this.applyHero();
+    this.initIcons();
+  }
+  rootEl(){ return document.getElementById('wabi'); }
+
+  applyAccent(){
+    const root = this.rootEl(); if(!root) return;
+    let a = this.props.accent;
+    let main = '#5A6647', deep = '#434D35';
+    if (Array.isArray(a)) { main = a[0] || main; deep = a[1] || a[0] || deep; }
+    else if (typeof a === 'string' && a) { main = a; deep = a; }
+    root.style.setProperty('--accent', main);
+    root.style.setProperty('--accent-deep', deep);
+  }
+
+  applyHero(){
+    const v = this.props.heroVariant || 'still';
+    const still = document.getElementById('hero-still');
+    const ed = document.getElementById('hero-editorial');
+    if (still) still.style.display = (v === 'still') ? '' : 'none';
+    if (ed) ed.style.display = (v === 'editorial') ? '' : 'none';
+  }
+
+  initIcons(){
+    const run = () => { try { if (window.lucide) window.lucide.createIcons(); } catch(e){} };
+    run(); setTimeout(run, 250); setTimeout(run, 700);
+  }
+
+  initReveal(){
+    const root = this.rootEl(); if(!root) return;
+    const els = [...root.querySelectorAll('[data-reveal]')];
+    if (this.props.reduceMotion) {
+      els.forEach(e => { e.style.opacity='1'; e.style.transform='none'; });
+      return;
+    }
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(e => { e.style.opacity='1'; e.style.transform='none'; });
+      return;
+    }
+    const io = new IntersectionObserver((ents) => {
+      ents.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.style.opacity='1';
+          en.target.style.transform='none';
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold:0.12, rootMargin:'0px 0px -6% 0px' });
+    els.forEach(e => io.observe(e));
+    // safety: never leave content invisible
+    setTimeout(() => els.forEach(e => {
+      if (getComputedStyle(e).opacity === '0') { e.style.opacity='1'; e.style.transform='none'; }
+    }), 2600);
+  }
+
+  go(id){
+    ['home','services','team','contact'].forEach(p => {
+      const el = document.getElementById('page-'+p);
+      if (el) el.style.display = (p === id) ? '' : 'none';
+    });
+    document.querySelectorAll('#wmenu [data-p]').forEach(a => {
+      const on = a.getAttribute('data-p') === id;
+      a.style.background = on ? 'var(--accent,#5A6647)' : 'transparent';
+      a.style.color = on ? '#FCFAF4' : '#6B6459';
+    });
+    const m = document.getElementById('wmenu'); if (m) m.classList.remove('open');
+    const page = document.getElementById('page-'+id);
+    if (page) page.querySelectorAll('[data-reveal]').forEach(e => { e.style.opacity='1'; e.style.transform='none'; });
+    window.scrollTo({ top:0, behavior:'smooth' });
+    this.initIcons();
+  }
+
+  buildTeam(){
+    const grid = document.getElementById('team-grid');
+    if (!grid) return;
+    const team = [
+      {n:'ThS. Hà Trang', r:'Thạc sĩ Tâm lý Lâm sàng · ĐH Xã hội Nga', s:'PTSD, ADHD & LGBTQI+', t:'CBT · ACT · Neurodiversity · AOP', p:'650K', loc:'Online · offline SG'},
+      {n:'ThS. Ngọc Mai', r:'Thạc sĩ Tâm lý Lâm sàng', s:'Tổn thương thời thơ ấu, khủng hoảng hiện sinh, lòng tự trọng thấp, rối loạn cảm xúc, vấn đề gắn bó & mối quan hệ', t:'Person-Centered · CBT · MiCBT · IFS', p:'650K', loc:'Online · offline HN'},
+      {n:'ThS. Thu Thuỷ', r:'Thạc sĩ Tâm lý', s:'Thân chủ 20–35: mối quan hệ, childhood trauma, attachment styles, lo âu, stress, trầm cảm. Couple therapy', t:'CBT · SFBT · Psychodynamic · Mindfulness', p:'650K', loc:'Chỉ online'},
+      {n:'ThS. Ly Đinh', r:'Thạc sĩ Tâm lý', s:'PTSD/C-PTSD, đau buồn & mất mát, trải nghiệm tuổi thơ bất lợi, trầm cảm, lo âu', t:'CBT · CPT · Person-Centered · ACT · DBT', p:'650K', loc:'Chỉ online'},
+      {n:'ThS. Phương An', r:'Thạc sĩ Lâm sàng · ĐH Sussex, Anh', s:'Tâm lý học trường học, stress, hướng dẫn hành vi. Chuyên viên tâm lý học đường', t:'CBT · MI · MBCT', p:'650K', loc:'Online · offline HN'},
+      {n:'ThS. Kim Ngân', r:'7 năm kinh nghiệm trị liệu', s:'ADHD, sang chấn, rối loạn cảm xúc (lo âu, trầm cảm, lưỡng cực), giá trị bản thân, ranh giới', t:'CBT · EFT', p:'650K', loc:'Online · offline HN'},
+      {n:'ThS. Gia Bảo', r:'ThS Lâm sàng trẻ em & VTN · ĐHQG HN', s:'Trầm cảm, lo âu, OCD, PTSD, rối loạn nhân cách ranh giới', t:'CBT · DBT · BA', p:'650K', loc:'Online · offline HN'},
+      {n:'ThS. Mai Nguyen', r:'Thạc sĩ Tâm lý', s:'Vấn đề mối quan hệ (tình yêu, hôn nhân, gia đình, xã hội). Couple Hàn–Việt bằng tiếng Hàn', t:'Psychoanalytic · Client-centered · Gestalt', p:'650K', loc:'Chỉ online'},
+      {n:'ThS. Minh Châu', r:'Thạc sĩ Tâm lý', s:'Lo âu, trầm cảm, đau buồn – tang chế, khó khăn về mối quan hệ gắn bó', t:'Psychoanalysis · Adlerian · Mindfulness · Art', p:'750K', loc:'Online · offline HCM'},
+      {n:'ThS. Đức Minh', r:'Trị liệu & Tư vấn · ĐH Western Sydney', s:'Thân chủ 18–35: lo âu, trầm cảm, PTSD/C-PTSD, sang chấn liên thế hệ, tổn thương gắn bó. Hỗ trợ ASD, ADHD', t:'Person-Centered · IFS · EFIT · MI', p:'650K', loc:'Online · offline HCM'},
+      {n:'ThS. Quỳnh Trang', r:'ThS Lâm sàng · ĐHQG HN', s:'Thân chủ 10–30: trầm cảm, lo âu, OCD, ám sợ xã hội, PTSD. Couple tuổi trẻ', t:'CBT & các kỹ thuật lâm sàng', p:'600K', loc:'Online · offline HN'},
+      {n:'Vi Vương', r:'PG Dip Tâm lý · ĐH Wrexham (Anh)', s:'Tâm lý ung thư học, khủng hoảng tâm lý, bản sắc & ý nghĩa sống. 4 ngôn ngữ: Việt–Anh–Quan Thoại–Quảng Đông', t:'ACT · DBT', p:'600K', loc:'Online · offline HCM'}
+    ];
+    const esc = (x) => String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    grid.innerHTML = team.map((m,i) => `
+      <div data-reveal style="opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;background:#FCFAF4;border:1px solid #EAE0D0;border-radius:24px;padding:24px;display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px">
+          <div style="width:66px;height:66px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid #E7DECE">
+            <image-slot id="therapist-${i}" shape="circle" placeholder="Ảnh"></image-slot>
+          </div>
+          <div>
+            <h4 style="font-family:'Newsreader',serif;font-weight:500;font-size:1.28rem;line-height:1.15">${esc(m.n)}</h4>
+            <div style="font-size:.8rem;color:#8A8072;margin-top:3px">${esc(m.r)}</div>
+          </div>
+        </div>
+        <div style="font-size:.9rem;color:#6B6459;margin-bottom:12px"><b style="color:#33302A;font-weight:500">Chuyên môn:</b> ${esc(m.s)}</div>
+        <div style="font-size:.9rem;color:#6B6459;margin-bottom:16px"><b style="color:#33302A;font-weight:500">Liệu pháp:</b> ${esc(m.t)}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:16px;border-top:1px solid #EAE0D0;margin-top:auto;font-size:.82rem">
+          <span style="display:inline-flex;align-items:center;gap:6px;background:#F7F2E9;padding:5px 12px;border-radius:100px;color:#6B6459"><i data-lucide="map-pin" style="width:13px;height:13px"></i>${esc(m.loc)}</span>
+          <span style="margin-left:auto;background:#E7EADD;color:var(--accent-deep,#434D35);font-weight:500;padding:5px 12px;border-radius:100px">${esc(m.p)}/buổi</span>
+        </div>
+      </div>`).join('');
+  }
+
+  renderVals(){
+    return {
+      go: (e) => {
+        const el = e && e.currentTarget ? e.currentTarget : null;
+        const id = el ? el.getAttribute('data-p') : null;
+        if (id) this.go(id);
+      },
+      toggleMenu: () => { const m = document.getElementById('wmenu'); if (m) m.classList.toggle('open'); },
+      submitForm: (e) => {
+        e.preventDefault();
+        const f = document.getElementById('cform');
+        const ok = document.getElementById('cform-ok');
+        if (f) f.style.display = 'none';
+        if (ok) ok.style.display = 'block';
+        this.initIcons();
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

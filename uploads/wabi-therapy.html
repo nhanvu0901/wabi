@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wabi Therapy — Không gian chăm sóc sức khỏe tinh thần</title>
+
+<!-- Fonts: Fraunces (display, có tiếng Việt) + Be Vietnam Pro (body, thiết kế cho tiếng Việt) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Icon libraries (imported, không tự vẽ) -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root{
+  --paper:#FAF6F0;
+  --paper-2:#F2EBE1;
+  --card:#FFFEFB;
+  --ink:#3A322C;
+  --ink-soft:#6E635A;
+  --sage:#7E8C6E;
+  --sage-deep:#5C6A4C;
+  --lilac:#9A88A9;
+  --lilac-soft:#EDE6F0;
+  --blush:#DFB1A3;
+  --blush-soft:#F6E7E0;
+  --line:#E6DBCC;
+  --sage-soft:#EAEEE2;
+  --shadow:0 18px 50px -30px rgba(58,50,44,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Be Vietnam Pro',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.7;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,.display{font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.01em;line-height:1.12}
+.serif-it{font-family:'Fraunces',serif;font-style:italic;font-weight:400}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+.eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--sage-deep);font-weight:600}
+
+/* ---------- NAV ---------- */
+header{position:sticky;top:0;z-index:100;background:rgba(250,246,240,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{display:flex;align-items:center;gap:11px;font-family:'Fraunces',serif;font-size:1.5rem;letter-spacing:-.02em;cursor:pointer}
+.brand .dot{width:11px;height:11px;border-radius:50%;background:var(--blush);box-shadow:0 0 0 4px var(--blush-soft)}
+.navlinks{display:flex;gap:6px;align-items:center}
+.navlinks a{font-size:.9rem;color:var(--ink-soft);padding:9px 14px;border-radius:100px;transition:.2s;cursor:pointer;font-weight:400}
+.navlinks a:hover{color:var(--ink);background:var(--paper-2)}
+.navlinks a.active{color:var(--sage-deep);background:var(--sage-soft);font-weight:500}
+.nav-cta{background:var(--ink)!important;color:var(--paper)!important;font-weight:500!important}
+.nav-cta:hover{background:var(--sage-deep)!important}
+.burger{display:none;background:none;border:none;cursor:pointer;color:var(--ink);padding:6px}
+
+/* ---------- PAGES ---------- */
+.page{display:none;animation:fade .5s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+section{padding:78px 0}
+.sec-head{max-width:640px;margin-bottom:46px}
+.sec-head h2{font-size:2.5rem;margin:14px 0 12px}
+.sec-head p{color:var(--ink-soft);font-size:1.05rem}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;padding:96px 0 88px;overflow:hidden}
+.hero .wrap{position:relative;z-index:2;max-width:840px}
+.hero h1{font-size:clamp(2.6rem,6vw,4.6rem);margin:22px 0 26px}
+.hero h1 .serif-it{color:var(--sage-deep)}
+.hero p.lead{font-size:1.2rem;color:var(--ink-soft);max-width:560px;margin-bottom:36px}
+.blob{position:absolute;border-radius:50%;filter:blur(46px);opacity:.55;z-index:1}
+.b1{width:420px;height:420px;background:var(--sage-soft);top:-120px;right:-80px}
+.b2{width:340px;height:340px;background:var(--blush-soft);bottom:-140px;left:-100px}
+.b3{width:280px;height:280px;background:var(--lilac-soft);top:120px;right:180px;opacity:.7}
+.btn-row{display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:100px;font-weight:500;font-size:.98rem;cursor:pointer;transition:.22s;border:1px solid transparent}
+.btn i{width:18px;height:18px}
+.btn-dark{background:var(--ink);color:var(--paper)}
+.btn-dark:hover{background:var(--sage-deep);transform:translateY(-2px)}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--sage);background:var(--card)}
+.trust{display:flex;gap:26px;flex-wrap:wrap;margin-top:52px;padding-top:34px;border-top:1px solid var(--line)}
+.trust div{display:flex;flex-direction:column}
+.trust b{font-family:'Fraunces',serif;font-size:1.9rem;color:var(--sage-deep);font-weight:500}
+.trust span{font-size:.82rem;color:var(--ink-soft)}
+
+/* ---------- VALUE CARDS ---------- */
+.grid{display:grid;gap:22px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px;transition:.25s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--sage)}
+.ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;margin-bottom:18px}
+.ic i{width:24px;height:24px}
+.ic-sage{background:var(--sage-soft);color:var(--sage-deep)}
+.ic-lilac{background:var(--lilac-soft);color:var(--lilac)}
+.ic-blush{background:var(--blush-soft);color:#B07A6A}
+.card h3{font-size:1.35rem;margin-bottom:9px}
+.card p{color:var(--ink-soft);font-size:.96rem}
+
+/* ---------- ONION BANNER ---------- */
+.onion-banner{background:linear-gradient(135deg,#3A322C,#524437);color:var(--paper);border-radius:28px;padding:48px 46px;position:relative;overflow:hidden}
+.onion-banner .tag{display:inline-flex;align-items:center;gap:8px;background:rgba(250,246,240,.14);padding:6px 15px;border-radius:100px;font-size:.78rem;letter-spacing:.05em;margin-bottom:18px}
+.onion-banner h3{font-size:2.1rem;color:var(--paper);max-width:560px;margin-bottom:14px;line-height:1.16}
+.onion-banner h3 em{color:var(--blush);font-style:italic}
+.onion-banner p{color:rgba(250,246,240,.78);max-width:520px;margin-bottom:26px}
+.cups{display:flex;gap:9px;position:absolute;right:44px;bottom:44px;opacity:.9}
+.cups i{width:26px;height:26px;color:var(--blush)}
+
+/* ---------- PHILOSOPHY ---------- */
+.philo{background:var(--paper-2);border-radius:28px;padding:60px 52px;text-align:center}
+.philo .quote{font-family:'Fraunces',serif;font-size:2rem;line-height:1.35;max-width:720px;margin:20px auto;font-weight:400}
+.philo .quote em{font-style:italic;color:var(--sage-deep)}
+
+/* ---------- SERVICES ---------- */
+.svc{display:grid;grid-template-columns:64px 1fr;gap:24px;padding:34px 0;border-top:1px solid var(--line)}
+.svc:last-child{border-bottom:1px solid var(--line)}
+.svc-num{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--lilac);display:grid;place-items:start}
+.svc h3{font-size:1.6rem;margin-bottom:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.svc h3 .meta{font-family:'Be Vietnam Pro';font-size:.75rem;font-weight:500;color:var(--sage-deep);background:var(--sage-soft);padding:4px 11px;border-radius:100px;letter-spacing:.02em}
+.svc p{color:var(--ink-soft);margin-bottom:16px;max-width:720px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:.82rem;background:var(--card);border:1px solid var(--line);padding:6px 13px;border-radius:100px;color:var(--ink-soft)}
+.chip i{width:13px;height:13px;vertical-align:-2px;margin-right:5px;color:var(--sage)}
+
+/* ---------- TEAM ---------- */
+.team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.t-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px;transition:.25s}
+.t-card:hover{box-shadow:var(--shadow);border-color:var(--lilac);transform:translateY(-3px)}
+.t-top{display:flex;align-items:center;gap:15px;margin-bottom:16px}
+.avatar{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-family:'Fraunces',serif;font-size:1.4rem;color:#fff;flex-shrink:0}
+.t-card h4{font-family:'Fraunces',serif;font-size:1.28rem;font-weight:500}
+.t-role{font-size:.8rem;color:var(--ink-soft)}
+.t-body{font-size:.9rem;color:var(--ink-soft);margin-bottom:14px}
+.t-body b{color:var(--ink);font-weight:500}
+.t-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:14px;border-top:1px solid var(--line);font-size:.82rem}
+.pill{background:var(--paper-2);padding:4px 11px;border-radius:100px;color:var(--ink-soft);display:inline-flex;align-items:center;gap:5px}
+.pill i{width:13px;height:13px;color:var(--sage-deep)}
+.price-pill{background:var(--sage-soft);color:var(--sage-deep);font-weight:500;margin-left:auto}
+
+/* ---------- PROCESS ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s}
+.step{position:relative;padding-top:20px}
+.step .n{font-family:'Fraunces',serif;font-size:2.4rem;color:var(--blush);font-weight:400;line-height:1}
+.step h4{font-size:1.15rem;margin:12px 0 8px}
+.step p{font-size:.9rem;color:var(--ink-soft)}
+.step:not(:last-child):after{content:'';position:absolute;top:34px;right:-14px;width:22px;height:1px;background:var(--line)}
+
+/* ---------- PRICING ---------- */
+.ptable{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.prow{display:grid;grid-template-columns:1.6fr 1fr auto;gap:16px;padding:20px 26px;border-bottom:1px solid var(--line);align-items:center}
+.prow:last-child{border-bottom:none}
+.prow:hover{background:var(--paper)}
+.prow .pname{font-weight:500}
+.prow .pname small{display:block;font-weight:400;color:var(--ink-soft);font-size:.82rem}
+.prow .pdur{font-size:.88rem;color:var(--ink-soft)}
+.prow .pcost{font-family:'Fraunces',serif;font-size:1.25rem;color:var(--sage-deep);text-align:right;white-space:nowrap}
+.combo{background:var(--lilac-soft);border:1px solid #DED0E4;border-radius:20px;padding:26px 30px;margin-top:22px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.combo .ic{margin:0}
+.combo b{font-family:'Fraunces',serif;font-size:1.3rem;color:var(--lilac)}
+
+/* ---------- COFFEE TRACKER ---------- */
+.tracker{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:40px;text-align:center;box-shadow:var(--shadow)}
+.tracker .grid-cups{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;margin:30px 0 24px}
+.cup{width:60px;height:60px;border-radius:16px;background:var(--paper-2);display:grid;place-items:center;cursor:pointer;transition:.3s;border:2px solid transparent;color:var(--line)}
+.cup i{width:28px;height:28px}
+.cup.on{background:var(--sage-soft);color:var(--sage-deep);border-color:var(--sage);transform:scale(1.05)}
+.tracker .count{font-family:'Fraunces',serif;font-size:1.4rem;color:var(--ink)}
+.tracker .count span{color:var(--sage-deep)}
+.tracker .progress-txt{color:var(--ink-soft);margin-top:6px;font-size:.94rem;min-height:24px}
+.free-tag{background:var(--blush);color:#5A2E23;padding:6px 16px;border-radius:100px;font-weight:600;font-size:.85rem;display:inline-flex;align-items:center;gap:7px;margin-top:14px;opacity:0;transition:.4s}
+.free-tag.show{opacity:1}
+
+/* ---------- HOW / STEPS ONION ---------- */
+.join{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:16px}
+.join .card{padding:26px}
+.join .stepnum{font-family:'Fraunces',serif;color:var(--blush);font-size:1.3rem}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:820px;margin:0 auto}
+.q{border:1px solid var(--line);border-radius:18px;margin-bottom:14px;background:var(--card);overflow:hidden}
+.q summary{padding:22px 26px;cursor:pointer;font-weight:500;font-size:1.05rem;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.q summary::-webkit-details-marker{display:none}
+.q summary i{width:20px;height:20px;color:var(--sage-deep);transition:.3s;flex-shrink:0}
+.q[open] summary i{transform:rotate(45deg)}
+.q .a{padding:0 26px 24px;color:var(--ink-soft);font-size:.98rem}
+.q .a b{color:var(--ink);font-weight:500}
+
+/* ---------- CONTACT ---------- */
+.contact-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:26px}
+.contact-card{background:var(--ink);color:var(--paper);border-radius:26px;padding:44px}
+.contact-card h3{color:var(--paper);font-size:2rem;margin-bottom:14px}
+.contact-card p{color:rgba(250,246,240,.75);margin-bottom:26px}
+.socials{display:flex;flex-direction:column;gap:12px}
+.soc{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(250,246,240,.08);border-radius:14px;transition:.2s;cursor:pointer}
+.soc:hover{background:rgba(250,246,240,.15);transform:translateX(4px)}
+.soc i{width:22px;font-size:1.15rem;text-align:center;color:var(--blush)}
+.soc div b{display:block;font-weight:500}
+.soc div span{font-size:.82rem;color:rgba(250,246,240,.65)}
+.hotline{background:var(--blush-soft);border:1px solid #EAD2C8;border-radius:26px;padding:36px}
+.hotline .warn{display:flex;align-items:center;gap:10px;color:#B0573F;font-weight:600;margin-bottom:8px}
+.hotline .warn i{width:20px;height:20px}
+.hotline h4{font-family:'Fraunces',serif;font-size:1.4rem;margin-bottom:6px}
+.hotline p{font-size:.9rem;color:var(--ink-soft);margin-bottom:20px}
+.hline{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px dashed #E3C9BE;font-size:.92rem}
+.hline:last-child{border:none}
+.hline b{color:#B0573F;font-weight:600;white-space:nowrap}
+
+/* ---------- FOOTER ---------- */
+footer{background:var(--paper-2);border-top:1px solid var(--line);padding:44px 0;margin-top:20px}
+.foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+.foot .brand{font-size:1.3rem}
+.foot p{font-size:.85rem;color:var(--ink-soft)}
+.foot .fsoc{display:flex;gap:16px;font-size:1.15rem;color:var(--ink-soft)}
+.foot .fsoc i{cursor:pointer;transition:.2s}
+.foot .fsoc i:hover{color:var(--sage-deep)}
+
+.center-cta{text-align:center;padding:60px 0 20px}
+.center-cta h2{font-size:2.3rem;margin-bottom:14px}
+.center-cta p{color:var(--ink-soft);max-width:480px;margin:0 auto 26px}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:900px){
+  .navlinks{position:fixed;top:72px;left:0;right:0;background:var(--paper);flex-direction:column;padding:16px;gap:4px;border-bottom:1px solid var(--line);display:none;box-shadow:var(--shadow)}
+  .navlinks.open{display:flex}
+  .navlinks a{width:100%}
+  .burger{display:block}
+  .g3,.g2,.team-grid,.contact-grid,.join{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .step:not(:last-child):after{display:none}
+  .onion-banner{padding:38px 30px}
+  .cups{display:none}
+  .philo,.contact-card,.tracker{padding:34px 26px}
+}
+@media(max-width:560px){
+  .steps{grid-template-columns:1fr}
+  .prow{grid-template-columns:1fr;gap:6px}
+  .prow .pcost{text-align:left}
+  .cup{width:48px;height:48px}
+  .hero{padding:60px 0}
+  section{padding:56px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header>
+  <div class="wrap nav">
+    <div class="brand" onclick="go('home')"><span class="dot"></span>Wabi <span class="serif-it" style="font-size:.9em;color:var(--ink-soft)">Therapy</span></div>
+    <nav class="navlinks" id="menu">
+      <a onclick="go('home')" data-p="home" class="active">Trang chủ</a>
+      <a onclick="go('services')" data-p="services">Dịch vụ</a>
+      <a onclick="go('team')" data-p="team">Đội ngũ</a>
+      <a onclick="go('process')" data-p="process">Quy trình & Giá</a>
+      <a onclick="go('onion')" data-p="onion">Onion Cafe</a>
+      <a onclick="go('faq')" data-p="faq">Hỏi đáp</a>
+      <a onclick="go('contact')" data-p="contact" class="nav-cta">Đặt lịch</a>
+    </nav>
+    <button class="burger" onclick="document.getElementById('menu').classList.toggle('open')"><i data-lucide="menu"></i></button>
+  </div>
+</header>
+
+<!-- ============ HOME ============ -->
+<div class="page active" id="home">
+  <div class="hero">
+    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+    <div class="wrap">
+      <span class="eyebrow">Tham vấn · Trị liệu · Đánh giá tâm lý</span>
+      <h1>Một khoảng lặng để bạn được <span class="serif-it">là chính mình.</span></h1>
+      <p class="lead">Wabi là không gian an toàn, riêng tư và thấu cảm — nơi bạn bắt đầu hành trình chăm sóc sức khỏe tinh thần một cách nhẹ nhàng, đúng với chính mình. Online & offline tại Hà Nội và TP.HCM.</p>
+      <div class="btn-row">
+        <a class="btn btn-dark" onclick="go('contact')"><i data-lucide="calendar-heart"></i> Đặt lịch tham vấn</a>
+        <a class="btn btn-ghost" onclick="go('services')"><i data-lucide="compass"></i> Khám phá dịch vụ</a>
+      </div>
+      <div class="trust">
+        <div><b>15+</b><span>Thạc sĩ Tâm lý Lâm sàng</span></div>
+        <div><b>10+</b><span>Liệu pháp trị liệu</span></div>
+        <div><b>4</b><span>Ngôn ngữ: Việt · Anh · Hàn · Trung</span></div>
+        <div><b>Linh hoạt</b><span>Không cọc · không ép số buổi</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- value -->
+  <section style="padding-top:20px">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Vì sao chọn Wabi</span>
+        <h2>Ba điều bạn luôn được đảm bảo</h2>
+      </div>
+      <div class="grid g3">
+        <div class="card"><div class="ic ic-sage"><i data-lucide="shield-check"></i></div><h3>An toàn & riêng tư</h3><p>Mọi chia sẻ của bạn được giữ kín tuyệt đối. Không phán xét, chỉ có lắng nghe và thấu hiểu.</p></div>
+        <div class="card"><div class="ic ic-lilac"><i data-lucide="graduation-cap"></i></div><h3>Chuyên môn sâu</h3><p>Đội ngũ tốt nghiệp Thạc sĩ Tâm lý học Lâm sàng, đào tạo bài bản trong nước & quốc tế (Anh, Úc, Nga…).</p></div>
+        <div class="card"><div class="ic ic-blush"><i data-lucide="heart-handshake"></i></div><h3>Đồng hành linh hoạt</h3><p>Không quy định số buổi cố định, không cọc trước. Bạn hẹn theo nhịp của mình — tuần, tháng, hay khi cần.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- services snapshot -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Dịch vụ</span>
+        <h2>Chúng mình có thể đồng hành cùng bạn ở đâu?</h2>
+      </div>
+      <div class="grid g3">
+        <div class="card" onclick="go('services')" style="cursor:pointer"><div class="ic ic-sage"><i data-lucide="messages-square"></i></div><h3>Tham vấn & Trị liệu</h3><p>Cho các vấn đề về bản ngã, lòng tự trọng, gắn bó, và bệnh lý: trầm cảm, lo âu, ADHD, BPD, PTSD…</p></div>
+        <div class="card" onclick="go('services')" style="cursor:pointer"><div class="ic ic-lilac"><i data-lucide="clipboard-list"></i></div><h3>Đánh giá tâm lý</h3><p>Buổi 60 phút cùng nhà tâm lý + báo cáo PDF chuyên sâu qua email trong 7–10 ngày.</p></div>
+        <div class="card" onclick="go('services')" style="cursor:pointer"><div class="ic ic-blush"><i data-lucide="users"></i></div><h3>Cặp đôi · Art · Hướng nghiệp</h3><p>Tham vấn cặp đôi, trị liệu bằng nghệ thuật và định hướng nghề nghiệp cho tuổi trẻ.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- onion banner -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="onion-banner">
+        <span class="tag"><i data-lucide="coffee" style="width:15px;height:15px"></i> Không phải clickbait — tụi mình làm thật</span>
+        <h3>Uống đủ 10 ly cà phê tại Onion Cafe → <em>1 buổi tham vấn miễn phí.</em></h3>
+        <p>Nhiều người đang cần nói chuyện với ai đó — nhưng chưa sẵn sàng, chưa đủ tiền, hoặc chỉ là chưa dám. Vậy thì cứ uống cà phê đã. Tích từ từ. 10 ly không xa đâu.</p>
+        <a class="btn" style="background:var(--blush);color:#5A2E23" onclick="go('onion')"><i data-lucide="arrow-right"></i> Xem cách tham gia</a>
+        <div class="cups"><i data-lucide="coffee"></i><i data-lucide="coffee"></i><i data-lucide="coffee"></i><i data-lucide="coffee"></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- philosophy -->
+  <section>
+    <div class="wrap">
+      <div class="philo">
+        <span class="eyebrow">Tinh thần Wabi</span>
+        <p class="quote">Mỗi vết thương tâm hồn đều xứng đáng được <em>lắng nghe và chăm sóc.</em> Wabi có những nhà trị liệu sẵn sàng ở đây, đi cùng bạn nhẹ nhàng từng bước.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap center-cta">
+    <h2>Bạn không cần phải chờ đến khi "đủ tệ".</h2>
+    <p>Hãy đi therapy khi bạn sẵn sàng. Nhắn cho tụi mình bất cứ khi nào bạn muốn bắt đầu.</p>
+    <a class="btn btn-dark" onclick="go('contact')"><i data-lucide="calendar-heart"></i> Bắt đầu ngay</a>
+  </div>
+</div>
+
+<!-- ============ SERVICES ============ -->
+<div class="page" id="services">
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Dịch vụ</span>
+        <h2>Chọn hình thức phù hợp với bạn</h2>
+        <p>Online qua Google Meet hoặc trực tiếp tại địa điểm của therapist (HN & TP.HCM). Một buổi khoảng 60 phút. Không quy định số buổi cố định.</p>
+      </div>
+
+      <div class="svc">
+        <div class="svc-num">01</div>
+        <div>
+          <h3>Tham vấn & Trị liệu tâm lý <span class="meta">Counseling / Psychotherapy</span></h3>
+          <p>Quá trình điều trị liên tục nhằm giải quyết vấn đề tâm lý, cải thiện sức khỏe tinh thần và phát triển cá nhân, thông qua đối thoại và các kỹ thuật chuyên biệt. Phù hợp cho vấn đề về bản ngã (phát triển bản thân, lòng tự trọng, phong cách gắn bó) và các bệnh lý.</p>
+          <div class="chips">
+            <span class="chip"><i data-lucide="check"></i>Trầm cảm · Lo âu</span>
+            <span class="chip"><i data-lucide="check"></i>ADHD · BPD · PTSD</span>
+            <span class="chip"><i data-lucide="check"></i>Attachment styles</span>
+            <span class="chip"><i data-lucide="check"></i>Childhood trauma</span>
+            <span class="chip"><i data-lucide="check"></i>Lòng tự trọng</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-num">02</div>
+        <div>
+          <h3>Đánh giá tâm lý <span class="meta">Psychological Assessment</span></h3>
+          <p>Sử dụng các bài kiểm tra và công cụ chuẩn hóa để thu thập thông tin về nhận thức, tính cách, cảm xúc và hành vi. Buổi 60 phút làm việc trực tiếp với therapist — họ chọn bài test phù hợp, kết luận ngay trong buổi và gửi báo cáo PDF chi tiết qua email trong <b>7–10 ngày</b>.</p>
+          <div class="chips">
+            <span class="chip"><i data-lucide="check"></i>Test nhân cách Big5</span>
+            <span class="chip"><i data-lucide="check"></i>Đa trí thông minh</span>
+            <span class="chip"><i data-lucide="check"></i>Lòng tự trọng (Sorensen)</span>
+            <span class="chip"><i data-lucide="check"></i>Cảm nhận hạnh phúc (Ryff)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-num">03</div>
+        <div>
+          <h3>Tham vấn cặp đôi <span class="meta">Couple Therapy</span></h3>
+          <p>Cùng nhau xây dựng mối quan hệ tốt đẹp hơn và làm rõ các vấn đề về giao tiếp, cách thể hiện cảm xúc. Buổi đầu khám phá nhu cầu riêng của mỗi người (30 phút/người), các buổi sau cả hai tham gia cùng nhau (90 phút). Có thể sắp xếp buổi riêng khi cần.</p>
+          <div class="chips">
+            <span class="chip"><i data-lucide="check"></i>Đánh giá mối quan hệ</span>
+            <span class="chip"><i data-lucide="check"></i>Chuẩn bị làm cha mẹ</span>
+            <span class="chip"><i data-lucide="check"></i>Couple Hàn–Việt (tiếng Hàn)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-num">04</div>
+        <div>
+          <h3>Art Therapy <span class="meta">Trị liệu bằng nghệ thuật</span></h3>
+          <p>Dùng công cụ nghệ thuật để khám phá và chữa lành cảm xúc — dành cho những ai muốn thể hiện bản thân theo cách không chỉ bằng lời nói. 60 phút mỗi buổi, có nhiều lựa chọn tiếp cận.</p>
+          <div class="chips">
+            <span class="chip"><i data-lucide="check"></i>Art as Therapy</span>
+            <span class="chip"><i data-lucide="check"></i>Khám phá cảm xúc</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="svc">
+        <div class="svc-num">05</div>
+        <div>
+          <h3>Hướng nghiệp <span class="meta">Career Counseling</span></h3>
+          <p>Làm test năng lực + trò chuyện với therapist về định hướng. Gói <b>Cơ bản</b> (2 buổi) gồm test và tư vấn kết quả; gói <b>Chuyên sâu</b> (3 buổi) có thêm buổi lên kế hoạch thực hiện định hướng.</p>
+          <div class="chips">
+            <span class="chip"><i data-lucide="check"></i>Test đa trí thông minh</span>
+            <span class="chip"><i data-lucide="check"></i>Định hướng nghề</span>
+            <span class="chip"><i data-lucide="check"></i>Lập kế hoạch</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:36px">
+        <a class="btn btn-dark" onclick="go('process')"><i data-lucide="wallet"></i> Xem bảng giá & quy trình</a>
+        <a class="btn btn-ghost" onclick="go('team')"><i data-lucide="users"></i> Gặp đội ngũ therapist</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ TEAM ============ -->
+<div class="page" id="team">
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Đội ngũ</span>
+        <h2>Những người sẽ đồng hành cùng bạn</h2>
+        <p>Mỗi therapist có chuyên môn, liệu pháp và mức phí riêng. Chia sẻ với admin về tuổi, nơi sống và vấn đề bạn gặp — tụi mình sẽ tư vấn người phù hợp nhất. Bạn hoàn toàn có thể đổi therapist nếu thấy cần.</p>
+      </div>
+      <div class="team-grid" id="teamGrid"></div>
+      <p style="text-align:center;color:var(--ink-soft);margin-top:30px;font-size:.92rem">…và nhiều chuyên viên khác. Nhắn admin để nhận danh sách đầy đủ phù hợp với nhu cầu của bạn.</p>
+      <div style="text-align:center;margin-top:26px"><a class="btn btn-dark" onclick="go('contact')"><i data-lucide="message-circle"></i> Nhờ tư vấn chọn therapist</a></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PROCESS & PRICING ============ -->
+<div class="page" id="process">
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Quy trình</span>
+        <h2>Từ lần nhắn đầu tiên đến khi bạn thấy nhẹ hơn</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><h4>Liên hệ</h4><p>Nhắn admin, chia sẻ tuổi, nơi sống và vấn đề bạn đang gặp để được tư vấn therapist & dịch vụ phù hợp.</p></div>
+        <div class="step"><div class="n">2</div><h4>Screening</h4><p>Trả lời vài câu hỏi ngắn về tình trạng hiện tại, mong muốn và kỳ vọng — giúp therapist chuẩn bị tốt hơn.</p></div>
+        <div class="step"><div class="n">3</div><h4>Buổi làm việc</h4><p>60 phút online (Google Meet) hoặc trực tiếp. Không gian an toàn để bạn chia sẻ. Thanh toán cuối buổi.</p></div>
+        <div class="step"><div class="n">4</div><h4>Đồng hành sau buổi</h4><p>Treatment Plan hoặc báo cáo PDF (với đánh giá). Hẹn buổi tiếp theo linh hoạt theo nhịp của bạn.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Bảng giá</span>
+        <h2>Minh bạch, thanh toán cuối buổi</h2>
+        <p>Không cọc trước. Có thể trả sau mỗi buổi hoặc cuối tháng (nếu theo liệu trình nhiều buổi). Ở nước ngoài có thể thanh toán qua PayPal.</p>
+      </div>
+      <div class="ptable">
+        <div class="prow"><div class="pname">Tham vấn / Trị liệu<small>60 phút · online hoặc offline</small></div><div class="pdur">Mỗi buổi</div><div class="pcost">600–750K</div></div>
+        <div class="prow"><div class="pname">Đánh giá tâm lý<small>60 phút + báo cáo PDF sau 7–10 ngày</small></div><div class="pdur">Trọn buổi</div><div class="pcost">550K <small style="font-family:'Be Vietnam Pro';color:var(--ink-soft);font-size:.72rem">+200K nếu offline</small></div></div>
+        <div class="prow"><div class="pname">Tham vấn cặp đôi<small>90 phút cho 2 người</small></div><div class="pdur">Mỗi buổi</div><div class="pcost">1.200K</div></div>
+        <div class="prow"><div class="pname">Art Therapy<small>60 phút</small></div><div class="pdur">Mỗi buổi</div><div class="pcost">650K</div></div>
+        <div class="prow"><div class="pname">Hướng nghiệp Cơ bản<small>Gồm 2 buổi (test + tư vấn)</small></div><div class="pdur">Mỗi buổi</div><div class="pcost">750K</div></div>
+        <div class="prow"><div class="pname">Hướng nghiệp Chuyên sâu<small>Gồm 3 buổi (thêm buổi lập kế hoạch)</small></div><div class="pdur">Mỗi buổi</div><div class="pcost">650K</div></div>
+      </div>
+
+      <div class="combo">
+        <div class="ic ic-lilac"><i data-lucide="gift"></i></div>
+        <div style="flex:1;min-width:220px">
+          <b>Gói Đồng Hành — Combo 8 buổi giảm ngay 10%</b>
+          <p style="color:var(--ink-soft);font-size:.94rem;margin-top:4px">Sức khỏe tinh thần là một hành trình. Combo giúp bạn tiết kiệm chi phí và giữ lịch cố định với chuyên gia, tạo sự ổn định trong suốt quá trình.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ ONION ============ -->
+<div class="page" id="onion">
+  <section>
+    <div class="wrap">
+      <div class="sec-head" style="max-width:720px">
+        <span class="eyebrow">🧅 Chương trình đặc biệt · Hà Nội</span>
+        <h2>10 ly cà phê = 1 buổi tham vấn miễn phí</h2>
+        <p>Tụi mình biết bước đầu tiên luôn khó nhất. Nên tụi mình làm cho nó nhẹ hơn: cứ ghé Onion Cafe, uống cà phê, tích ly. Đủ 10 ly là bạn có một buổi tham vấn tâm lý — hoàn toàn miễn phí.</p>
+      </div>
+
+      <!-- interactive tracker -->
+      <div class="tracker">
+        <span class="eyebrow">Thử tích ly xem sao</span>
+        <div class="grid-cups" id="cups"></div>
+        <div class="count"><span id="cupCount">0</span>/10 ly</div>
+        <div class="progress-txt" id="cupMsg">Chạm vào từng ly để tích nhé ☕</div>
+        <div class="free-tag" id="freeTag"><i data-lucide="party-popper" style="width:16px;height:16px"></i> Bạn đã có 1 buổi tham vấn miễn phí!</div>
+      </div>
+
+      <div class="join">
+        <div class="card"><div class="stepnum">Bước 1</div><h3 style="font-size:1.2rem;margin:8px 0">Ghé Onion Cafe</h3><p>4 Ngõ 46A Phạm Ngọc Thạch, Hà Nội.</p></div>
+        <div class="card"><div class="stepnum">Bước 2</div><h3 style="font-size:1.2rem;margin:8px 0">Báo tên + SĐT khi order</h3><p>Chỉ cần họ tên và số điện thoại của bạn.</p></div>
+        <div class="card"><div class="stepnum">Bước 3</div><h3 style="font-size:1.2rem;margin:8px 0">Wabi tích ly tự động</h3><p>Tụi mình cộng dồn giúp bạn — không cần nhớ gì cả.</p></div>
+      </div>
+
+      <div style="text-align:center;margin-top:36px">
+        <a class="btn btn-dark" onclick="go('contact')"><i data-lucide="map-pin"></i> Liên hệ & địa chỉ</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ FAQ ============ -->
+<div class="page" id="faq">
+  <section>
+    <div class="wrap">
+      <div class="sec-head" style="margin:0 auto 46px;text-align:center">
+        <span class="eyebrow">Hỏi đáp</span>
+        <h2>Những điều bạn có thể đang thắc mắc</h2>
+      </div>
+      <div class="faq">
+        <details class="q"><summary>Nhà tâm lý và bác sĩ tâm thần khác nhau thế nào? <i data-lucide="plus"></i></summary>
+          <div class="a">Nhà tâm lý lâm sàng (Thạc sĩ trở lên) được đào tạo để <b>đánh giá</b> sức khỏe tâm thần, nhận diện & phân biệt các rối loạn, thực hành trị liệu và giúp bạn hiểu, quản lý vấn đề. Việc đưa ra <b>chẩn đoán chính thức và kê thuốc</b> là do bác sĩ tâm thần thực hiện. Đánh giá của nhà tâm lý là cơ sở tốt để bạn trình bày với bác sĩ nếu cần can thiệp y khoa.</div>
+        </details>
+        <details class="q"><summary>Mình dưới 18 tuổi có tham gia được không? <i data-lucide="plus"></i></summary>
+          <div class="a">Được nhé. Bạn chỉ cần có <b>sự đồng ý của phụ huynh</b> — chụp màn hình đồng ý và chia sẻ số Zalo của phụ huynh với admin là được.</div>
+        </details>
+        <details class="q"><summary>Tham vấn diễn ra online hay offline? <i data-lucide="plus"></i></summary>
+          <div class="a">Cả hai. Online qua <b>Google Meet</b> hoặc <b>trực tiếp</b> tại địa điểm của therapist (HN & TP.HCM). Mỗi buổi khoảng 60 phút. Nhớ chuẩn bị không gian yên tĩnh, wifi ổn định; nếu chưa thoải mái bạn có thể tắt cam.</div>
+        </details>
+        <details class="q"><summary>Mình có phải cam kết số buổi cố định không? <i data-lucide="plus"></i></summary>
+          <div class="a">Không. Wabi <b>không quy định số buổi cố định</b>. Bạn hẹn linh hoạt — hàng tuần, hàng tháng, hoặc bất cứ khi nào bạn thấy cần.</div>
+        </details>
+        <details class="q"><summary>Trong đánh giá tâm lý mình sẽ làm những test nào? <i data-lucide="plus"></i></summary>
+          <div class="a">Therapist chọn bài phù hợp với bạn, ví dụ: <b>Big5</b> (đo nhân cách, khoa học và tin cậy hơn MBTI), <b>test đa trí thông minh</b> (9 nhóm năng lực bẩm sinh), <b>test lòng tự trọng Sorensen</b>, <b>thang cảm nhận hạnh phúc Carol Ryff</b>, cùng các thang lâm sàng chuẩn hóa như DASS-21, Beck, Zung khi cần.</div>
+        </details>
+        <details class="q"><summary>File báo cáo có bắt buộc và tính phí riêng không? <i data-lucide="plus"></i></summary>
+          <div class="a">Chi phí chủ yếu nằm ở buổi gặp trực tiếp với therapist. File tổng hợp là phần <b>hỗ trợ thêm — như một món quà bonus</b>, không bắt buộc. Trong buổi bạn hoàn toàn có thể đặt câu hỏi trực tiếp và ghi âm lại nếu cần.</div>
+        </details>
+        <details class="q"><summary>Mình thanh toán như thế nào? <i data-lucide="plus"></i></summary>
+          <div class="a">Thanh toán <b>cuối mỗi buổi</b>, hoặc cuối tháng nếu theo liệu trình nhiều buổi (admin gửi bill + mã QR). Không cần cọc trước. Ở nước ngoài có thể trả qua PayPal.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ CONTACT ============ -->
+<div class="page" id="contact">
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Liên hệ</span>
+        <h2>Hãy nhắn cho tụi mình khi bạn sẵn sàng</h2>
+        <p>Cứ thoải mái suy nghĩ. Bao giờ muốn lên lịch, chỉ cần nhắn — admin sẽ book giúp bạn sớm nhất. Nếu có câu hỏi ngoài tham vấn hay tình huống cần giúp đỡ, cũng cứ nhắn nhé.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3>Kết nối với Wabi</h3>
+          <p>Chia sẻ một chút về tuổi, nơi sống và điều bạn đang gặp phải — tụi mình sẽ tư vấn therapist & dịch vụ phù hợp.</p>
+          <div class="socials">
+            <a class="soc"><i class="fa-brands fa-facebook"></i><div><b>Wabi Therapy</b><span>Facebook</span></div></a>
+            <a class="soc"><i class="fa-brands fa-tiktok"></i><div><b>Wabi Therapy</b><span>TikTok</span></div></a>
+            <a class="soc"><i class="fa-brands fa-instagram"></i><div><b>Wabi Therapy</b><span>Instagram</span></div></a>
+            <a class="soc"><i class="fa-solid fa-location-dot"></i><div><b>4 Ngõ 46A Phạm Ngọc Thạch</b><span>Onion Cafe · Hà Nội</span></div></a>
+          </div>
+        </div>
+
+        <div class="hotline">
+          <div class="warn"><i data-lucide="life-buoy"></i> Cần hỗ trợ khẩn cấp?</div>
+          <h4>Đường dây nóng</h4>
+          <p>Nếu bạn đang trong khủng hoảng, hãy liên hệ ngay các đường dây dưới đây — luôn có người sẵn sàng lắng nghe.</p>
+          <div class="hline"><span>Đường dây nóng Ngày Mai</span><b>096 306 1414</b></div>
+          <div class="hline"><span>Tổng đài Bảo vệ Trẻ em Quốc gia</span><b>111</b></div>
+          <div class="hline"><span>Hội Tâm lý Trị liệu Việt Nam</span><b>1900 63 644</b></div>
+          <div class="hline"><span>Ngôi nhà Bình yên (PN & trẻ em)</span><b>1900 96 96 80</b></div>
+          <div class="hline"><span>Bệnh viện Việt Pháp (Hà Nội)</span><b>024 3574 1111</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="brand" style="margin-bottom:8px"><span class="dot"></span>Wabi Therapy</div>
+      <p>Không gian an toàn, riêng tư và thấu cảm cho sức khỏe tinh thần của bạn.</p>
+    </div>
+    <div class="fsoc">
+      <i class="fa-brands fa-facebook"></i>
+      <i class="fa-brands fa-tiktok"></i>
+      <i class="fa-brands fa-instagram"></i>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---------- ROUTER ---------- */
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.navlinks a').forEach(a=>a.classList.toggle('active',a.dataset.p===id));
+  document.getElementById('menu').classList.remove('open');
+  window.scrollTo({top:0,behavior:'smooth'});
+  lucide.createIcons();
+}
+
+/* ---------- TEAM DATA ---------- */
+const team=[
+ {n:'ThS. Hà Trang',c:'#7E8C6E',r:'Thạc sĩ Tâm lý Lâm sàng · ĐH Xã hội Nga',s:'PTSD, ADHD & LGBTQI+',t:'CBT · ACT · Neurodiversity · AOP',p:'650K',loc:'Online · offline SG'},
+ {n:'ThS. Ngọc Mai',c:'#9A88A9',r:'Thạc sĩ Tâm lý Lâm sàng',s:'Tổn thương thời thơ ấu, khủng hoảng hiện sinh, lòng tự trọng thấp, rối loạn cảm xúc, vấn đề gắn bó & mối quan hệ',t:'Person-Centered · CBT · MiCBT · IFS',p:'650K',loc:'Online · offline HN'},
+ {n:'ThS. Thu Thuỷ',c:'#DFB1A3',r:'Thạc sĩ Tâm lý',s:'Thân chủ 20–35: mối quan hệ, childhood trauma, attachment styles, lo âu, stress, trầm cảm. Couple therapy',t:'CBT · SFBT · Psychodynamic · Mindfulness',p:'650K',loc:'Chỉ online'},
+ {n:'ThS. Ly Đinh',c:'#5C6A4C',r:'Thạc sĩ Tâm lý',s:'PTSD/C-PTSD, đau buồn & mất mát, trải nghiệm tuổi thơ bất lợi, trầm cảm, lo âu',t:'CBT · CPT · Person-Centered · ACT · DBT',p:'650K',loc:'Chỉ online'},
+ {n:'ThS. Phương An',c:'#7E8C6E',r:'Thạc sĩ Lâm sàng · ĐH Sussex, Anh',s:'Tâm lý học trường học, stress, hướng dẫn hành vi. Chuyên viên tâm lý học đường',t:'CBT · MI · MBCT',p:'650K',loc:'Online · offline HN'},
+ {n:'ThS. Kim Ngân',c:'#9A88A9',r:'7 năm kinh nghiệm trị liệu',s:'ADHD, sang chấn, rối loạn cảm xúc (lo âu, trầm cảm, lưỡng cực), giá trị bản thân, ranh giới',t:'CBT · EFT',p:'650K',loc:'Online · offline HN'},
+ {n:'ThS. Gia Bảo',c:'#DFB1A3',r:'ThS Lâm sàng trẻ em & VTN · ĐHQG HN',s:'Trầm cảm, lo âu, OCD, PTSD, rối loạn nhân cách ranh giới',t:'CBT · DBT · BA',p:'650K',loc:'Online · offline HN'},
+ {n:'ThS. Mai Nguyen',c:'#5C6A4C',r:'Thạc sĩ Tâm lý',s:'Vấn đề mối quan hệ (tình yêu, hôn nhân, gia đình, xã hội). Couple Hàn–Việt bằng tiếng Hàn',t:'Psychoanalytic · Client-centered · Gestalt',p:'650K',loc:'Chỉ online'},
+ {n:'ThS. Minh Châu',c:'#7E8C6E',r:'Thạc sĩ Tâm lý',s:'Lo âu, trầm cảm, đau buồn – tang chế, khó khăn về mối quan hệ gắn bó',t:'Psychoanalysis · Adlerian · Mindfulness · Art',p:'750K',loc:'Online · offline HCM'},
+ {n:'ThS. Đức Minh',c:'#9A88A9',r:'Trị liệu & Tư vấn · ĐH Western Sydney',s:'Thân chủ 18–35: lo âu, trầm cảm, PTSD/C-PTSD, sang chấn liên thế hệ, tổn thương gắn bó. Hỗ trợ ASD, ADHD',t:'Person-Centered · IFS · EFIT · MI',p:'650K',loc:'Online · offline HCM'},
+ {n:'ThS. Quỳnh Trang',c:'#DFB1A3',r:'ThS Lâm sàng · ĐHQG HN',s:'Thân chủ 10–30: trầm cảm, lo âu, OCD, ám sợ xã hội, PTSD. Couple tuổi trẻ',t:'CBT & các kỹ thuật lâm sàng',p:'600K',loc:'Online · offline HN'},
+ {n:'Vi Vương',c:'#5C6A4C',r:'PG Dip Tâm lý · ĐH Wrexham (Anh)',s:'Tâm lý ung thư học, khủng hoảng tâm lý, bản sắc & ý nghĩa sống. 4 ngôn ngữ: Việt–Anh–Quan Thoại–Quảng Đông',t:'ACT · DBT',p:'600K',loc:'Online · offline HCM'},
+];
+const tg=document.getElementById('teamGrid');
+tg.innerHTML=team.map(m=>`
+ <div class="t-card">
+   <div class="t-top">
+     <div class="avatar" style="background:${m.c}">${m.n.split(' ').pop()[0]}</div>
+     <div><h4>${m.n}</h4><div class="t-role">${m.r}</div></div>
+   </div>
+   <div class="t-body"><b>Chuyên môn:</b> ${m.s}</div>
+   <div class="t-body" style="margin-bottom:0"><b>Liệu pháp:</b> ${m.t}</div>
+   <div class="t-foot">
+     <span class="pill"><i data-lucide="map-pin"></i>${m.loc}</span>
+     <span class="pill price-pill">${m.p}/buổi</span>
+   </div>
+ </div>`).join('');
+
+/* ---------- COFFEE TRACKER ---------- */
+const cupsEl=document.getElementById('cups');
+let filled=0;
+for(let i=0;i<10;i++){
+  const c=document.createElement('div');
+  c.className='cup';c.dataset.i=i;
+  c.innerHTML='<i data-lucide="coffee"></i>';
+  c.onclick=()=>{
+    const idx=+c.dataset.i;
+    filled=(idx<filled)?idx:idx+1;
+    document.querySelectorAll('.cup').forEach((el,j)=>el.classList.toggle('on',j<filled));
+    document.getElementById('cupCount').textContent=filled;
+    const msg=document.getElementById('cupMsg');
+    const tag=document.getElementById('freeTag');
+    if(filled>=10){msg.textContent='10 ly rồi — không xa đúng không? 🥹';tag.classList.add('show');}
+    else{tag.classList.remove('show');
+      const left=10-filled;
+      msg.textContent=filled===0?'Chạm vào từng ly để tích nhé ☕':`Còn ${left} ly nữa là tới buổi miễn phí!`;}
+  };
+  cupsEl.appendChild(c);
+}
+
+lucide.createIcons();
+</script>
+</body>
+</html>
