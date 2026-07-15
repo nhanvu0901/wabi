@@ -448,9 +448,10 @@ export type Therapist = {
   sort_order: number
   name: string
   title: string
-  description: string
   specialties: string
+  therapies: string
   price: string
+  location: string
   photo_url: string | null
 }
 ```
@@ -470,11 +471,12 @@ create table services (
 create table therapists (
   id bigint generated always as identity primary key,
   sort_order int not null,
-  name text not null,
-  title text not null,
-  description text not null,
-  specialties text not null,
-  price text not null,
+  name text not null,        -- field n
+  title text not null,       -- field r
+  specialties text not null, -- field s ("Chuyên môn:")
+  therapies text not null,   -- field t ("Liệu pháp:")
+  price text not null,       -- field p
+  location text not null,    -- field loc
   photo_url text
 );
 
@@ -504,7 +506,7 @@ create policy "anon insert contact" on contact_submissions
 
 Đọc `Wabi Therapy.dc.html`:
 - 5 services: trang services L216–304 — lấy đúng tên + mô tả từng dịch vụ 01–05.
-- 12 therapists: mảng trong `buildTeam()` L502–538 — lấy đúng name/title/description/specialties/price từng người, `sort_order` theo thứ tự mảng, `photo_url` = null.
+- 12 therapists: mảng trong `buildTeam()` L502–538 (field n/r/s/t/p/loc) — map n→name, r→title, s→specialties, t→therapies, p→price, loc→location; `sort_order` theo thứ tự mảng, `photo_url` = null.
 
 `supabase/seed.sql` dạng:
 
@@ -516,7 +518,7 @@ insert into services (sort_order, name, description) values
   (4, '...', '...'),
   (5, '...', '...');
 
-insert into therapists (sort_order, name, title, description, specialties, price, photo_url) values
+insert into therapists (sort_order, name, title, specialties, therapies, price, location, photo_url) values
   (1, '<tên>', '<title>', '<desc>', '<specialties>', '<price>', null),
   -- ... đủ 12 dòng, escape dấu nháy đơn trong text tiếng Việt ('' thay ')
   (12, '...', '...', '...', '...', '...', null);

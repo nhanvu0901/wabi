@@ -63,11 +63,12 @@ create table services (
 create table therapists (
   id bigint generated always as identity primary key,
   sort_order int not null,
-  name text not null,
-  title text not null,          -- học vị/chức danh
-  description text not null,
-  specialties text not null,    -- chuỗi hiển thị như design (không cần mảng)
-  price text not null,          -- giữ dạng text hiển thị (vd "600.000đ/buổi")
+  name text not null,           -- field n trong design
+  title text not null,          -- field r: học vị/chức danh
+  specialties text not null,    -- field s: nhãn "Chuyên môn:" trên card
+  therapies text not null,      -- field t: nhãn "Liệu pháp:" trên card
+  price text not null,          -- field p: giữ dạng text hiển thị (vd "650K")
+  location text not null,       -- field loc: "Online · offline HN"...
   photo_url text                -- path trong /public/images, nullable → placeholder
 );
 
