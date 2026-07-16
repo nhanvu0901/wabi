@@ -96,7 +96,7 @@ create table contact_submissions (
 
 ## 8. Ảnh
 
-- 3 file .jpg trong `uploads/` copy vào `/public/images`, gắn vào hero `hero-still` + team glimpse.
+- 3 file .jpg trong `uploads/` KHÔNG dùng được (screenshot design-reference của bên thứ ba, có logo/chữ nước ngoài — phát hiện khi triển khai). Mọi slot ảnh giữ placeholder cho đến khi Master cung cấp ảnh thật.
 - Slot chưa có ảnh: render placeholder đúng style design (khối màu + caption), không dùng `<image-slot>` custom element.
 - Thêm ảnh therapist sau này: commit ảnh vào `/public/images` + điền path vào cột `photo_url` trong dashboard.
 
