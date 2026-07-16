@@ -8,36 +8,36 @@ export const metadata = { title: 'Dịch vụ — Wabi Therapy' }
 
 // ponytail: pill label, tag chips and <b> highlights aren't DB columns
 // (services table is only sort_order/name/description, char-verified from the
-// same source section) — they stay hard-coded here, zipped to services by
-// array position since the query is ordered by sort_order and there are
-// always exactly 5 rows.
-const SERVICE_EXTRAS: { pill: string; tags: string[]; highlights: string[] }[] = [
-  {
+// same source section) — they stay hard-coded here, keyed by sort_order (1–5)
+// since that's what the query orders by. Unknown sort_order (DB row without a
+// matching entry) degrades to empty pill/tags/highlights instead of crashing.
+const SERVICE_EXTRAS: Record<number, { pill: string; tags: string[]; highlights: string[] }> = {
+  1: {
     pill: 'Counseling / Psychotherapy',
     tags: ['Trầm cảm · Lo âu', 'ADHD · BPD · PTSD', 'Attachment styles', 'Childhood trauma', 'Lòng tự trọng'],
     highlights: [],
   },
-  {
+  2: {
     pill: 'Psychological Assessment',
     tags: ['Test nhân cách Big5', 'Đa trí thông minh', 'Lòng tự trọng (Sorensen)', 'Cảm nhận hạnh phúc (Ryff)'],
     highlights: ['7–10 ngày'],
   },
-  {
+  3: {
     pill: 'Couple Therapy',
     tags: ['Đánh giá mối quan hệ', 'Chuẩn bị làm cha mẹ', 'Couple Hàn–Việt (tiếng Hàn)'],
     highlights: [],
   },
-  {
+  4: {
     pill: 'Trị liệu bằng nghệ thuật',
     tags: ['Art as Therapy', 'Khám phá cảm xúc'],
     highlights: [],
   },
-  {
+  5: {
     pill: 'Career Counseling',
     tags: ['Test đa trí thông minh', 'Định hướng nghề', 'Lập kế hoạch'],
     highlights: ['Cơ bản', 'Chuyên sâu'],
   },
-]
+}
 
 // Source wraps some description phrases in <b style="color:#33302A;font-weight:500">
 // (Wabi Therapy.dc.html:247, :289). DB stores plain text, so re-wrap the known
@@ -101,8 +101,8 @@ export default async function ServicesPage() {
           </p>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {services.map((s, i) => {
-            const extra = SERVICE_EXTRAS[i]
+          {services.map((s) => {
+            const extra = SERVICE_EXTRAS[s.sort_order] ?? { pill: '', tags: [], highlights: [] }
             return (
               <div
                 key={s.id}

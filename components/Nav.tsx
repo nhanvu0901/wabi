@@ -76,6 +76,7 @@ export default function Nav() {
           className="wburger"
           onClick={() => setOpen((o) => !o)}
           aria-label="Mở menu"
+          aria-expanded={open}
           style={{
             background: 'transparent',
             border: '1px solid #E2D8C6',
