@@ -38,6 +38,7 @@ export default function ContactForm() {
       style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}
       onSubmit={(e) => {
         e.preventDefault()
+        if (pending) return
         const fd = new FormData(e.currentTarget)
         startTransition(async () => {
           // ponytail: catches network failure (e.g. offline) reaching the
