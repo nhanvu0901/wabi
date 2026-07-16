@@ -49,7 +49,7 @@ export default function Nav() {
             Wabi <span style={{ fontStyle: 'italic', color: '#8A8072', fontSize: '.92em' }}>Therapy</span>
           </span>
         </Link>
-        <nav className={open ? 'wnav-links open' : 'wnav-links'} id="wmenu" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <nav className={open ? 'wnav-links open' : 'wnav-links'} id="wmenu" style={{ alignItems: 'center', gap: '4px' }}>
           {LINKS.map((l) => {
             const active = pathname === l.href
             return (

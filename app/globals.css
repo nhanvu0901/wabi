@@ -6,6 +6,7 @@ a:hover{color:var(--accent-deep,#434D35)}
 img{max-width:100%;display:block}
 input,textarea,button,select{font-family:inherit;font-size:1rem}
 ::selection{background:#DDE2CF;color:#33302A}
+.wnav-links{display:flex}
 .wburger{display:none}
 @media(max-width:860px){
   .wnav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:#FBF7EF;border-bottom:1px solid #E2D8C6;padding:14px;gap:6px;box-shadow:0 24px 40px -28px rgba(51,48,42,.5)}
