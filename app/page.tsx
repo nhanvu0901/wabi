@@ -11,8 +11,28 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import ImagePlaceholder from '../components/ImagePlaceholder'
+import { supabase } from '../lib/supabase'
+import type { Therapist } from '../lib/types'
 
-export default function Home() {
+export const revalidate = 60
+
+// Glimpse cards: design order (design source L171–203). DB rows matched by exact
+// name; each entry doubles as hard-coded fallback if the row is missing.
+const GLIMPSE = [
+  { name: 'ThS. Ngọc Mai', title: 'Thạc sĩ Tâm lý Lâm sàng', delay: '' },
+  { name: 'ThS. Hà Trang', title: 'Thạc sĩ Tâm lý Lâm sàng · ĐH Xã hội Nga', delay: ' .08s' },
+  { name: 'ThS. Ly Đinh', title: 'Thạc sĩ Tâm lý', delay: ' .16s' },
+  { name: 'ThS. Đức Minh', title: 'Trị liệu & Tư vấn · ĐH Western Sydney', delay: ' .24s' },
+]
+
+export default async function Home() {
+  const { data, error } = await supabase()
+    .from('therapists')
+    .select('*')
+    .in('name', GLIMPSE.map((g) => g.name))
+  if (error) throw error
+  const byName = new Map((data as Therapist[]).map((t) => [t.name, t]))
+
   return (
     <>
       {/* HERO — Direction A: Stillness (centered, text-forward) */}
@@ -580,122 +600,40 @@ export default function Home() {
             </Link>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '22px' }}>
-            <div
-              data-reveal
-              style={{
-                opacity: 0,
-                transform: 'translateY(24px)',
-                transition: 'opacity .8s ease,transform .8s ease',
-                background: '#FCFAF4',
-                border: '1px solid #EAE0D0',
-                borderRadius: '24px',
-                padding: '20px',
-                textAlign: 'center',
-              }}
-            >
-              <div
-                style={{
-                  width: '104px',
-                  height: '104px',
-                  margin: '0 auto 16px',
-                  borderRadius: '50%',
-                  overflow: 'hidden',
-                  border: '1px solid #E7DECE',
-                }}
-              >
-                <ImagePlaceholder label="Ảnh" />
-              </div>
-              <h4 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.2rem' }}>ThS. Ngọc Mai</h4>
-              <div style={{ fontSize: '.82rem', color: '#8A8072', marginTop: '4px' }}>Thạc sĩ Tâm lý Lâm sàng</div>
-            </div>
-            <div
-              data-reveal
-              style={{
-                opacity: 0,
-                transform: 'translateY(24px)',
-                transition: 'opacity .8s ease .08s,transform .8s ease .08s',
-                background: '#FCFAF4',
-                border: '1px solid #EAE0D0',
-                borderRadius: '24px',
-                padding: '20px',
-                textAlign: 'center',
-              }}
-            >
-              <div
-                style={{
-                  width: '104px',
-                  height: '104px',
-                  margin: '0 auto 16px',
-                  borderRadius: '50%',
-                  overflow: 'hidden',
-                  border: '1px solid #E7DECE',
-                }}
-              >
-                <ImagePlaceholder label="Ảnh" />
-              </div>
-              <h4 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.2rem' }}>ThS. Hà Trang</h4>
-              <div style={{ fontSize: '.82rem', color: '#8A8072', marginTop: '4px' }}>
-                Thạc sĩ Tâm lý Lâm sàng · ĐH Xã hội Nga
-              </div>
-            </div>
-            <div
-              data-reveal
-              style={{
-                opacity: 0,
-                transform: 'translateY(24px)',
-                transition: 'opacity .8s ease .16s,transform .8s ease .16s',
-                background: '#FCFAF4',
-                border: '1px solid #EAE0D0',
-                borderRadius: '24px',
-                padding: '20px',
-                textAlign: 'center',
-              }}
-            >
-              <div
-                style={{
-                  width: '104px',
-                  height: '104px',
-                  margin: '0 auto 16px',
-                  borderRadius: '50%',
-                  overflow: 'hidden',
-                  border: '1px solid #E7DECE',
-                }}
-              >
-                <ImagePlaceholder label="Ảnh" />
-              </div>
-              <h4 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.2rem' }}>ThS. Ly Đinh</h4>
-              <div style={{ fontSize: '.82rem', color: '#8A8072', marginTop: '4px' }}>Thạc sĩ Tâm lý</div>
-            </div>
-            <div
-              data-reveal
-              style={{
-                opacity: 0,
-                transform: 'translateY(24px)',
-                transition: 'opacity .8s ease .24s,transform .8s ease .24s',
-                background: '#FCFAF4',
-                border: '1px solid #EAE0D0',
-                borderRadius: '24px',
-                padding: '20px',
-                textAlign: 'center',
-              }}
-            >
-              <div
-                style={{
-                  width: '104px',
-                  height: '104px',
-                  margin: '0 auto 16px',
-                  borderRadius: '50%',
-                  overflow: 'hidden',
-                  border: '1px solid #E7DECE',
-                }}
-              >
-                <ImagePlaceholder label="Ảnh" />
-              </div>
-              <h4 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.2rem' }}>ThS. Đức Minh</h4>
-              <div style={{ fontSize: '.82rem', color: '#8A8072', marginTop: '4px' }}>
-                Trị liệu & Tư vấn · ĐH Western Sydney
-              </div>
-            </div>
+            {GLIMPSE.map((g) => {
+              const t = byName.get(g.name) ?? g
+              return (
+                <div
+                  key={g.name}
+                  data-reveal
+                  style={{
+                    opacity: 0,
+                    transform: 'translateY(24px)',
+                    transition: `opacity .8s ease${g.delay},transform .8s ease${g.delay}`,
+                    background: '#FCFAF4',
+                    border: '1px solid #EAE0D0',
+                    borderRadius: '24px',
+                    padding: '20px',
+                    textAlign: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '104px',
+                      height: '104px',
+                      margin: '0 auto 16px',
+                      borderRadius: '50%',
+                      overflow: 'hidden',
+                      border: '1px solid #E7DECE',
+                    }}
+                  >
+                    <ImagePlaceholder label="Ảnh" />
+                  </div>
+                  <h4 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.2rem' }}>{t.name}</h4>
+                  <div style={{ fontSize: '.82rem', color: '#8A8072', marginTop: '4px' }}>{t.title}</div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
