@@ -153,7 +153,7 @@ export default async function Home() {
                 boxShadow: '0 16px 34px -18px rgba(90,102,71,.9)',
               }}
             >
-              <CalendarHeart style={{ width: '18px', height: '18px' }} /> Đặt lịch tham vấn
+              <CalendarHeart style={{ width: '18px', height: '18px' }} /> Liên hệ với tụi mình
             </Link>
             <Link
               href="/dich-vu"
