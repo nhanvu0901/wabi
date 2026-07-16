@@ -86,7 +86,7 @@ create table contact_submissions (
 - Nguồn data từng phần:
   - `/dich-vu` (5 services) và `/doi-ngu` (12 therapists): fetch Supabase server-side, `revalidate = 60` (ISR) — sửa trong dashboard, web cập nhật trong ~1 phút.
   - Trang chủ — services preview (3 card): hard-code như design (copy riêng, không trùng bảng services).
-  - Trang chủ — team glimpse (4 người): lấy 4 therapist đầu theo `sort_order` từ Supabase, để nội dung đồng bộ với trang Đội ngũ.
+  - Trang chủ — team glimpse (4 người): design chọn tay 4 người cụ thể (không phải 4 người đầu bảng) — fetch từ Supabase theo đúng 4 tên đó, giữ thứ tự design; nếu tên nào không còn trong DB (bị đổi tên) thì card đó fallback về nội dung hard-code gốc để giữ layout.
 
 ## 7. Form contact
 
