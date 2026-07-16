@@ -6,32 +6,61 @@ import type { Service } from '../../lib/types'
 export const revalidate = 60
 export const metadata = { title: 'Dịch vụ — Wabi Therapy' }
 
-// ponytail: pill label + tag chips aren't DB columns (services table is only
-// sort_order/name/description, char-verified from the same source section) —
-// they stay hard-coded here, zipped to services by array position since the
-// query is ordered by sort_order and there are always exactly 5 rows.
-const SERVICE_EXTRAS: { pill: string; tags: string[] }[] = [
+// ponytail: pill label, tag chips and <b> highlights aren't DB columns
+// (services table is only sort_order/name/description, char-verified from the
+// same source section) — they stay hard-coded here, zipped to services by
+// array position since the query is ordered by sort_order and there are
+// always exactly 5 rows.
+const SERVICE_EXTRAS: { pill: string; tags: string[]; highlights: string[] }[] = [
   {
     pill: 'Counseling / Psychotherapy',
     tags: ['Trầm cảm · Lo âu', 'ADHD · BPD · PTSD', 'Attachment styles', 'Childhood trauma', 'Lòng tự trọng'],
+    highlights: [],
   },
   {
     pill: 'Psychological Assessment',
     tags: ['Test nhân cách Big5', 'Đa trí thông minh', 'Lòng tự trọng (Sorensen)', 'Cảm nhận hạnh phúc (Ryff)'],
+    highlights: ['7–10 ngày'],
   },
   {
     pill: 'Couple Therapy',
     tags: ['Đánh giá mối quan hệ', 'Chuẩn bị làm cha mẹ', 'Couple Hàn–Việt (tiếng Hàn)'],
+    highlights: [],
   },
   {
     pill: 'Trị liệu bằng nghệ thuật',
     tags: ['Art as Therapy', 'Khám phá cảm xúc'],
+    highlights: [],
   },
   {
     pill: 'Career Counseling',
     tags: ['Test đa trí thông minh', 'Định hướng nghề', 'Lập kế hoạch'],
+    highlights: ['Cơ bản', 'Chuyên sâu'],
   },
 ]
+
+// Source wraps some description phrases in <b style="color:#33302A;font-weight:500">
+// (Wabi Therapy.dc.html:247, :289). DB stores plain text, so re-wrap the known
+// phrases here. Phrase not found (content edited via dashboard) → renders plain.
+function renderDescription(text: string, highlights: string[]): React.ReactNode[] {
+  let parts: React.ReactNode[] = [text]
+  for (const h of highlights) {
+    parts = parts.flatMap((part) => {
+      if (typeof part !== 'string' || !part.includes(h)) return [part]
+      return part.split(h).flatMap((seg, i) =>
+        i === 0
+          ? [seg]
+          : [
+              <b key={`${h}-${i}`} style={{ color: '#33302A', fontWeight: 500 }}>
+                {h}
+              </b>,
+              seg,
+            ]
+      )
+    })
+  }
+  return parts
+}
 
 export default async function ServicesPage() {
   const { data, error } = await supabase().from('services').select('*').order('sort_order')
@@ -112,7 +141,7 @@ export default async function ServicesPage() {
                   >
                     {extra.pill}
                   </div>
-                  <p style={{ color: '#6B6459', marginBottom: '18px' }}>{s.description}</p>
+                  <p style={{ color: '#6B6459', marginBottom: '18px' }}>{renderDescription(s.description, extra.highlights)}</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '9px' }}>
                     {extra.tags.map((tag) => (
                       <span
