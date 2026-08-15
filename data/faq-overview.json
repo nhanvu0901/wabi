@@ -1,0 +1,81 @@
+{
+  "source": "73716d86-wabifaq50.xlsx",
+  "generatedBy": "scripts/extract-xlsx.mjs",
+  "sheet": "Tổng quan",
+  "groups": [
+    {
+      "topic": "Bắt đầu",
+      "questions": 7,
+      "highPriority": 7
+    },
+    {
+      "topic": "Dịch vụ",
+      "questions": 6,
+      "highPriority": 3
+    },
+    {
+      "topic": "Đánh giá",
+      "questions": 4,
+      "highPriority": 3
+    },
+    {
+      "topic": "Chuyên môn",
+      "questions": 3,
+      "highPriority": 2
+    },
+    {
+      "topic": "Chọn therapist",
+      "questions": 2,
+      "highPriority": 2
+    },
+    {
+      "topic": "Quy trình",
+      "questions": 9,
+      "highPriority": 7
+    },
+    {
+      "topic": "Chi phí",
+      "questions": 2,
+      "highPriority": 2
+    },
+    {
+      "topic": "Onion Cafe",
+      "questions": 1,
+      "highPriority": 1
+    },
+    {
+      "topic": "Trẻ vị thành niên",
+      "questions": 2,
+      "highPriority": 2
+    },
+    {
+      "topic": "Bảo mật",
+      "questions": 2,
+      "highPriority": 2
+    },
+    {
+      "topic": "Hiệu quả",
+      "questions": 3,
+      "highPriority": 2
+    },
+    {
+      "topic": "Sau buổi",
+      "questions": 1,
+      "highPriority": 0
+    },
+    {
+      "topic": "Khẩn cấp",
+      "questions": 2,
+      "highPriority": 2
+    },
+    {
+      "topic": "Khác",
+      "questions": 0,
+      "highPriority": 0
+    }
+  ],
+  "total": {
+    "questions": 44,
+    "highPriority": 35
+  }
+}

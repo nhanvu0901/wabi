@@ -1,9 +1,40 @@
+import { notFound } from 'next/navigation'
 import { LifeBuoy, MapPin } from 'lucide-react'
-import ContactForm from '../../components/ContactForm'
+import ContactForm from '../../../components/ContactForm'
+import { isLang, t, langAlternates, type Lang } from '../../../lib/i18n'
 
-export const metadata = { title: 'Liên hệ — Wabi Therapy' }
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params
+  if (!isLang(lang)) return { title: 'Liên hệ' }
+  return { title: t(lang)('ct.eyebrow'), alternates: langAlternates(lang, '/lien-he') }
+}
 
-export default function ContactPage() {
+const HOTLINES = [
+  { key: 'ct.hl1', number: '096 306 1414' },
+  { key: 'ct.hl2', number: '111' },
+  { key: 'ct.hl3', number: '1900 63 644' },
+  { key: 'ct.hl4', number: '1900 96 96 80' },
+  { key: 'ct.hl5', number: '024 3574 1111' },
+]
+
+const SOCIAL_ROW: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '15px',
+  padding: '15px 18px',
+  background: 'rgba(247,242,233,.08)',
+  borderRadius: '16px',
+  color: '#F7F2E9',
+}
+
+const SOCIAL_ICON: React.CSSProperties = { width: '22px', fontSize: '1.2rem', textAlign: 'center', color: '#D9A88C' }
+
+export default async function ContactPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang: raw } = await params
+  if (!isLang(raw)) notFound()
+  const lang: Lang = raw
+  const tr = t(lang)
+
   return (
     <section style={{ padding: 'clamp(56px,8vw,96px) 0' }}>
       <div style={{ maxWidth: '1160px', margin: '0 auto', padding: '0 clamp(20px,5vw,40px)' }}>
@@ -18,7 +49,7 @@ export default function ContactPage() {
           }}
         >
           <span style={{ fontSize: '.74rem', letterSpacing: '.24em', textTransform: 'uppercase', color: 'var(--accent-deep,#434D35)', fontWeight: 600 }}>
-            Contact
+            {tr('ct.eyebrow')}
           </span>
           <h2
             style={{
@@ -30,12 +61,9 @@ export default function ContactPage() {
               margin: '14px 0 14px',
             }}
           >
-            Hãy nhắn cho tụi mình khi bạn sẵn sàng
+            {tr('ct.title')}
           </h2>
-          <p style={{ color: '#645D53', fontSize: '1.06rem' }}>
-            Cứ thoải mái suy nghĩ. Bao giờ muốn lên lịch, chỉ cần nhắn — admin sẽ book giúp bạn sớm nhất. Nếu có câu
-            hỏi ngoài tham vấn hay tình huống cần giúp đỡ, cũng cứ nhắn nhé.
-          </p>
+          <p style={{ color: '#645D53', fontSize: '1.06rem' }}>{tr('ct.intro')}</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: '22px', alignItems: 'start' }}>
@@ -53,38 +81,26 @@ export default function ContactPage() {
             }}
           >
             <h3 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.7rem', color: '#F7F2E9', marginBottom: '12px' }}>
-              Kết nối với Wabi
+              {tr('ct.connect.t')}
             </h3>
-            <p style={{ color: 'rgba(247,242,233,.72)', marginBottom: '28px' }}>
-              Chia sẻ một chút về tuổi, nơi sống và điều bạn đang gặp phải — tụi mình sẽ tư vấn therapist & dịch vụ phù hợp.
-            </p>
+            <p style={{ color: 'rgba(247,242,233,.72)', marginBottom: '28px' }}>{tr('ct.connect.b')}</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <a
-                href="https://www.instagram.com/wabi.therapy/"
-                target="_blank"
-                rel="noopener"
-                style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px 18px', background: 'rgba(247,242,233,.08)', borderRadius: '16px', color: '#F7F2E9' }}
-              >
-                <i className="fa-brands fa-instagram" style={{ width: '22px', fontSize: '1.2rem', textAlign: 'center', color: '#D9A88C' }}></i>
+              <a href="https://www.instagram.com/wabi.therapy/" target="_blank" rel="noopener" style={SOCIAL_ROW}>
+                <i className="fa-brands fa-instagram" style={SOCIAL_ICON}></i>
                 <span>
                   <b style={{ display: 'block', fontWeight: 500 }}>wabi.therapy</b>
                   <span style={{ fontSize: '.82rem', color: 'rgba(247,242,233,.6)' }}>Instagram</span>
                 </span>
               </a>
-              <a
-                href="https://www.facebook.com/profile.php?id=61556380754645"
-                target="_blank"
-                rel="noopener"
-                style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px 18px', background: 'rgba(247,242,233,.08)', borderRadius: '16px', color: '#F7F2E9' }}
-              >
-                <i className="fa-brands fa-facebook" style={{ width: '22px', fontSize: '1.2rem', textAlign: 'center', color: '#D9A88C' }}></i>
+              <a href="https://www.facebook.com/profile.php?id=61556380754645" target="_blank" rel="noopener" style={SOCIAL_ROW}>
+                <i className="fa-brands fa-facebook" style={SOCIAL_ICON}></i>
                 <span>
                   <b style={{ display: 'block', fontWeight: 500 }}>Wabi Therapy</b>
                   <span style={{ fontSize: '.82rem', color: 'rgba(247,242,233,.6)' }}>Facebook</span>
                 </span>
               </a>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px 18px', background: 'rgba(247,242,233,.08)', borderRadius: '16px' }}>
-                <i className="fa-solid fa-location-dot" style={{ width: '22px', fontSize: '1.2rem', textAlign: 'center', color: '#D9A88C' }}></i>
+              <div style={{ ...SOCIAL_ROW, color: undefined }}>
+                <i className="fa-solid fa-location-dot" style={SOCIAL_ICON}></i>
                 <span>
                   <b style={{ display: 'block', fontWeight: 500 }}>4 Ngõ 46A Phạm Ngọc Thạch</b>
                   <span style={{ fontSize: '.82rem', color: 'rgba(247,242,233,.6)' }}>Onion Cafe · Hà Nội</span>
@@ -106,7 +122,7 @@ export default function ContactPage() {
               padding: 'clamp(30px,4vw,44px)',
             }}
           >
-            <ContactForm />
+            <ContactForm lang={lang} />
           </div>
         </div>
 
@@ -125,35 +141,29 @@ export default function ContactPage() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#A0573C', fontWeight: 600, marginBottom: '8px' }}>
-            <LifeBuoy style={{ width: '20px', height: '20px' }} /> Cần hỗ trợ khẩn cấp?
+            <LifeBuoy style={{ width: '20px', height: '20px' }} /> <span>{tr('ct.hot.tag')}</span>
           </div>
           <h3 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.5rem', marginBottom: '6px' }}>
-            Đường dây nóng
+            {tr('ct.hot.t')}
           </h3>
-          <p style={{ fontSize: '.95rem', color: '#6B6459', marginBottom: '22px', maxWidth: '640px' }}>
-            Nếu bạn đang trong khủng hoảng, hãy liên hệ ngay các đường dây dưới đây — luôn có người sẵn sàng lắng nghe.
-          </p>
+          <p style={{ fontSize: '.95rem', color: '#6B6459', marginBottom: '22px', maxWidth: '640px' }}>{tr('ct.hot.b')}</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: '0 40px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '14px', padding: '12px 0', borderBottom: '1px dashed #DDBFB0', fontSize: '.94rem' }}>
-              <span>Đường dây nóng Ngày Mai</span>
-              <b style={{ color: '#A0573C', fontWeight: 600, whiteSpace: 'nowrap' }}>096 306 1414</b>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '14px', padding: '12px 0', borderBottom: '1px dashed #DDBFB0', fontSize: '.94rem' }}>
-              <span>Tổng đài Bảo vệ Trẻ em Quốc gia</span>
-              <b style={{ color: '#A0573C', fontWeight: 600, whiteSpace: 'nowrap' }}>111</b>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '14px', padding: '12px 0', borderBottom: '1px dashed #DDBFB0', fontSize: '.94rem' }}>
-              <span>Hội Tâm lý Trị liệu Việt Nam</span>
-              <b style={{ color: '#A0573C', fontWeight: 600, whiteSpace: 'nowrap' }}>1900 63 644</b>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '14px', padding: '12px 0', borderBottom: '1px dashed #DDBFB0', fontSize: '.94rem' }}>
-              <span>Ngôi nhà Bình yên (PN & trẻ em)</span>
-              <b style={{ color: '#A0573C', fontWeight: 600, whiteSpace: 'nowrap' }}>1900 96 96 80</b>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '14px', padding: '12px 0', fontSize: '.94rem' }}>
-              <span>Bệnh viện Việt Pháp (Hà Nội)</span>
-              <b style={{ color: '#A0573C', fontWeight: 600, whiteSpace: 'nowrap' }}>024 3574 1111</b>
-            </div>
+            {HOTLINES.map((h, i) => (
+              <div
+                key={h.key}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: '14px',
+                  padding: '12px 0',
+                  borderBottom: i === HOTLINES.length - 1 ? undefined : '1px dashed #DDBFB0',
+                  fontSize: '.94rem',
+                }}
+              >
+                <span>{tr(h.key)}</span>
+                <b style={{ color: '#A0573C', fontWeight: 600, whiteSpace: 'nowrap' }}>{h.number}</b>
+              </div>
+            ))}
           </div>
         </div>
 

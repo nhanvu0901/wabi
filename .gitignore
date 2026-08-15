@@ -3,3 +3,7 @@ node_modules/
 .env*.local
 .DS_Store
 *.tsbuildinfo
+
+# macOS AppleDouble sidecars — this tree was copied from a Mac
+._*
+.DS_Store

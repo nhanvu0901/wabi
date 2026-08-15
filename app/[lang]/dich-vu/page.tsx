@@ -1,71 +1,83 @@
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { Users } from 'lucide-react'
-import { supabase } from '../../lib/supabase'
-import type { Service } from '../../lib/types'
+import Rich from '../../../components/Rich'
+import { getServices } from '../../../lib/content'
+import { isLang, t, langAlternates, type Lang } from '../../../lib/i18n'
+import { pickServiceName, pickServiceDescription } from '../../../lib/types'
 
 export const revalidate = 60
-export const metadata = { title: 'Dịch vụ — Wabi Therapy' }
 
-// ponytail: pill label, tag chips and <b> highlights aren't DB columns
-// (services table is only sort_order/name/description, char-verified from the
-// same source section) — they stay hard-coded here, keyed by sort_order (1–5)
-// since that's what the query orders by. Unknown sort_order (DB row without a
-// matching entry) degrades to empty pill/tags/highlights instead of crashing.
-const SERVICE_EXTRAS: Record<number, { pill: string; tags: string[]; highlights: string[] }> = {
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params
+  if (!isLang(lang)) return { title: 'Dịch vụ' }
+  return { title: t(lang)('nav.services'), alternates: langAlternates(lang, '/dich-vu') }
+}
+
+// Pill label and tag chips aren't DB columns — the services table only holds
+// sort_order/name/description. They stay here, keyed by sort_order (1–5).
+// Following the design: pills for 01/02/03/05 are English clinical labels that
+// don't translate, and only the tags that need translating carry a dict key.
+// `key: true` means "look this up"; a plain string renders as-is in both languages.
+type Chip = { text: string; key?: boolean }
+const SERVICE_EXTRAS: Record<number, { pill: string; pillKey?: boolean; tags: Chip[]; highlightKeys?: string[] }> = {
   1: {
     pill: 'Counseling / Psychotherapy',
-    tags: ['Trầm cảm · Lo âu', 'ADHD · BPD · PTSD', 'Attachment styles', 'Childhood trauma', 'Lòng tự trọng'],
-    highlights: [],
+    tags: [
+      { text: 'Trầm cảm · Lo âu' },
+      { text: 'ADHD · BPD · PTSD' },
+      { text: 'Attachment styles' },
+      { text: 'Childhood trauma' },
+      { text: 'sv1.tag', key: true },
+    ],
   },
   2: {
     pill: 'Psychological Assessment',
-    tags: ['Test nhân cách Big5', 'Đa trí thông minh', 'Lòng tự trọng (Sorensen)', 'Cảm nhận hạnh phúc (Ryff)'],
-    highlights: ['7–10 ngày'],
+    tags: [
+      { text: 'sv2.tag1', key: true },
+      { text: 'sv2.tag2', key: true },
+      { text: 'sv2.tag3', key: true },
+      { text: 'sv2.tag4', key: true },
+    ],
   },
   3: {
     pill: 'Couple Therapy',
-    tags: ['Đánh giá mối quan hệ', 'Chuẩn bị làm cha mẹ', 'Couple Hàn–Việt (tiếng Hàn)'],
-    highlights: [],
+    tags: [
+      { text: 'sv3.tag1', key: true },
+      { text: 'sv3.tag2', key: true },
+      { text: 'sv3.tag3', key: true },
+    ],
   },
   4: {
-    pill: 'Trị liệu bằng nghệ thuật',
-    tags: ['Art as Therapy', 'Khám phá cảm xúc'],
-    highlights: [],
+    pill: 'sv4.badge',
+    pillKey: true,
+    tags: [{ text: 'Art as Therapy' }, { text: 'sv4.tag', key: true }],
   },
   5: {
     pill: 'Career Counseling',
-    tags: ['Test đa trí thông minh', 'Định hướng nghề', 'Lập kế hoạch'],
-    highlights: ['Cơ bản', 'Chuyên sâu'],
+    tags: [
+      { text: 'sv5.tag1', key: true },
+      { text: 'sv5.tag2', key: true },
+      { text: 'sv5.tag3', key: true },
+    ],
   },
 }
 
-// Source wraps some description phrases in <b style="color:#33302A;font-weight:500">
-// (Wabi Therapy.dc.html:247, :289). DB stores plain text, so re-wrap the known
-// phrases here. Phrase not found (content edited via dashboard) → renders plain.
-function renderDescription(text: string, highlights: string[]): React.ReactNode[] {
-  let parts: React.ReactNode[] = [text]
-  for (const h of highlights) {
-    parts = parts.flatMap((part) => {
-      if (typeof part !== 'string' || !part.includes(h)) return [part]
-      return part.split(h).flatMap((seg, i) =>
-        i === 0
-          ? [seg]
-          : [
-              <b key={`${h}-${i}`} style={{ color: '#33302A', fontWeight: 500 }}>
-                {h}
-              </b>,
-              seg,
-            ]
-      )
-    })
-  }
-  return parts
-}
+// sv2.b and sv5.b carry <b> highlights in the dictionary; the DB stores plain
+// text. When the DB copy still matches the dictionary copy we render the
+// dictionary version (markup intact); once someone edits it in the dashboard the
+// DB wins and renders plain.
+const RICH_DESCRIPTION: Record<number, string> = { 2: 'sv2.b', 5: 'sv5.b' }
 
-export default async function ServicesPage() {
-  const { data, error } = await supabase().from('services').select('*').order('sort_order')
-  if (error) throw error
-  const services = data as Service[]
+export default async function ServicesPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang: raw } = await params
+  if (!isLang(raw)) notFound()
+  const lang: Lang = raw
+  const tr = t(lang)
+
+  const services = await getServices()
+
+  const stripTags = (s: string) => s.replace(/<[^>]*>/g, '')
 
   return (
     <section style={{ padding: 'clamp(56px,8vw,96px) 0' }}>
@@ -81,7 +93,7 @@ export default async function ServicesPage() {
           }}
         >
           <span style={{ fontSize: '.74rem', letterSpacing: '.24em', textTransform: 'uppercase', color: 'var(--accent-deep,#434D35)', fontWeight: 600 }}>
-            Dịch vụ
+            {tr('sp.eyebrow')}
           </span>
           <h2
             style={{
@@ -93,16 +105,17 @@ export default async function ServicesPage() {
               margin: '14px 0 14px',
             }}
           >
-            Chọn hình thức phù hợp với bạn
+            {tr('sv.title')}
           </h2>
-          <p style={{ color: '#645D53', fontSize: '1.06rem' }}>
-            Online qua Google Meet hoặc trực tiếp tại địa điểm của therapist (HN & TP.HCM). Một buổi khoảng 60 phút.
-            Không quy định số buổi cố định.
-          </p>
+          <p style={{ color: '#645D53', fontSize: '1.06rem' }}>{tr('sv.intro')}</p>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {services.map((s) => {
-            const extra = SERVICE_EXTRAS[s.sort_order] ?? { pill: '', tags: [], highlights: [] }
+            const extra = SERVICE_EXTRAS[s.sort_order] ?? { pill: '', tags: [] }
+            const dbDescription = pickServiceDescription(s, lang)
+            const richKey = RICH_DESCRIPTION[s.sort_order]
+            const richValue = richKey ? tr(richKey) : null
+            const useRich = richValue != null && stripTags(richValue) === dbDescription
             return (
               <div
                 key={s.id}
@@ -125,7 +138,7 @@ export default async function ServicesPage() {
                 </div>
                 <div>
                   <h3 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: 'clamp(1.4rem,2.6vw,1.75rem)', marginBottom: '8px' }}>
-                    {s.name}
+                    {pickServiceName(s, lang)}
                   </h3>
                   <div
                     style={{
@@ -139,16 +152,20 @@ export default async function ServicesPage() {
                       marginBottom: '16px',
                     }}
                   >
-                    {extra.pill}
+                    {extra.pillKey ? tr(extra.pill) : extra.pill}
                   </div>
-                  <p style={{ color: '#6B6459', marginBottom: '18px' }}>{renderDescription(s.description, extra.highlights)}</p>
+                  {useRich ? (
+                    <Rich as="p" html={richValue} style={{ color: '#6B6459', marginBottom: '18px' }} />
+                  ) : (
+                    <p style={{ color: '#6B6459', marginBottom: '18px' }}>{dbDescription}</p>
+                  )}
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '9px' }}>
                     {extra.tags.map((tag) => (
                       <span
-                        key={tag}
+                        key={tag.text}
                         style={{ fontSize: '.83rem', background: '#F7F2E9', border: '1px solid #E7DECE', padding: '6px 14px', borderRadius: '100px', color: '#6B6459' }}
                       >
-                        {tag}
+                        {tag.key ? tr(tag.text) : tag.text}
                       </span>
                     ))}
                   </div>
@@ -162,7 +179,7 @@ export default async function ServicesPage() {
           style={{ opacity: 0, transform: 'translateY(22px)', transition: 'opacity .8s ease,transform .8s ease', textAlign: 'center', marginTop: '48px' }}
         >
           <Link
-            href="/doi-ngu"
+            href={`/${lang}/doi-ngu`}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -175,7 +192,7 @@ export default async function ServicesPage() {
               color: '#FCFAF4',
             }}
           >
-            <Users style={{ width: '18px', height: '18px' }} /> Gặp đội ngũ therapist
+            <Users style={{ width: '18px', height: '18px' }} /> <span>{tr('sv.cta')}</span>
           </Link>
         </div>
       </div>

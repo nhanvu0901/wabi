@@ -1,0 +1,47 @@
+{
+  "source": "73716d86-wabifaq50.xlsx",
+  "generatedBy": "scripts/extract-xlsx.mjs",
+  "sheet": "TEXT EDITED",
+  "copyUnderReview": [
+    {
+      "current": "Wabi là không gian an toàn, riêng tư và thấu cảm — nơi bạn bắt đầu hành trình chăm sóc sức khỏe tinh thần một cách nhẹ nhàng, đúng với chính mình. Online & offline tại Hà Nội và TP.HCM.",
+      "replacement": null
+    },
+    {
+      "current": "An toàn & riêng tư\nMọi chia sẻ của bạn được giữ kín tuyệt đối. Không phán xét, chỉ có lắng nghe và thấu hiểu.",
+      "replacement": null
+    },
+    {
+      "current": "Đồng hành linh hoạt\nKhông quy định số buổi cố định, không cọc trước. Bạn hẹn theo nhịp của mình — tuần, tháng, hay khi cần.",
+      "replacement": null
+    },
+    {
+      "current": "Mỗi vết thương tâm hồn đều xứng đáng được lắng nghe và chăm sóc. Wabi có những nhà trị liệu sẵn sàng ở đây, đi cùng bạn nhẹ nhàng từng bước.",
+      "replacement": null
+    }
+  ],
+  "services": {
+    "instruction": "Bỏ Art Therapy. Thêm các Dịch vụ sau:",
+    "remove": [
+      "Art Therapy"
+    ],
+    "add": [
+      {
+        "name": "Employment Asssistant Program",
+        "description": "Đồng hành cùng doanh nghiệp trong việc xây dựng văn hóa quan tâm đến con người thông qua các giải pháp chăm sóc sức khỏe tâm thần dựa trên cơ sở khoa học và phù hợp với bối cảnh thực tiễn."
+      },
+      {
+        "name": "Low cost therapy",
+        "description": "Chương trình Hỗ trợ (Low-cost therapy) mang đến giải pháp hỗ trợ thiết thực với mức phí giảm 20% so với thông thường, dành riêng cho học sinh và sinh viên dưới 20 tuổi hoặc các bạn đang gặp khó khăn về tài chính"
+      },
+      {
+        "name": "Workshop",
+        "description": "Chú trọng sự kết hợp giữa lý thuyết nền tảng và thực hành trải nghiệm, giúp bạn mang về những giá trị ứng dụng thực tế. Dưới sự dẫn dắt của thạc sĩ tâm lý/nhà trị liệu, mỗi buổi học sẽ cung cấp kiến thức chuyên ngành và kỹ năng cụ thể—từ thiết lập ranh giới, nhận diện kiểu gắn bó đến xoa dịu lo âu."
+      },
+      {
+        "name": "Opentalk",
+        "description": "Không gian trò chuyện bình đẳng, tự do, không diễn giả hay áp lực phát biểu. Bạn có thể thoải mái lắng nghe hoặc lên tiếng khi sẵn sàng. Mỗi phiên thảo luận đều có chuyên viên tâm lý đồng hành để giữ vững không gian an toàn, bảo mật và nâng đỡ cảm xúc."
+      }
+    ]
+  }
+}

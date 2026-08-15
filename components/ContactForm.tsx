@@ -2,10 +2,24 @@
 import { useState, useTransition } from 'react'
 import { Send, Check } from 'lucide-react'
 import { submitContact } from '../lib/actions'
+import { t, type Lang } from '../lib/i18n'
 
-export default function ContactForm() {
+const FIELD: React.CSSProperties = {
+  width: '100%',
+  padding: '13px 16px',
+  border: '1px solid #E2D8C6',
+  borderRadius: '14px',
+  background: '#F7F2E9',
+  color: '#33302A',
+  outline: 'none',
+}
+
+const LABEL: React.CSSProperties = { display: 'block', fontSize: '.86rem', fontWeight: 500, marginBottom: '7px' }
+
+export default function ContactForm({ lang }: { lang: Lang }) {
   const [state, setState] = useState<'idle' | 'ok' | 'error'>('idle')
   const [pending, startTransition] = useTransition()
+  const tr = t(lang)
 
   if (state === 'ok') {
     return (
@@ -25,9 +39,9 @@ export default function ContactForm() {
           <Check style={{ width: '28px', height: '28px' }} />
         </div>
         <h3 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.5rem', marginBottom: '8px' }}>
-          Cảm ơn bạn đã nhắn.
+          {tr('ct.ok.t')}
         </h3>
-        <p style={{ color: '#6B6459' }}>Tụi mình đã nhận lời nhắn của bạn và sẽ phản hồi sớm nhất. Cứ thở nhẹ nhàng nhé.</p>
+        <p style={{ color: '#6B6459' }}>{tr('ct.ok.b')}</p>
       </div>
     )
   }
@@ -41,9 +55,8 @@ export default function ContactForm() {
         if (pending) return
         const fd = new FormData(e.currentTarget)
         startTransition(async () => {
-          // ponytail: catches network failure (e.g. offline) reaching the
-          // server action, not just a Supabase-side { ok: false } — both must
-          // surface the same error line.
+          // Catches a network failure reaching the server action, not just a
+          // Supabase-side { ok: false } — both must surface the same error line.
           try {
             const res = await submitContact(fd)
             setState(res.ok ? 'ok' : 'error')
@@ -54,66 +67,22 @@ export default function ContactForm() {
       }}
     >
       <div>
-        <label htmlFor="f-name" style={{ display: 'block', fontSize: '.86rem', fontWeight: 500, marginBottom: '7px' }}>
-          Họ tên
+        <label htmlFor="f-name" style={LABEL}>
+          {tr('ct.f.name')}
         </label>
-        <input
-          id="f-name"
-          name="name"
-          type="text"
-          required
-          autoComplete="name"
-          style={{
-            width: '100%',
-            padding: '13px 16px',
-            border: '1px solid #E2D8C6',
-            borderRadius: '14px',
-            background: '#F7F2E9',
-            color: '#33302A',
-            outline: 'none',
-          }}
-        />
+        <input id="f-name" name="name" type="text" required autoComplete="name" style={FIELD} />
       </div>
       <div>
-        <label htmlFor="f-contact" style={{ display: 'block', fontSize: '.86rem', fontWeight: 500, marginBottom: '7px' }}>
-          Email hoặc số điện thoại
+        <label htmlFor="f-contact" style={LABEL}>
+          {tr('ct.f.contact')}
         </label>
-        <input
-          id="f-contact"
-          name="contact"
-          type="text"
-          required
-          autoComplete="email"
-          style={{
-            width: '100%',
-            padding: '13px 16px',
-            border: '1px solid #E2D8C6',
-            borderRadius: '14px',
-            background: '#F7F2E9',
-            color: '#33302A',
-            outline: 'none',
-          }}
-        />
+        <input id="f-contact" name="contact" type="text" required autoComplete="email" style={FIELD} />
       </div>
       <div>
-        <label htmlFor="f-msg" style={{ display: 'block', fontSize: '.86rem', fontWeight: 500, marginBottom: '7px' }}>
-          Bạn muốn chia sẻ điều gì?
+        <label htmlFor="f-msg" style={LABEL}>
+          {tr('ct.f.msg')}
         </label>
-        <textarea
-          id="f-msg"
-          name="message"
-          rows={4}
-          style={{
-            width: '100%',
-            padding: '13px 16px',
-            border: '1px solid #E2D8C6',
-            borderRadius: '14px',
-            background: '#F7F2E9',
-            color: '#33302A',
-            outline: 'none',
-            resize: 'vertical',
-          }}
-        />
+        <textarea id="f-msg" name="message" rows={4} style={{ ...FIELD, resize: 'vertical' }} />
       </div>
       <button
         type="submit"
@@ -133,15 +102,11 @@ export default function ContactForm() {
           marginTop: '4px',
         }}
       >
-        <Send style={{ width: '17px', height: '17px' }} /> Gửi lời nhắn
+        <Send style={{ width: '17px', height: '17px' }} /> <span>{tr('ct.f.btn')}</span>
       </button>
-      <p style={{ fontSize: '.8rem', color: '#8A8072', textAlign: 'center' }}>
-        Tụi mình sẽ phản hồi qua thông tin bạn để lại. Mọi chia sẻ đều được giữ kín.
-      </p>
+      <p style={{ fontSize: '.8rem', color: '#8A8072', textAlign: 'center' }}>{tr('ct.f.note')}</p>
       {state === 'error' && (
-        <p style={{ color: '#8a4b3a', fontSize: '.9rem', marginTop: '8px' }}>
-          Gửi không thành công, vui lòng thử lại hoặc gọi hotline.
-        </p>
+        <p style={{ color: '#8a4b3a', fontSize: '.9rem', marginTop: '8px' }}>{tr('ct.f.err')}</p>
       )}
     </form>
   )

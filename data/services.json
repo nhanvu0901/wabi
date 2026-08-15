@@ -1,0 +1,46 @@
+{
+  "generatedBy": "scripts/… (design buildTeam array + supabase/seed.sql)",
+  "count": 5,
+  "entries": [
+    {
+      "id": 1,
+      "sort_order": 1,
+      "name": "Tham vấn & Trị liệu tâm lý",
+      "name_en": "Counseling & Psychotherapy",
+      "description": "Quá trình điều trị liên tục nhằm giải quyết vấn đề tâm lý, cải thiện sức khỏe tinh thần và phát triển cá nhân, thông qua đối thoại và các kỹ thuật chuyên biệt. Phù hợp cho vấn đề về bản ngã (phát triển bản thân, lòng tự trọng, phong cách gắn bó) và các bệnh lý.",
+      "description_en": "An ongoing process to address psychological difficulties, improve mental wellbeing and support personal growth, through dialogue and specialized techniques. Suited to questions of self (personal development, self-esteem, attachment style) and clinical conditions."
+    },
+    {
+      "id": 2,
+      "sort_order": 2,
+      "name": "Đánh giá tâm lý",
+      "name_en": "Psychological Assessment",
+      "description": "Sử dụng các bài kiểm tra và công cụ chuẩn hóa để thu thập thông tin về nhận thức, tính cách, cảm xúc và hành vi. Buổi 60 phút làm việc trực tiếp với therapist — họ chọn bài test phù hợp, kết luận ngay trong buổi và gửi báo cáo PDF chi tiết qua email trong 7–10 ngày.",
+      "description_en": "Using standardized tests and tools to gather information about cognition, personality, emotion and behavior. A 60-minute session working directly with a therapist — they choose suitable tests, conclude within the session, and send a detailed PDF report by email within 7–10 days."
+    },
+    {
+      "id": 3,
+      "sort_order": 3,
+      "name": "Tham vấn cặp đôi",
+      "name_en": "Couple Counseling",
+      "description": "Cùng nhau xây dựng mối quan hệ tốt đẹp hơn và làm rõ các vấn đề về giao tiếp, cách thể hiện cảm xúc. Buổi đầu khám phá nhu cầu riêng của mỗi người (30 phút/người), các buổi sau cả hai tham gia cùng nhau (90 phút). Có thể sắp xếp buổi riêng khi cần.",
+      "description_en": "Build a better relationship together and clarify issues around communication and expressing emotion. The first session explores each person's needs (30 min/person); later sessions are joint (90 min). Individual sessions can be arranged when needed."
+    },
+    {
+      "id": 4,
+      "sort_order": 4,
+      "name": "Art Therapy",
+      "name_en": "Art Therapy",
+      "description": "Dùng công cụ nghệ thuật để khám phá và chữa lành cảm xúc — dành cho những ai muốn thể hiện bản thân theo cách không chỉ bằng lời nói. 60 phút mỗi buổi, có nhiều lựa chọn tiếp cận.",
+      "description_en": "Using art tools to explore and heal emotions — for those who want to express themselves in more than words. 60 minutes per session, with several approaches to choose from."
+    },
+    {
+      "id": 5,
+      "sort_order": 5,
+      "name": "Hướng nghiệp",
+      "name_en": "Career Counseling",
+      "description": "Làm test năng lực + trò chuyện với therapist về định hướng. Gói Cơ bản (2 buổi) gồm test và tư vấn kết quả; gói Chuyên sâu (3 buổi) có thêm buổi lên kế hoạch thực hiện định hướng.",
+      "description_en": "Take an aptitude test + talk with a therapist about direction. The Basic package (2 sessions) covers testing and results consultation; the In-depth package (3 sessions) adds a session to plan out your direction."
+    }
+  ]
+}

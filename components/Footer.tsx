@@ -1,4 +1,7 @@
-export default function Footer() {
+import { type Lang, t } from '../lib/i18n'
+
+export default function Footer({ lang }: { lang: Lang }) {
+  const tr = t(lang)
   return (
     <footer style={{ background: '#EFE7D8', borderTop: '1px solid #E2D8C6', padding: 'clamp(40px,6vw,60px) 0 36px' }}>
       <div
@@ -18,7 +21,7 @@ export default function Footer() {
             <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#B67A5E', boxShadow: '0 0 0 5px #EAD9CB' }}></span>
             <span style={{ fontFamily: "'Newsreader',serif", fontSize: '1.4rem' }}>Wabi Therapy</span>
           </div>
-          <p style={{ fontSize: '.92rem', color: '#6B6459' }}>Không gian an toàn, riêng tư và thấu cảm cho sức khỏe tinh thần của bạn.</p>
+          <p style={{ fontSize: '.92rem', color: '#6B6459' }}>{tr('foot.tag')}</p>
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
           <a
@@ -69,7 +72,7 @@ export default function Footer() {
           color: '#8A8072',
         }}
       >
-        © 2026 Wabi Therapy · Tham vấn · Trị liệu · Đánh giá tâm lý
+        {tr('foot.copy')}
       </div>
     </footer>
   )

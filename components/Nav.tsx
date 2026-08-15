@@ -3,17 +3,24 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu } from 'lucide-react'
+import { LANGS, type Lang, t } from '../lib/i18n'
 
+// Route slugs stay Vietnamese in both languages (/vi/dich-vu and /en/dich-vu).
+// Only the visible label switches — that comes from the dictionary.
 const LINKS = [
-  { href: '/', label: 'Home' },
-  { href: '/dich-vu', label: 'Dịch vụ' },
-  { href: '/doi-ngu', label: 'Đội ngũ Therapist' },
-  { href: '/lien-he', label: 'Contact' },
+  { path: '', key: 'nav.home' },
+  { path: '/dich-vu', key: 'nav.services' },
+  { path: '/doi-ngu', key: 'nav.team' },
+  { path: '/lien-he', key: 'nav.contact' },
 ]
 
-export default function Nav() {
+export default function Nav({ lang }: { lang: Lang }) {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
+  const tr = t(lang)
+
+  // Strip the language prefix so the same path can be rebuilt in the other language.
+  const rest = pathname.replace(/^\/(vi|en)/, '')
 
   return (
     <header
@@ -40,7 +47,7 @@ export default function Nav() {
         }}
       >
         <Link
-          href="/"
+          href={`/${lang}`}
           onClick={() => setOpen(false)}
           style={{ display: 'flex', alignItems: 'center', gap: '11px', cursor: 'pointer', color: '#33302A' }}
         >
@@ -51,11 +58,12 @@ export default function Nav() {
         </Link>
         <nav className={open ? 'wnav-links open' : 'wnav-links'} id="wmenu" style={{ alignItems: 'center', gap: '4px' }}>
           {LINKS.map((l) => {
-            const active = pathname === l.href
+            const href = `/${lang}${l.path}`
+            const active = pathname === href
             return (
               <Link
-                key={l.href}
-                href={l.href}
+                key={l.key}
+                href={href}
                 onClick={() => setOpen(false)}
                 style={{
                   fontSize: '.92rem',
@@ -67,30 +75,58 @@ export default function Nav() {
                   color: active ? '#FCFAF4' : '#6B6459',
                 }}
               >
-                {l.label}
+                {tr(l.key)}
               </Link>
             )
           })}
         </nav>
-        <button
-          className="wburger"
-          onClick={() => setOpen((o) => !o)}
-          aria-label="Mở menu"
-          aria-expanded={open}
-          style={{
-            background: 'transparent',
-            border: '1px solid #E2D8C6',
-            borderRadius: '12px',
-            width: '44px',
-            height: '44px',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            color: '#33302A',
-          }}
-        >
-          <Menu size={22} />
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+          {/* Language switcher — <Link> rather than the design's setLang(), so the
+              server renders the chosen language instead of swapping it after load. */}
+          <div style={{ display: 'flex', alignItems: 'center', background: '#F1E9DB', border: '1px solid #E2D8C6', borderRadius: '100px', padding: '3px' }}>
+            {LANGS.map((l) => (
+              <Link
+                key={l}
+                href={`/${l}${rest}`}
+                hrefLang={l}
+                aria-current={l === lang ? 'true' : undefined}
+                onClick={() => setOpen(false)}
+                style={{
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '.8rem',
+                  fontWeight: 600,
+                  padding: '6px 13px',
+                  borderRadius: '100px',
+                  transition: '.2s',
+                  background: l === lang ? 'var(--accent,#5A6647)' : 'transparent',
+                  color: l === lang ? '#FCFAF4' : '#8A8072',
+                }}
+              >
+                {l.toUpperCase()}
+              </Link>
+            ))}
+          </div>
+          <button
+            className="wburger"
+            onClick={() => setOpen((o) => !o)}
+            aria-label="Menu"
+            aria-expanded={open}
+            style={{
+              background: 'transparent',
+              border: '1px solid #E2D8C6',
+              borderRadius: '12px',
+              width: '44px',
+              height: '44px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              color: '#33302A',
+            }}
+          >
+            <Menu size={22} />
+          </button>
+        </div>
       </div>
     </header>
   )

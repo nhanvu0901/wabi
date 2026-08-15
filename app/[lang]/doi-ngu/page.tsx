@@ -1,16 +1,25 @@
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { MessageCircle } from 'lucide-react'
-import { supabase } from '../../lib/supabase'
-import type { Therapist } from '../../lib/types'
-import TherapistCard from '../../components/TherapistCard'
+import { getTherapists } from '../../../lib/content'
+import { isLang, t, langAlternates, type Lang } from '../../../lib/i18n'
+import TherapistCard from '../../../components/TherapistCard'
 
 export const revalidate = 60
-export const metadata = { title: 'Đội ngũ — Wabi Therapy' }
 
-export default async function TeamPage() {
-  const { data, error } = await supabase().from('therapists').select('*').order('sort_order')
-  if (error) throw error
-  const therapists = data as Therapist[]
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params
+  if (!isLang(lang)) return { title: 'Đội ngũ' }
+  return { title: t(lang)('tm.eyebrow'), alternates: langAlternates(lang, '/doi-ngu') }
+}
+
+export default async function TeamPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang: raw } = await params
+  if (!isLang(raw)) notFound()
+  const lang: Lang = raw
+  const tr = t(lang)
+
+  const therapists = await getTherapists()
 
   return (
     <section style={{ padding: 'clamp(56px,8vw,96px) 0' }}>
@@ -26,7 +35,7 @@ export default async function TeamPage() {
           }}
         >
           <span style={{ fontSize: '.74rem', letterSpacing: '.24em', textTransform: 'uppercase', color: 'var(--accent-deep,#434D35)', fontWeight: 600 }}>
-            Đội ngũ Therapist
+            {tr('tm.eyebrow')}
           </span>
           <h2
             style={{
@@ -38,24 +47,19 @@ export default async function TeamPage() {
               margin: '14px 0 14px',
             }}
           >
-            Những người sẽ đồng hành cùng bạn
+            {tr('tm.title')}
           </h2>
-          <p style={{ color: '#645D53', fontSize: '1.06rem' }}>
-            Mỗi therapist có chuyên môn, liệu pháp và mức phí riêng. Chia sẻ với admin về tuổi, nơi sống và vấn đề bạn
-            gặp — tụi mình sẽ tư vấn người phù hợp nhất. Bạn hoàn toàn có thể đổi therapist nếu thấy cần.
-          </p>
+          <p style={{ color: '#645D53', fontSize: '1.06rem' }}>{tr('tm.intro')}</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', gap: '22px' }}>
-          {therapists.map((t) => (
-            <TherapistCard key={t.id} t={t} />
+          {therapists.map((row) => (
+            <TherapistCard key={row.id} t={row} lang={lang} />
           ))}
         </div>
-        <p style={{ textAlign: 'center', color: '#7A7266', marginTop: '36px', fontSize: '.94rem' }}>
-          …và nhiều chuyên viên khác. Nhắn admin để nhận danh sách đầy đủ phù hợp với nhu cầu của bạn.
-        </p>
+        <p style={{ textAlign: 'center', color: '#7A7266', marginTop: '36px', fontSize: '.94rem' }}>{tr('tm.foot')}</p>
         <div style={{ textAlign: 'center', marginTop: '26px' }}>
           <Link
-            href="/lien-he"
+            href={`/${lang}/lien-he`}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -68,7 +72,7 @@ export default async function TeamPage() {
               color: '#FCFAF4',
             }}
           >
-            <MessageCircle style={{ width: '18px', height: '18px' }} /> Nhờ tư vấn chọn therapist
+            <MessageCircle style={{ width: '18px', height: '18px' }} /> <span>{tr('tm.cta')}</span>
           </Link>
         </div>
       </div>
