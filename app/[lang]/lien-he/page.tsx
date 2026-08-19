@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import RiseIn from '../../../components/RiseIn'
 import { LifeBuoy, MapPin } from 'lucide-react'
 import ContactForm from '../../../components/ContactForm'
 import { isLang, t, langAlternates, type Lang } from '../../../lib/i18n'
@@ -61,7 +62,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
               margin: '14px 0 14px',
             }}
           >
-            {tr('ct.title')}
+            <RiseIn>{tr('ct.title')}</RiseIn>
           </h2>
           <p style={{ color: '#645D53', fontSize: '1.06rem' }}>{tr('ct.intro')}</p>
         </div>

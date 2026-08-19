@@ -135,6 +135,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             zIndex: 0,
           }}
         ></div>
+        {/* Vòng thở — điểm nhấn chuyển động của trang chủ. Ba vòng lệch pha 1/3
+            nhịp; nhìn vài giây là thở theo, đó là kỹ thuật trị liệu thật.
+            aria-hidden vì nó không mang thông tin gì cho trình đọc màn hình. */}
+        <div className="wabi-breath-rings" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+        </div>
         <div
           style={{
             maxWidth: '900px',
@@ -306,6 +314,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             ].map(({ k, Icon, bg, fg, delay }) => (
               <div
                 key={k}
+                className="wabi-lift"
                 data-reveal
                 style={{
                   opacity: 0,
@@ -350,6 +359,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               <Link
                 key={k}
                 href={`/${lang}/dich-vu`}
+                className="wabi-lift"
                 data-reveal
                 style={{
                   opacity: 0,
@@ -441,6 +451,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               return (
                 <div
                   key={g.name}
+                  className="wabi-lift"
                   data-reveal
                   style={{
                     opacity: 0,

@@ -18,7 +18,10 @@ export default function Footer({ lang }: { lang: Lang }) {
       >
         <div style={{ maxWidth: '380px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '12px' }}>
-            <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#B67A5E', boxShadow: '0 0 0 5px #EAD9CB' }}></span>
+            <span
+              className="wabi-pulse"
+              style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#B67A5E', ['--ring' as string]: '#EAD9CB' }}
+            ></span>
             <span style={{ fontFamily: "'Newsreader',serif", fontSize: '1.4rem' }}>Wabi Therapy</span>
           </div>
           <p style={{ fontSize: '.92rem', color: '#6B6459' }}>{tr('foot.tag')}</p>

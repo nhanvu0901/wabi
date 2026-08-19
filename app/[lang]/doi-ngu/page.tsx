@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import RiseIn from '../../../components/RiseIn'
 import { MessageCircle } from 'lucide-react'
 import { getTherapists } from '../../../lib/content'
 import { isLang, t, langAlternates, type Lang } from '../../../lib/i18n'
@@ -47,7 +48,7 @@ export default async function TeamPage({ params }: { params: Promise<{ lang: str
               margin: '14px 0 14px',
             }}
           >
-            {tr('tm.title')}
+            <RiseIn>{tr('tm.title')}</RiseIn>
           </h2>
           <p style={{ color: '#645D53', fontSize: '1.06rem' }}>{tr('tm.intro')}</p>
         </div>

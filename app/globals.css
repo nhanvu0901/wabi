@@ -22,3 +22,137 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
   #chat-panel{width:calc(100vw - 28px) !important;height:calc(100vh - 120px) !important;max-height:560px !important}
 }
 :root{--accent:#5A6647;--accent-deep:#434D35}
+
+/* ============================================================
+   NHỊP THỞ — hệ chuyển động
+   ============================================================
+   Nhịp gốc 11s = 6 nhịp/phút, tần số "coherent breathing". Mọi
+   chuyển động trên site đều lấy thời lượng từ đây, nên chúng
+   cùng một nhịp thay vì mỗi chỗ một kiểu.
+   Thở ra (6s) dài hơn thở vào (4s) — đó là thứ khiến chuyển
+   động có cảm giác buông chứ không phải đẩy.                  */
+:root{
+  --breath:11s;
+  --breath-in:4s;
+  --breath-out:6s;
+  --quarter:2.75s;
+  --exhale:cubic-bezier(.16,.84,.28,1);
+  --reveal:1.4s;
+}
+
+/* --- Lỗi nền: nội dung không được phụ thuộc vào JS ---
+   40 phần tử [data-reveal] render với opacity:0 và chờ
+   RevealInit bật lên. Không có JS thì trang trắng hoàn toàn.  */
+@media (scripting: none){
+  [data-reveal]{opacity:1 !important;transform:none !important}
+  /* .wabi-rise cũng vậy: nếu không có JS gắn data-risen thì tiêu đề sẽ nằm
+     nguyên dưới lớp che, tức là mất hẳn. */
+  .wabi-rise > *{transform:none !important}
+}
+
+/* --- Đường cong reveal ---
+   Chỉ ghi đè duration + timing-function; transition-delay vẫn
+   lấy từ inline style nên nhịp so le của design giữ nguyên.   */
+[data-reveal]{
+  transition-duration:var(--reveal) !important;
+  transition-timing-function:var(--exhale) !important;
+}
+
+/* --- Tầng 1a · chấm logo thở (mọi trang) --- */
+.wabi-pulse{position:relative}
+.wabi-pulse::after{
+  content:"";position:absolute;inset:-5px;border-radius:50%;
+  background:var(--ring,#EEDFD3);z-index:-1;
+  animation:wabiRing var(--breath) ease-in-out infinite;
+}
+@keyframes wabiRing{
+  0%{transform:scale(.82);opacity:.9}
+  36%{transform:scale(1.5);opacity:.32}
+  45%{transform:scale(1.5);opacity:.32}
+  100%{transform:scale(.82);opacity:.9}
+}
+
+/* --- Tầng 1b · nền trôi (mọi trang) --- */
+.wabi-ambient{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.wabi-ambient span{position:absolute;border-radius:50%;filter:blur(60px)}
+.wabi-ambient .a1{
+  width:min(620px,70vw);aspect-ratio:1;top:-14%;right:-12%;opacity:.4;
+  background:radial-gradient(circle,#E7EADD,#DFE4D0);
+  animation:wabiDrift1 calc(var(--breath)*4) ease-in-out infinite;
+}
+.wabi-ambient .a2{
+  width:min(480px,60vw);aspect-ratio:1;bottom:-16%;left:-10%;opacity:.32;
+  background:radial-gradient(circle,#EEDFD3,#EAD7C8);
+  animation:wabiDrift2 calc(var(--breath)*5) ease-in-out infinite;
+}
+@keyframes wabiDrift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-3%,3%) scale(1.09)}}
+@keyframes wabiDrift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(3%,-3%) scale(1.11)}}
+
+/* --- Tầng 2a · vòng thở ở hero (trang chủ) --- */
+.wabi-breath-rings{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:1}
+.wabi-breath-rings i{
+  position:absolute;width:min(440px,62vw);aspect-ratio:1;border-radius:50%;
+  border:1px solid var(--accent,#5A6647);
+  animation:wabiBreathe var(--breath) ease-in-out infinite;
+}
+.wabi-breath-rings i:nth-child(2){animation-delay:calc(var(--breath)/-3)}
+.wabi-breath-rings i:nth-child(3){animation-delay:calc(var(--breath)/-1.5)}
+@keyframes wabiBreathe{
+  0%{transform:scale(.46);opacity:.34}
+  36%{transform:scale(1);opacity:.07}
+  45%{transform:scale(1);opacity:.07}
+  100%{transform:scale(.46);opacity:.34}
+}
+
+/* --- Tầng 2b · tiêu đề dâng lên từ sau lớp che --- */
+.wabi-rise{display:block;overflow:hidden}
+.wabi-rise > *{display:block;transform:translateY(105%);transition:transform var(--reveal) var(--exhale)}
+.wabi-rise[data-risen="true"] > *{transform:none}
+
+/* --- Tầng 3a · card hít vào khi rê chuột ---
+   2.75s = 1/4 nhịp: chậm gấp nhiều lần hover thường, nên cảm
+   giác là thức dậy chứ không phải bật lên.                    */
+.wabi-lift{transition:transform var(--quarter) var(--exhale),box-shadow var(--quarter) var(--exhale)}
+@media (hover:hover){
+  .wabi-lift:hover{transform:scale(1.014);box-shadow:0 30px 54px -34px rgba(51,48,42,.5)}
+  .wabi-lift:hover img{filter:none}
+}
+/* Ảnh chân dung nhạt màu nhẹ, đủ màu khi rê chuột — người bạn đang nhìn thì
+   "sống". Giữ ở .35 chứ không xám hẳn: mặt người xám trên web phòng trị liệu
+   dễ đọc thành lạnh lùng. Bỏ hiệu ứng này = xoá đúng dòng dưới. */
+.wabi-lift img{filter:grayscale(.35);transition:filter var(--quarter) var(--exhale)}
+
+/* --- Tầng 3b · trạng thái chờ cũng thở ---
+   Spinner quay là ngôn ngữ của sự gấp gáp; ba chấm thở nói
+   ngược lại: cứ từ từ.                                        */
+.wabi-dots{display:inline-flex;gap:6px;align-items:center}
+.wabi-dots i{
+  width:7px;height:7px;border-radius:50%;background:currentColor;display:block;
+  animation:wabiDot calc(var(--breath)/2) ease-in-out infinite;
+}
+.wabi-dots i:nth-child(2){animation-delay:calc(var(--breath)/-9)}
+.wabi-dots i:nth-child(3){animation-delay:calc(var(--breath)/-4.5)}
+@keyframes wabiDot{
+  0%,100%{transform:scale(.6);opacity:.4}
+  50%{transform:scale(1.25);opacity:1}
+}
+
+/* --- Hợp đồng reduced-motion ---
+   Với một số người chuyển động là yếu tố kích hoạt thật, và
+   trên web phòng trị liệu tỉ lệ đó cao hơn mặt bằng chung.
+   Tầng 1 và 2 tắt HẲN (không phải chậm lại); tầng 3 giữ phản
+   hồi nhưng rút ngắn và bỏ phần dịch chuyển.                  */
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .wabi-pulse::after,
+  .wabi-ambient .a1,.wabi-ambient .a2,
+  .wabi-breath-rings i,
+  .wabi-dots i{animation:none !important}
+  .wabi-breath-rings{display:none}
+  .wabi-pulse::after{transform:scale(1);opacity:.9}
+  .wabi-rise > *{transform:none;transition:none}
+  [data-reveal]{transition-duration:.01ms !important}
+  .wabi-lift{transition-duration:120ms}
+  .wabi-lift:hover{transform:none;box-shadow:0 18px 34px -26px rgba(51,48,42,.4)}
+  .wabi-dots i{transform:scale(1);opacity:.75}
+}

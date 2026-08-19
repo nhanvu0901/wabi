@@ -176,7 +176,16 @@ export default function ChatBox({ lang }: { lang: Lang }) {
           {messages.map((m, i) => (
             <div key={i} style={BUBBLE_ROW(m.who === 'bot')}>
               <div style={BUBBLE(m.who === 'bot')}>
-                {m.text || <span style={{ opacity: 0.5 }}>…</span>}
+                {m.text || (
+                  // Ba chấm thở thay cho spinner: câu trả lời mất 0,7–19 giây
+                  // tuỳ lúc, nên thứ hiện ra trong lúc chờ nói "cứ từ từ"
+                  // chứ không phải "nhanh lên".
+                  <span className="wabi-dots" style={{ color: 'var(--accent,#5A6647)' }} aria-label="đang trả lời">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                )}
               </div>
             </div>
           ))}

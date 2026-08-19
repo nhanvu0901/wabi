@@ -1,5 +1,5 @@
 {
-  "source": "73716d86-wabifaq50.xlsx",
+  "source": "wabi-faq-50.xlsx",
   "generatedBy": "scripts/extract-xlsx.mjs",
   "sheet": "FAQ",
   "count": 44,

@@ -12,6 +12,7 @@ export default function TherapistCard({ t: therapist, lang }: { t: Therapist; la
   const tr = t(lang)
   return (
     <div
+      className="wabi-lift"
       data-reveal
       style={{
         opacity: 0,

@@ -51,7 +51,9 @@ export default function Nav({ lang }: { lang: Lang }) {
           onClick={() => setOpen(false)}
           style={{ display: 'flex', alignItems: 'center', gap: '11px', cursor: 'pointer', color: '#33302A' }}
         >
-          <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#B67A5E', boxShadow: '0 0 0 5px #EEDFD3' }}></span>
+          {/* Ring is the .wabi-pulse ::after so it can breathe; the design's
+              static box-shadow drew the same 5px ring. */}
+          <span className="wabi-pulse" style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#B67A5E' }}></span>
           <span style={{ fontFamily: "'Newsreader',serif", fontSize: '1.55rem', letterSpacing: '-.01em', lineHeight: 1 }}>
             Wabi <span style={{ fontStyle: 'italic', color: '#8A8072', fontSize: '.92em' }}>Therapy</span>
           </span>

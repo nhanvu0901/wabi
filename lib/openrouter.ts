@@ -27,6 +27,8 @@ export type EmbeddingUsage = {
 export type EmbedOptions = {
   /** Override the model; defaults to EMBEDDING_MODEL. */
   model?: string
+  /** Request a model-supported output size (the FAQ corpus uses 4096). */
+  dimensions?: number
   /** Passed straight through to the API ('float' is the server default). */
   encoding_format?: 'float' | 'base64'
   /** Abort the request from the caller (e.g. a request-scoped signal). */
@@ -82,6 +84,7 @@ export async function embed(input: string | string[], opts: EmbedOptions = {}): 
     body: JSON.stringify({
       model: opts.model ?? EMBEDDING_MODEL,
       input: texts,
+      ...(opts.dimensions ? { dimensions: opts.dimensions } : {}),
       ...(opts.encoding_format ? { encoding_format: opts.encoding_format } : {}),
     }),
     signal,

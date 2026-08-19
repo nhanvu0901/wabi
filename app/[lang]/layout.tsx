@@ -5,6 +5,7 @@ import Nav from '../../components/Nav'
 import Footer from '../../components/Footer'
 import RevealInit from '../../components/RevealInit'
 import ChatBox from '../../components/ChatBox'
+import Ambient from '../../components/Ambient'
 import { LANGS, isLang, t, langAlternates, SITE_URL } from '../../lib/i18n'
 
 // This is the app's root layout — it owns <html>/<body>. Every route lives under
@@ -64,6 +65,7 @@ export default async function LangLayout({
         />
       </head>
       <body>
+        <Ambient />
         <div id="wabi" style={{ position: 'relative' }}>
           <RevealInit />
           <Nav lang={lang} />

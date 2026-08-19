@@ -102,7 +102,16 @@ export default function ContactForm({ lang }: { lang: Lang }) {
           marginTop: '4px',
         }}
       >
-        <Send style={{ width: '17px', height: '17px' }} /> <span>{tr('ct.f.btn')}</span>
+        {pending ? (
+          <span className="wabi-dots" style={{ color: '#FCFAF4' }} aria-label="đang gửi">
+            <i />
+            <i />
+            <i />
+          </span>
+        ) : (
+          <Send style={{ width: '17px', height: '17px' }} />
+        )}{' '}
+        <span>{tr('ct.f.btn')}</span>
       </button>
       <p style={{ fontSize: '.8rem', color: '#8A8072', textAlign: 'center' }}>{tr('ct.f.note')}</p>
       {state === 'error' && (

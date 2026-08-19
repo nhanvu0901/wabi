@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import RiseIn from '../../../components/RiseIn'
 import { Users } from 'lucide-react'
 import Rich from '../../../components/Rich'
 import { getServices } from '../../../lib/content'
@@ -105,7 +106,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ lang:
               margin: '14px 0 14px',
             }}
           >
-            {tr('sv.title')}
+            <RiseIn>{tr('sv.title')}</RiseIn>
           </h2>
           <p style={{ color: '#645D53', fontSize: '1.06rem' }}>{tr('sv.intro')}</p>
         </div>
@@ -119,6 +120,7 @@ export default async function ServicesPage({ params }: { params: Promise<{ lang:
             return (
               <div
                 key={s.id}
+                className="wabi-lift"
                 data-reveal
                 style={{
                   opacity: 0,
