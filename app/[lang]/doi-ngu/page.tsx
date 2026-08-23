@@ -1,10 +1,9 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import RiseIn from '../../../components/RiseIn'
 import { MessageCircle } from 'lucide-react'
+import TeamDirectory from '../../../components/TeamDirectory'
 import { getTherapists } from '../../../lib/content'
-import { isLang, t, langAlternates, type Lang } from '../../../lib/i18n'
-import TherapistCard from '../../../components/TherapistCard'
+import { isLang, langAlternates, t, type Lang } from '../../../lib/i18n'
 
 export const revalidate = 60
 
@@ -19,64 +18,31 @@ export default async function TeamPage({ params }: { params: Promise<{ lang: str
   if (!isLang(raw)) notFound()
   const lang: Lang = raw
   const tr = t(lang)
-
   const therapists = await getTherapists()
 
   return (
-    <section style={{ padding: 'clamp(56px,8vw,96px) 0' }}>
-      <div style={{ maxWidth: '1160px', margin: '0 auto', padding: '0 clamp(20px,5vw,40px)' }}>
-        <div
-          data-reveal
-          style={{
-            opacity: 0,
-            transform: 'translateY(22px)',
-            transition: 'opacity .8s ease,transform .8s ease',
-            maxWidth: '720px',
-            marginBottom: '52px',
-          }}
-        >
-          <span style={{ fontSize: '.74rem', letterSpacing: '.24em', textTransform: 'uppercase', color: 'var(--accent-deep,#434D35)', fontWeight: 600 }}>
-            {tr('tm.eyebrow')}
-          </span>
-          <h2
-            style={{
-              fontFamily: "'Newsreader',serif",
-              fontWeight: 400,
-              fontSize: 'clamp(2.2rem,5vw,3.2rem)',
-              letterSpacing: '-.01em',
-              lineHeight: 1.1,
-              margin: '14px 0 14px',
-            }}
-          >
-            <RiseIn>{tr('tm.title')}</RiseIn>
-          </h2>
-          <p style={{ color: '#645D53', fontSize: '1.06rem' }}>{tr('tm.intro')}</p>
+    <main className="inner-page inner-page--team">
+      <section className="inner-page__section">
+        <div className="inner-page__shell inner-page__shell--team">
+          <header className="inner-page__hero inner-page__hero--team">
+            <span className="inner-page__eyebrow">{tr('tm.eyebrow')}</span>
+            <h1>
+              {tr('tm.titleLead')} <em>{tr('tm.titleAccent')}</em>
+            </h1>
+            <p>{tr('tm.intro')}</p>
+          </header>
+
+          <TeamDirectory therapists={therapists} lang={lang} />
+
+          <p className="inner-team-footnote">{tr('tm.foot')}</p>
+          <div className="inner-page__cta-wrap inner-page__cta-wrap--team">
+            <Link className="inner-page__cta" href={`/${lang}/lien-he`}>
+              {tr('tm.cta')}
+              <span><MessageCircle aria-hidden="true" /></span>
+            </Link>
+          </div>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', gap: '22px' }}>
-          {therapists.map((row) => (
-            <TherapistCard key={row.id} t={row} lang={lang} />
-          ))}
-        </div>
-        <p style={{ textAlign: 'center', color: '#7A7266', marginTop: '36px', fontSize: '.94rem' }}>{tr('tm.foot')}</p>
-        <div style={{ textAlign: 'center', marginTop: '26px' }}>
-          <Link
-            href={`/${lang}/lien-he`}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '9px',
-              padding: '15px 30px',
-              borderRadius: '100px',
-              fontWeight: 500,
-              cursor: 'pointer',
-              background: 'var(--accent,#5A6647)',
-              color: '#FCFAF4',
-            }}
-          >
-            <MessageCircle style={{ width: '18px', height: '18px' }} /> <span>{tr('tm.cta')}</span>
-          </Link>
-        </div>
-      </div>
-    </section>
+      </section>
+    </main>
   )
 }

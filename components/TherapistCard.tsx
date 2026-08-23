@@ -8,112 +8,63 @@ import { pickTitle, pickSpecialties, pickTherapies, pickLocation, type Therapist
 // photo circle, name/title, focus/approaches lines, location pill (map-pin icon)
 // + price pill. Title, specialties and location come from the language-matched
 // column; name, therapies and price are identical in both languages.
-export default function TherapistCard({ t: therapist, lang }: { t: Therapist; lang: Lang }) {
+export default function TherapistCard({
+  t: therapist,
+  lang,
+  priority = false,
+}: {
+  t: Therapist
+  lang: Lang
+  priority?: boolean
+}) {
   const tr = t(lang)
+  const therapies = pickTherapies(therapist, lang)
+    .split('·')
+    .map((therapy) => therapy.trim())
+    .filter(Boolean)
+
   return (
-    <div
-      className="wabi-lift"
-      data-reveal
-      style={{
-        opacity: 0,
-        transform: 'translateY(24px)',
-        transition: 'opacity .7s ease,transform .7s ease',
-        background: '#FCFAF4',
-        border: '1px solid #EAE0D0',
-        borderRadius: '24px',
-        padding: '24px',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '18px' }}>
-        <div
-          style={{
-            width: '66px',
-            height: '66px',
-            borderRadius: '50%',
-            overflow: 'hidden',
-            flexShrink: 0,
-            border: '1px solid #E7DECE',
-          }}
-        >
+    <article className="inner-team-card wabi-lift">
+      <div className="inner-team-card__header">
+        <div className="inner-team-card__photo">
           {therapist.photo_url ? (
-            // next/image rather than a bare <img>: the source portraits are up to
-            // 2MB and this renders them at 66px, so Next resizes and re-encodes.
             <Image
               src={therapist.photo_url}
               alt={therapist.name}
-              width={132}
-              height={132}
+              width={148}
+              height={148}
+              priority={priority}
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           ) : (
             <ImagePlaceholder label="Ảnh" />
           )}
         </div>
-        <div>
-          <h4 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.28rem', lineHeight: 1.15 }}>
-            {therapist.name}
-          </h4>
-          <div style={{ fontSize: '.8rem', color: '#8A8072', marginTop: '3px' }}>{pickTitle(therapist, lang)}</div>
+        <div className="inner-team-card__identity">
+          <h2>{therapist.name}</h2>
+          <p>{pickTitle(therapist, lang)}</p>
         </div>
       </div>
-      <div style={{ fontSize: '.9rem', color: '#6B6459', marginBottom: '12px' }}>
-        <b style={{ color: '#33302A', fontWeight: 500 }}>{tr('card.spec')}</b> {pickSpecialties(therapist, lang)}
+
+      <div className="inner-team-card__label">{tr('card.spec').replace(':', '')}</div>
+      <p className="inner-team-card__specialties">{pickSpecialties(therapist, lang)}</p>
+
+      <div className="inner-team-card__label">{tr('card.ther').replace(':', '')}</div>
+      <div className="inner-team-card__therapies">
+        {therapies.map((therapy) => (
+          <span key={therapy}>{therapy}</span>
+        ))}
       </div>
-      <div style={{ fontSize: '.9rem', color: '#6B6459', marginBottom: '16px' }}>
-        <b style={{ color: '#33302A', fontWeight: 500 }}>{tr('card.ther')}</b> {pickTherapies(therapist, lang)}
-      </div>
-      {/* Location left, price right — one row at any width. The design had
-          flex-wrap:wrap here, which is fine in Vietnamese ("Online · offline SG",
-          258px of 295px) but breaks in English ("Online · in-person HCMC" needs
-          322px): the price pill dropped to a second line and the card grew from
-          50px to 90px, so cards in the same row no longer matched.
-          nowrap + a shrinkable location pill keeps the structure; the location
-          text wraps inside its own pill when it runs out of room. */}
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'nowrap',
-          gap: '8px',
-          alignItems: 'center',
-          paddingTop: '16px',
-          borderTop: '1px solid #EAE0D0',
-          marginTop: 'auto',
-          fontSize: '.82rem',
-        }}
-      >
-        <span
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            background: '#F7F2E9',
-            padding: '5px 12px',
-            borderRadius: '100px',
-            color: '#6B6459',
-            minWidth: 0,
-          }}
-        >
-          <MapPin style={{ width: '13px', height: '13px', flexShrink: 0 }} />
-          <span style={{ minWidth: 0 }}>{pickLocation(therapist, lang)}</span>
+
+      <div className="inner-team-card__footer">
+        <span className="inner-team-card__location">
+          <MapPin aria-hidden="true" />
+          <span>{pickLocation(therapist, lang)}</span>
         </span>
-        <span
-          style={{
-            marginLeft: 'auto',
-            flexShrink: 0,
-            whiteSpace: 'nowrap',
-            background: '#E7EADD',
-            color: 'var(--accent-deep,#434D35)',
-            fontWeight: 500,
-            padding: '5px 12px',
-            borderRadius: '100px',
-          }}
-        >
-          {therapist.price}
-          {tr('card.ses')}
+        <span className="inner-team-card__price">
+          {therapist.price}{tr('card.ses')}
         </span>
       </div>
-    </div>
+    </article>
   )
 }

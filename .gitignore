@@ -1,6 +1,8 @@
 node_modules/
 .next/
 .env*.local
+.idea/
+.scratch/
 .DS_Store
 *.tsbuildinfo
 

@@ -2,81 +2,28 @@ import { type Lang, t } from '../lib/i18n'
 
 export default function Footer({ lang }: { lang: Lang }) {
   const tr = t(lang)
+
   return (
-    <footer style={{ background: '#EFE7D8', borderTop: '1px solid #E2D8C6', padding: 'clamp(40px,6vw,60px) 0 36px' }}>
-      <div
-        style={{
-          maxWidth: '1160px',
-          margin: '0 auto',
-          padding: '0 clamp(20px,5vw,40px)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          gap: '26px',
-          flexWrap: 'wrap',
-        }}
-      >
-        <div style={{ maxWidth: '380px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '11px', marginBottom: '12px' }}>
-            <span
-              className="wabi-pulse"
-              style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#B67A5E', ['--ring' as string]: '#EAD9CB' }}
-            ></span>
-            <span style={{ fontFamily: "'Newsreader',serif", fontSize: '1.4rem' }}>Wabi Therapy</span>
+    <footer className="wabi-footer">
+      <div className="wabi-footer__watermark" aria-hidden="true">Wabi Therapy</div>
+      <div className="wabi-footer__top">
+        <div className="wabi-footer__about">
+          <div className="wabi-footer__brand">
+            <span className="wabi-pulse" />
+            <span>Wabi <em>Therapy</em></span>
           </div>
-          <p style={{ fontSize: '.92rem', color: '#6B6459' }}>{tr('foot.tag')}</p>
+          <p>{tr('foot.tag')}</p>
         </div>
-        <div style={{ display: 'flex', gap: '12px' }}>
-          <a
-            href="https://www.instagram.com/wabi.therapy/"
-            target="_blank"
-            rel="noopener"
-            aria-label="Instagram"
-            style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '50%',
-              border: '1px solid #DDD1BE',
-              display: 'grid',
-              placeItems: 'center',
-              color: '#6B6459',
-              background: '#FBF7EF',
-            }}
-          >
-            <i className="fa-brands fa-instagram" style={{ fontSize: '1.15rem' }}></i>
+        <div className="wabi-footer__socials">
+          <a href="https://www.instagram.com/wabi.therapy/" target="_blank" rel="noopener" aria-label="Instagram">
+            <i className="fa-brands fa-instagram" aria-hidden="true" />
           </a>
-          <a
-            href="https://www.facebook.com/profile.php?id=61556380754645"
-            target="_blank"
-            rel="noopener"
-            aria-label="Facebook"
-            style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '50%',
-              border: '1px solid #DDD1BE',
-              display: 'grid',
-              placeItems: 'center',
-              color: '#6B6459',
-              background: '#FBF7EF',
-            }}
-          >
-            <i className="fa-brands fa-facebook" style={{ fontSize: '1.15rem' }}></i>
+          <a href="https://www.facebook.com/profile.php?id=61556380754645" target="_blank" rel="noopener" aria-label="Facebook">
+            <i className="fa-brands fa-facebook" aria-hidden="true" />
           </a>
         </div>
       </div>
-      <div
-        style={{
-          maxWidth: '1160px',
-          margin: '28px auto 0',
-          padding: '22px clamp(20px,5vw,40px) 0',
-          borderTop: '1px solid #E2D8C6',
-          fontSize: '.82rem',
-          color: '#8A8072',
-        }}
-      >
-        {tr('foot.copy')}
-      </div>
+      <div className="wabi-footer__copy">{tr('foot.copy')}</div>
     </footer>
   )
 }

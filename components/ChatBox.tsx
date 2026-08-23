@@ -1,35 +1,12 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
-import { MessageCircle, X, Send } from 'lucide-react'
-import { t, type Lang } from '../lib/i18n'
 
-// Ports #wabi-chat from the design (bundled design L704-722) — launcher, panel,
-// header, bubbles, chips and input keep the design's exact styles. What changed
-// is where replies come from: the design answered with five canned strings
-// picked by regex; here the reply streams from /api/chat, which is also the only
-// place the OpenRouter key exists.
+import { useEffect, useRef, useState } from 'react'
+import { MessageCircle, Send, X } from 'lucide-react'
+import { t, type Lang } from '../lib/i18n'
 
 type Msg = { who: 'bot' | 'user'; text: string }
 
 const CHIP_KEYS = ['chat.chip1', 'chat.chip2', 'chat.chip3', 'chat.chip4']
-
-const BUBBLE_ROW = (bot: boolean): React.CSSProperties => ({
-  display: 'flex',
-  justifyContent: bot ? 'flex-start' : 'flex-end',
-  animation: 'wabiMsg .3s ease',
-})
-
-const BUBBLE = (bot: boolean): React.CSSProperties => ({
-  maxWidth: '82%',
-  padding: '11px 15px',
-  borderRadius: bot ? '4px 16px 16px 16px' : '16px 16px 4px 16px',
-  fontSize: '.9rem',
-  lineHeight: 1.6,
-  whiteSpace: 'pre-wrap',
-  ...(bot
-    ? { background: '#FCFAF4', border: '1px solid #EAE0D0', color: '#33302A' }
-    : { background: 'var(--accent,#5A6647)', color: '#FCFAF4' }),
-})
 
 export default function ChatBox({ lang }: { lang: Lang }) {
   const tr = t(lang)
@@ -39,9 +16,8 @@ export default function ChatBox({ lang }: { lang: Lang }) {
   const [busy, setBusy] = useState(false)
   const bodyRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const launcherRef = useRef<HTMLButtonElement>(null)
 
-  // The greeting is seeded on first open, matching the design's resetChat().
-  // Re-seeding on language change keeps the transcript in one language.
   useEffect(() => {
     setMessages([{ who: 'bot', text: tr('chat.greeting') }])
   }, [lang]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -51,49 +27,61 @@ export default function ChatBox({ lang }: { lang: Lang }) {
   }, [open])
 
   useEffect(() => {
-    const el = bodyRef.current
-    if (el) el.scrollTop = el.scrollHeight
+    if (!open) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      setOpen(false)
+      requestAnimationFrame(() => launcherRef.current?.focus())
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [open])
+
+  useEffect(() => {
+    const body = bodyRef.current
+    if (body) body.scrollTop = body.scrollHeight
   }, [messages, open])
 
   async function send(text: string) {
     const question = text.trim()
     if (!question || busy) return
+
     setDraft('')
     setBusy(true)
-
-    // History goes up before the empty bot bubble, so the request carries the
-    // conversation the user can actually see.
     const history = [...messages, { who: 'user' as const, text: question }]
     setMessages([...history, { who: 'bot', text: '' }])
 
     try {
-      const res = await fetch('/api/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           lang,
-          messages: history.map((m) => ({ role: m.who === 'bot' ? 'assistant' : 'user', content: m.text })),
+          messages: history.map((message) => ({
+            role: message.who === 'bot' ? 'assistant' : 'user',
+            content: message.text,
+          })),
         }),
       })
-      if (!res.ok || !res.body) throw new Error(String(res.status))
+      if (!response.ok || !response.body) throw new Error(String(response.status))
 
-      const reader = res.body.getReader()
+      const reader = response.body.getReader()
       const decoder = new TextDecoder()
-      let acc = ''
+      let answer = ''
       for (;;) {
         const { done, value } = await reader.read()
         if (done) break
-        acc += decoder.decode(value, { stream: true })
-        setMessages((prev) => {
-          const next = [...prev]
-          next[next.length - 1] = { who: 'bot', text: acc }
+        answer += decoder.decode(value, { stream: true })
+        setMessages((current) => {
+          const next = [...current]
+          next[next.length - 1] = { who: 'bot', text: answer }
           return next
         })
       }
-      if (!acc.trim()) throw new Error('empty')
+      if (!answer.trim()) throw new Error('empty')
     } catch {
-      setMessages((prev) => {
-        const next = [...prev]
+      setMessages((current) => {
+        const next = [...current]
         next[next.length - 1] = { who: 'bot', text: tr('chat.err') }
         return next
       })
@@ -103,189 +91,79 @@ export default function ChatBox({ lang }: { lang: Lang }) {
     }
   }
 
-  // Chips only show on the opening turn, exactly as in the design.
-  const showChips = messages.length === 1 && messages[0].who === 'bot'
+  const showChips = messages.length === 1 && messages[0]?.who === 'bot'
 
   return (
-    <div id="wabi-chat" style={{ position: 'fixed', right: 'clamp(16px,3vw,28px)', bottom: 'clamp(16px,3vw,28px)', zIndex: 300 }}>
+    <div className="wabi-chat" id="wabi-chat">
       <div
+        className={`wabi-chat-panel${open ? ' is-open' : ''}`}
         id="chat-panel"
         role="dialog"
         aria-label="Wabi Therapy chat"
-        style={{
-          display: open ? 'flex' : 'none',
-          width: '370px',
-          height: '540px',
-          maxHeight: 'calc(100vh - 120px)',
-          background: '#FBF7EF',
-          border: '1px solid #E2D8C6',
-          borderRadius: '24px',
-          overflow: 'hidden',
-          flexDirection: 'column',
-          boxShadow: '0 40px 80px -30px rgba(51,48,42,.55)',
-          animation: 'wabiPop .3s ease',
-        }}
       >
-        <div style={{ background: '#3A342C', color: '#F7F2E9', padding: '16px 18px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-          <div
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg,#7C8968,#5A6647)',
-              display: 'grid',
-              placeItems: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#EEDFD3', boxShadow: '0 0 0 4px rgba(238,223,211,.28)' }}></span>
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontFamily: "'Newsreader',serif", fontSize: '1.12rem', lineHeight: 1.1 }}>Wabi Therapy</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '.76rem', color: 'rgba(247,242,233,.7)', marginTop: '2px' }}>
-              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#8FB37A' }}></span>
-              <span>{tr('chat.status')}</span>
-            </div>
+        <header className="wabi-chat-panel__header">
+          <div className="wabi-chat-panel__avatar"><span /></div>
+          <div className="wabi-chat-panel__identity">
+            <strong>Wabi Therapy</strong>
+            <small><span />{tr('chat.status')}</small>
           </div>
           <button
-            onClick={() => setOpen(false)}
-            aria-label={tr('chat.close')}
-            style={{
-              background: 'rgba(247,242,233,.1)',
-              border: 'none',
-              color: '#F7F2E9',
-              width: '34px',
-              height: '34px',
-              borderRadius: '10px',
-              cursor: 'pointer',
-              display: 'grid',
-              placeItems: 'center',
-              flexShrink: 0,
+            type="button"
+            onClick={() => {
+              setOpen(false)
+              requestAnimationFrame(() => launcherRef.current?.focus())
             }}
+            aria-label={tr('chat.close')}
           >
-            <X style={{ width: '18px', height: '18px' }} />
+            <X aria-hidden="true" />
           </button>
-        </div>
+        </header>
 
-        <div
-          id="chat-body"
-          ref={bodyRef}
-          aria-live="polite"
-          style={{ flex: 1, overflowY: 'auto', padding: '20px 18px', display: 'flex', flexDirection: 'column', gap: '12px', background: '#F7F2E9' }}
-        >
-          {messages.map((m, i) => (
-            <div key={i} style={BUBBLE_ROW(m.who === 'bot')}>
-              <div style={BUBBLE(m.who === 'bot')}>
-                {m.text || (
-                  // Ba chấm thở thay cho spinner: câu trả lời mất 0,7–19 giây
-                  // tuỳ lúc, nên thứ hiện ra trong lúc chờ nói "cứ từ từ"
-                  // chứ không phải "nhanh lên".
-                  <span className="wabi-dots" style={{ color: 'var(--accent,#5A6647)' }} aria-label="đang trả lời">
-                    <i />
-                    <i />
-                    <i />
-                  </span>
+        <div className="wabi-chat-panel__body" id="chat-body" ref={bodyRef} aria-live="polite">
+          {messages.map((message, index) => (
+            <div className={`wabi-chat-message wabi-chat-message--${message.who}`} key={index}>
+              <div>
+                {message.text || (
+                  <span className="wabi-dots" aria-label={tr('chat.replying')}><i /><i /><i /></span>
                 )}
               </div>
             </div>
           ))}
           {showChips && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '2px' }}>
-              {CHIP_KEYS.map((k) => (
-                <button
-                  key={k}
-                  onClick={() => send(tr(k))}
-                  style={{
-                    background: '#FBF7EF',
-                    border: '1px solid #DED3C0',
-                    color: 'var(--accent-deep,#434D35)',
-                    padding: '8px 14px',
-                    borderRadius: '100px',
-                    cursor: 'pointer',
-                    fontSize: '.85rem',
-                    fontFamily: 'inherit',
-                    transition: '.15s',
-                  }}
-                >
-                  {tr(k)}
-                </button>
+            <div className="wabi-chat-chips">
+              {CHIP_KEYS.map((key) => (
+                <button type="button" key={key} onClick={() => send(tr(key))}>{tr(key)}</button>
               ))}
             </div>
           )}
         </div>
 
-        <form
-          id="chat-form"
-          onSubmit={(e) => {
-            e.preventDefault()
-            send(draft)
-          }}
-          style={{ flexShrink: 0, display: 'flex', gap: '9px', padding: '14px', background: '#FBF7EF', borderTop: '1px solid #EAE0D0' }}
-        >
+        <form className="wabi-chat-form" onSubmit={(event) => { event.preventDefault(); send(draft) }}>
           <input
-            id="chat-input"
             ref={inputRef}
             type="text"
             autoComplete="off"
             value={draft}
-            onChange={(e) => setDraft(e.target.value)}
+            onChange={(event) => setDraft(event.target.value)}
             placeholder={tr('chat.placeholder')}
             aria-label={tr('chat.placeholder')}
-            style={{
-              flex: 1,
-              padding: '12px 15px',
-              border: '1px solid #E2D8C6',
-              borderRadius: '100px',
-              background: '#F7F2E9',
-              color: '#33302A',
-              outline: 'none',
-              fontSize: '.92rem',
-            }}
           />
-          <button
-            type="submit"
-            aria-label={tr('chat.send')}
-            disabled={busy || !draft.trim()}
-            style={{
-              width: '46px',
-              height: '46px',
-              flexShrink: 0,
-              border: 'none',
-              borderRadius: '50%',
-              cursor: busy || !draft.trim() ? 'default' : 'pointer',
-              background: 'var(--accent,#5A6647)',
-              color: '#FCFAF4',
-              display: 'grid',
-              placeItems: 'center',
-              opacity: busy || !draft.trim() ? 0.55 : 1,
-            }}
-          >
-            <Send style={{ width: '18px', height: '18px' }} />
+          <button type="submit" aria-label={tr('chat.send')} disabled={busy || !draft.trim()}>
+            <Send aria-hidden="true" />
           </button>
         </form>
       </div>
 
       <button
-        id="chat-launch"
-        onClick={() => setOpen((o) => !o)}
+        ref={launcherRef}
+        className="wabi-chat-launch"
+        type="button"
+        onClick={() => setOpen((current) => !current)}
         aria-label={open ? tr('chat.close') : tr('chat.open')}
         aria-expanded={open}
-        style={{
-          marginLeft: 'auto',
-          width: '60px',
-          height: '60px',
-          borderRadius: '50%',
-          border: 'none',
-          cursor: 'pointer',
-          background: 'var(--accent,#5A6647)',
-          color: '#FCFAF4',
-          display: 'grid',
-          placeItems: 'center',
-          boxShadow: '0 18px 34px -12px rgba(90,102,71,.9)',
-          transition: 'transform .2s',
-        }}
+        aria-controls="chat-panel"
       >
-        {open ? <X style={{ width: '26px', height: '26px' }} /> : <MessageCircle style={{ width: '26px', height: '26px' }} />}
+        {open ? <X aria-hidden="true" /> : <MessageCircle aria-hidden="true" />}
       </button>
     </div>
   )

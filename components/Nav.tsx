@@ -1,12 +1,11 @@
 'use client'
+
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu } from 'lucide-react'
-import { LANGS, type Lang, t } from '../lib/i18n'
+import { ArrowRight, Menu, X } from 'lucide-react'
+import { LANGS, t, type Lang } from '../lib/i18n'
 
-// Route slugs stay Vietnamese in both languages (/vi/dich-vu and /en/dich-vu).
-// Only the visible label switches — that comes from the dictionary.
 const LINKS = [
   { path: '', key: 'nav.home' },
   { path: '/dich-vu', key: 'nav.services' },
@@ -16,118 +15,64 @@ const LINKS = [
 
 export default function Nav({ lang }: { lang: Lang }) {
   const [open, setOpen] = useState(false)
-  const pathname = usePathname()
+  const pathname = usePathname() || `/${lang}`
   const tr = t(lang)
-
-  // Strip the language prefix so the same path can be rebuilt in the other language.
   const rest = pathname.replace(/^\/(vi|en)/, '')
 
   return (
-    <header
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 200,
-        background: 'rgba(247,242,233,.82)',
-        backdropFilter: 'blur(14px)',
-        WebkitBackdropFilter: 'blur(14px)',
-        borderBottom: '1px solid #E7DECE',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1160px',
-          margin: '0 auto',
-          padding: '0 clamp(20px,5vw,40px)',
-          height: '74px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          position: 'relative',
-        }}
-      >
-        <Link
-          href={`/${lang}`}
-          onClick={() => setOpen(false)}
-          style={{ display: 'flex', alignItems: 'center', gap: '11px', cursor: 'pointer', color: '#33302A' }}
-        >
-          {/* Ring is the .wabi-pulse ::after so it can breathe; the design's
-              static box-shadow drew the same 5px ring. */}
-          <span className="wabi-pulse" style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#B67A5E' }}></span>
-          <span style={{ fontFamily: "'Newsreader',serif", fontSize: '1.55rem', letterSpacing: '-.01em', lineHeight: 1 }}>
-            Wabi <span style={{ fontStyle: 'italic', color: '#8A8072', fontSize: '.92em' }}>Therapy</span>
-          </span>
-        </Link>
-        <nav className={open ? 'wnav-links open' : 'wnav-links'} id="wmenu" style={{ alignItems: 'center', gap: '4px' }}>
-          {LINKS.map((l) => {
-            const href = `/${lang}${l.path}`
-            const active = pathname === href
-            return (
-              <Link
-                key={l.key}
-                href={href}
-                onClick={() => setOpen(false)}
-                style={{
-                  fontSize: '.92rem',
-                  padding: '9px 16px',
-                  borderRadius: '100px',
-                  cursor: 'pointer',
-                  transition: '.2s',
-                  background: active ? 'var(--accent,#5A6647)' : 'transparent',
-                  color: active ? '#FCFAF4' : '#6B6459',
-                }}
-              >
-                {tr(l.key)}
-              </Link>
-            )
-          })}
-        </nav>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
-          {/* Language switcher — <Link> rather than the design's setLang(), so the
-              server renders the chosen language instead of swapping it after load. */}
-          <div style={{ display: 'flex', alignItems: 'center', background: '#F1E9DB', border: '1px solid #E2D8C6', borderRadius: '100px', padding: '3px' }}>
-            {LANGS.map((l) => (
-              <Link
-                key={l}
-                href={`/${l}${rest}`}
-                hrefLang={l}
-                aria-current={l === lang ? 'true' : undefined}
-                onClick={() => setOpen(false)}
-                style={{
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: '.8rem',
-                  fontWeight: 600,
-                  padding: '6px 13px',
-                  borderRadius: '100px',
-                  transition: '.2s',
-                  background: l === lang ? 'var(--accent,#5A6647)' : 'transparent',
-                  color: l === lang ? '#FCFAF4' : '#8A8072',
-                }}
-              >
-                {l.toUpperCase()}
-              </Link>
-            ))}
+    <header className="wabi-nav">
+      <div className="wabi-nav__frame">
+        <div className="wabi-nav-shell">
+          <Link className="wabi-nav__brand" href={`/${lang}`} onClick={() => setOpen(false)}>
+            <span className="wabi-pulse wabi-nav__dot" />
+            <span>Wabi <em>Therapy</em></span>
+          </Link>
+
+          <nav className={`wabi-nav-links${open ? ' is-open' : ''}`} aria-label="Primary navigation">
+            {LINKS.map((item) => {
+              const href = `/${lang}${item.path}`
+              const active = pathname === href
+              return (
+                <Link
+                  key={item.key}
+                  href={href}
+                  aria-current={active ? 'page' : undefined}
+                  onClick={() => setOpen(false)}
+                >
+                  {tr(item.key)}
+                </Link>
+              )
+            })}
+          </nav>
+
+          <div className="wabi-nav__actions">
+            <div className="wabi-language-switch" aria-label="Language">
+              {LANGS.map((entry) => (
+                <Link
+                  key={entry}
+                  href={`/${entry}${rest}`}
+                  hrefLang={entry}
+                  aria-current={entry === lang ? 'true' : undefined}
+                  onClick={() => setOpen(false)}
+                >
+                  {entry.toUpperCase()}
+                </Link>
+              ))}
+            </div>
+            <Link className="wabi-nav__booking" href={`/${lang}/lien-he`}>
+              {tr('nav.book')}
+              <span><ArrowRight aria-hidden="true" /></span>
+            </Link>
+            <button
+              className="wabi-nav-burger"
+              type="button"
+              aria-label="Menu"
+              aria-expanded={open}
+              onClick={() => setOpen((current) => !current)}
+            >
+              {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+            </button>
           </div>
-          <button
-            className="wburger"
-            onClick={() => setOpen((o) => !o)}
-            aria-label="Menu"
-            aria-expanded={open}
-            style={{
-              background: 'transparent',
-              border: '1px solid #E2D8C6',
-              borderRadius: '12px',
-              width: '44px',
-              height: '44px',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              color: '#33302A',
-            }}
-          >
-            <Menu size={22} />
-          </button>
         </div>
       </div>
     </header>

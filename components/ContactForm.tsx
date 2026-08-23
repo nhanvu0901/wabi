@@ -4,18 +4,6 @@ import { Send, Check } from 'lucide-react'
 import { submitContact } from '../lib/actions'
 import { t, type Lang } from '../lib/i18n'
 
-const FIELD: React.CSSProperties = {
-  width: '100%',
-  padding: '13px 16px',
-  border: '1px solid #E2D8C6',
-  borderRadius: '14px',
-  background: '#F7F2E9',
-  color: '#33302A',
-  outline: 'none',
-}
-
-const LABEL: React.CSSProperties = { display: 'block', fontSize: '.86rem', fontWeight: 500, marginBottom: '7px' }
-
 export default function ContactForm({ lang }: { lang: Lang }) {
   const [state, setState] = useState<'idle' | 'ok' | 'error'>('idle')
   const [pending, startTransition] = useTransition()
@@ -23,25 +11,12 @@ export default function ContactForm({ lang }: { lang: Lang }) {
 
   if (state === 'ok') {
     return (
-      <div id="cform-ok" style={{ textAlign: 'center', padding: '24px 0' }}>
-        <div
-          style={{
-            width: '60px',
-            height: '60px',
-            borderRadius: '50%',
-            background: '#E7EADD',
-            color: 'var(--accent-deep,#434D35)',
-            display: 'grid',
-            placeItems: 'center',
-            margin: '0 auto 18px',
-          }}
-        >
+      <div id="cform-ok" className="contact-form__success">
+        <div className="contact-form__success-icon">
           <Check style={{ width: '28px', height: '28px' }} />
         </div>
-        <h3 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.5rem', marginBottom: '8px' }}>
-          {tr('ct.ok.t')}
-        </h3>
-        <p style={{ color: '#6B6459' }}>{tr('ct.ok.b')}</p>
+        <h2>{tr('ct.ok.t')}</h2>
+        <p>{tr('ct.ok.b')}</p>
       </div>
     )
   }
@@ -49,7 +24,7 @@ export default function ContactForm({ lang }: { lang: Lang }) {
   return (
     <form
       id="cform"
-      style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}
+      className="contact-form"
       onSubmit={(e) => {
         e.preventDefault()
         if (pending) return
@@ -67,43 +42,30 @@ export default function ContactForm({ lang }: { lang: Lang }) {
       }}
     >
       <div>
-        <label htmlFor="f-name" style={LABEL}>
+        <label htmlFor="f-name">
           {tr('ct.f.name')}
         </label>
-        <input id="f-name" name="name" type="text" required autoComplete="name" style={FIELD} />
+        <input id="f-name" name="name" type="text" required autoComplete="name" />
       </div>
       <div>
-        <label htmlFor="f-contact" style={LABEL}>
+        <label htmlFor="f-contact">
           {tr('ct.f.contact')}
         </label>
-        <input id="f-contact" name="contact" type="text" required autoComplete="email" style={FIELD} />
+        <input id="f-contact" name="contact" type="text" required autoComplete="email" />
       </div>
       <div>
-        <label htmlFor="f-msg" style={LABEL}>
+        <label htmlFor="f-msg">
           {tr('ct.f.msg')}
         </label>
-        <textarea id="f-msg" name="message" rows={4} style={{ ...FIELD, resize: 'vertical' }} />
+        <textarea id="f-msg" name="message" rows={4} />
       </div>
       <button
         type="submit"
         disabled={pending}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '9px',
-          padding: '15px 24px',
-          borderRadius: '100px',
-          fontWeight: 500,
-          cursor: 'pointer',
-          background: 'var(--accent,#5A6647)',
-          color: '#FCFAF4',
-          border: 'none',
-          marginTop: '4px',
-        }}
+        className="contact-form__submit"
       >
         {pending ? (
-          <span className="wabi-dots" style={{ color: '#FCFAF4' }} aria-label="đang gửi">
+          <span className="wabi-dots" style={{ color: '#FCFAF4' }} aria-label={tr('ct.f.sending')}>
             <i />
             <i />
             <i />
@@ -113,9 +75,9 @@ export default function ContactForm({ lang }: { lang: Lang }) {
         )}{' '}
         <span>{tr('ct.f.btn')}</span>
       </button>
-      <p style={{ fontSize: '.8rem', color: '#8A8072', textAlign: 'center' }}>{tr('ct.f.note')}</p>
+      <p className="contact-form__note">{tr('ct.f.note')}</p>
       {state === 'error' && (
-        <p style={{ color: '#8a4b3a', fontSize: '.9rem', marginTop: '8px' }}>{tr('ct.f.err')}</p>
+        <p className="contact-form__error">{tr('ct.f.err')}</p>
       )}
     </form>
   )
