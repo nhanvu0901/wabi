@@ -33,11 +33,6 @@ const SERVICE_EXTRAS: Record<number, { pill: string; pillKey?: boolean; tags: Ch
     ],
   },
   4: {
-    pill: 'sv4.badge',
-    pillKey: true,
-    tags: [{ text: 'Art as Therapy' }, { text: 'sv4.tag', key: true }],
-  },
-  5: {
     pill: 'Career Counseling',
     tags: [
       { text: 'sv5.tag1', key: true },
@@ -47,7 +42,7 @@ const SERVICE_EXTRAS: Record<number, { pill: string; pillKey?: boolean; tags: Ch
   },
 }
 
-const RICH_DESCRIPTION: Record<number, string> = { 2: 'sv2.b', 5: 'sv5.b' }
+const RICH_DESCRIPTION: Record<number, string> = { 2: 'sv2.b', 4: 'sv5.b' }
 const stripTags = (value: string) => value.replace(/<[^>]*>/g, '')
 
 export default function ServiceDirectory({ services, lang }: { services: Service[]; lang: Lang }) {

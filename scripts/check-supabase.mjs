@@ -31,7 +31,7 @@ async function probe(path) {
 const checks = []
 
 // ---- 0001_init ------------------------------------------------------------
-for (const [table, expect] of [['therapists', 12], ['services', 5], ['contact_submissions', null]]) {
+for (const [table, expect] of [['therapists', 12], ['services', 9], ['contact_submissions', null]]) {
   const r = await probe(`${table}?select=id&limit=1`)
   checks.push({
     migration: '0001_init',

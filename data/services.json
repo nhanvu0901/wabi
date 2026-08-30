@@ -1,6 +1,6 @@
 {
   "generatedBy": "scripts/… (design buildTeam array + supabase/seed.sql)",
-  "count": 5,
+  "count": 9,
   "entries": [
     {
       "id": 1,
@@ -29,18 +29,50 @@
     {
       "id": 4,
       "sort_order": 4,
-      "name": "Art Therapy",
-      "name_en": "Art Therapy",
-      "description": "Dùng công cụ nghệ thuật để khám phá và chữa lành cảm xúc — dành cho những ai muốn thể hiện bản thân theo cách không chỉ bằng lời nói. 60 phút mỗi buổi, có nhiều lựa chọn tiếp cận.",
-      "description_en": "Using art tools to explore and heal emotions — for those who want to express themselves in more than words. 60 minutes per session, with several approaches to choose from."
-    },
-    {
-      "id": 5,
-      "sort_order": 5,
       "name": "Hướng nghiệp",
       "name_en": "Career Counseling",
       "description": "Làm test năng lực + trò chuyện với therapist về định hướng. Gói Cơ bản (2 buổi) gồm test và tư vấn kết quả; gói Chuyên sâu (3 buổi) có thêm buổi lên kế hoạch thực hiện định hướng.",
       "description_en": "Take an aptitude test + talk with a therapist about direction. The Basic package (2 sessions) covers testing and results consultation; the In-depth package (3 sessions) adds a session to plan out your direction."
+    },
+    {
+      "id": 5,
+      "sort_order": 5,
+      "name": "Employee Assistance Program (EAP)",
+      "name_en": "Employee Assistance Program (EAP)",
+      "description": "Đồng hành cùng doanh nghiệp trong việc xây dựng văn hóa quan tâm đến con người thông qua các giải pháp chăm sóc sức khỏe tâm thần dựa trên cơ sở khoa học và phù hợp với bối cảnh thực tiễn.",
+      "description_en": "Partnering with organizations to build people-centered workplace cultures through evidence-based mental health solutions tailored to real-world organizational contexts."
+    },
+    {
+      "id": 6,
+      "sort_order": 6,
+      "name": "Low-cost Therapy",
+      "name_en": "Low-cost Therapy",
+      "description": "Chương trình Hỗ trợ (Low-cost Therapy) mang đến giải pháp hỗ trợ thiết thực với mức phí giảm 20% so với thông thường, dành riêng cho học sinh và sinh viên dưới 20 tuổi hoặc các bạn đang gặp khó khăn về tài chính.",
+      "description_en": "Our Low-cost Therapy program offers practical mental health support at fees 20% lower than standard rates, exclusively for students under 20 or people experiencing financial hardship."
+    },
+    {
+      "id": 7,
+      "sort_order": 7,
+      "name": "Workshop",
+      "name_en": "Workshop",
+      "description": "Chú trọng sự kết hợp giữa lý thuyết nền tảng và thực hành trải nghiệm, giúp bạn mang về những giá trị ứng dụng thực tế. Dưới sự dẫn dắt của thạc sĩ tâm lý/nhà trị liệu, mỗi buổi học sẽ cung cấp kiến thức chuyên ngành và kỹ năng cụ thể—từ thiết lập ranh giới, nhận diện kiểu gắn bó đến xoa dịu lo âu.",
+      "description_en": "Combining foundational theory with experiential practice, each workshop gives you practical tools to apply in everyday life. Led by a master's-level psychologist or therapist, every session offers specialist knowledge and specific skills—from setting boundaries and recognizing attachment styles to easing anxiety."
+    },
+    {
+      "id": 8,
+      "sort_order": 8,
+      "name": "Open Talk",
+      "name_en": "Open Talk",
+      "description": "Không gian trò chuyện bình đẳng, tự do, không diễn giả hay áp lực phát biểu. Bạn có thể thoải mái lắng nghe hoặc lên tiếng khi sẵn sàng. Mỗi phiên thảo luận đều có chuyên viên tâm lý đồng hành để giữ vững không gian an toàn, bảo mật và nâng đỡ cảm xúc.",
+      "description_en": "An open, equal conversation space with no speakers and no pressure to contribute. You are welcome to listen or speak when you feel ready. A mental health professional accompanies each discussion to maintain a safe, confidential and emotionally supportive space."
+    },
+    {
+      "id": 9,
+      "sort_order": 9,
+      "name": "Mentorship in Psychology",
+      "name_en": "Mentorship in Psychology",
+      "description": "Chương trình mentorship dành cho sinh viên Tâm lý muốn khám phá ngành tham vấn - trị liệu qua trải nghiệm thực tế, không phải lý thuyết. 6 buổi để bạn đặt chân vào cơ sở tham vấn thật, tự đánh giá bản thân qua trắc nghiệm chuyên môn, và nghe những câu chuyện nghề nghiệp từ người đang làm nghề. Bạn không cần biết trước câu trả lời, chỉ cần mang theo câu hỏi.",
+      "description_en": "A mentorship program for psychology students who want to explore counseling and therapy through hands-on experience, not just theory. Across six sessions, you will step inside a real counseling center, reflect on your fit through professional assessments, and hear career stories directly from practitioners. You do not need to have the answers—just bring your questions."
     }
   ]
 }
