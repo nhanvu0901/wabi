@@ -162,6 +162,7 @@ export const DICT: Record<string, { vi: string; en: string }> = {
   "card.spec": { vi: "Chuyên môn:", en: "Focus:" },
   "card.ther": { vi: "Liệu pháp:", en: "Approaches:" },
   "card.ses": { vi: "/buổi", en: "/session" },
+  "card.more": { vi: "Xem thêm", en: "View details" },
 }
 
 export const SITE_URL = 'https://wabi-therapy.vercel.app'

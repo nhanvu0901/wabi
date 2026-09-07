@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { MapPin } from 'lucide-react'
 import ImagePlaceholder from './ImagePlaceholder'
 import { t, type Lang } from '../lib/i18n'
@@ -61,9 +62,9 @@ export default function TherapistCard({
           <MapPin aria-hidden="true" />
           <span>{pickLocation(therapist, lang)}</span>
         </span>
-        <span className="inner-team-card__price">
-          {therapist.price}{tr('card.ses')}
-        </span>
+        <Link className="inner-team-card__price" href={`/${lang}/doi-ngu/${therapist.id}`}>
+          {tr('card.more')}
+        </Link>
       </div>
     </article>
   )

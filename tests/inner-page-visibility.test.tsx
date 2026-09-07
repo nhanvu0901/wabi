@@ -1,9 +1,16 @@
 import React from 'react'
+import { existsSync, readFileSync } from 'node:fs'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import TherapistCard from '../components/TherapistCard'
 import ServiceDirectory from '../components/ServiceDirectory'
 import type { Therapist } from '../lib/types'
+
+vi.mock('../lib/content', () => ({
+  getTherapists: vi.fn(async () => [therapist]),
+}))
+vi.mock('next/navigation', () => ({ notFound: vi.fn() }))
+import TherapistDetailPage from '../app/[lang]/doi-ngu/[id]/page'
 
 const therapist: Therapist = {
   id: 1,
@@ -28,6 +35,22 @@ describe('inner page progressive rendering', () => {
     expect(html).toContain('ThS. Ngọc Mai')
     expect(html).not.toContain('data-reveal')
     expect(html).not.toMatch(/opacity:0(?:[;"'])/)
+  })
+
+  it('links each therapist card to a minimal detail page', () => {
+    const html = renderToStaticMarkup(<TherapistCard t={therapist} lang="vi" />)
+    const detailPage = new URL('../app/[lang]/doi-ngu/[id]/page.tsx', import.meta.url)
+
+    expect(html).toContain('href="/vi/doi-ngu/1"')
+    expect(html).toContain('Xem thêm')
+    expect(existsSync(detailPage)).toBe(true)
+    expect(readFileSync(detailPage, 'utf8')).toContain('{therapist.name}')
+  })
+
+  it('renders the selected therapist name on the detail page', async () => {
+    const page = await TherapistDetailPage({ params: Promise.resolve({ lang: 'vi', id: '1' }) })
+
+    expect(renderToStaticMarkup(page)).toContain('<h1>ThS. Ngọc Mai</h1>')
   })
 
   it('renders service content visibly before client JavaScript runs', () => {
