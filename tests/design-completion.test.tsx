@@ -9,6 +9,7 @@ import ContactPageContent from '../components/ContactPageContent'
 import Footer from '../components/Footer'
 import Nav from '../components/Nav'
 import { selectHomepageTherapists } from '../lib/home-team'
+import { DICT } from '../lib/i18n'
 import type { Therapist } from '../lib/types'
 
 const therapist = (id: number, photoUrl: string | null): Therapist => ({
@@ -28,6 +29,14 @@ const therapist = (id: number, photoUrl: string | null): Therapist => ({
 })
 
 describe('new design completion', () => {
+  it('preserves the intentional CTA title line break in both languages', () => {
+    const homepage = readFileSync(new URL('../app/[lang]/page.tsx', import.meta.url), 'utf8')
+
+    expect(DICT['cta.title'].vi).toBe('Bạn không cần phải chờ đến khi\n“đủ tệ”.')
+    expect(DICT['cta.title'].en).toBe("You don't have to wait until things feel\n“bad enough.”")
+    expect(homepage).toContain("whiteSpace: 'pre-line'")
+  })
+
   it('renders the complete contact page visibly in server HTML', () => {
     const html = renderToStaticMarkup(<ContactPageContent lang="vi" />)
     const css = readFileSync(new URL('../app/globals.css', import.meta.url), 'utf8')

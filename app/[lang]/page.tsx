@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Users,
 } from 'lucide-react'
+import MindfulBreathing from '../../components/MindfulBreathing'
 import ParallaxA from '../../components/ParallaxA'
 import ParallaxHeroTitle from '../../components/ParallaxHeroTitle'
 import ParallaxIntro from '../../components/ParallaxIntro'
@@ -122,13 +123,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
       <section data-pxa-stage className="pxa-values">
         <div className="pxa-shell pxa-shell--wide pxa-value-grid">
-          <div className="pxa-scene-sticky" aria-hidden="true">
-            <div data-pxa="pin" data-pxa-y="60" className="pxa-layer" style={{ top: '12%', left: '50%', width: '64%', aspectRatio: 1, marginLeft: '-32%', borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,253,244,.95),rgba(233,239,214,.35) 60%,transparent 72%)' }} />
-            <div data-pxa="pin" data-pxa-y="-70" className="pxa-layer" style={{ bottom: '-4%', left: '-14%', right: '-14%', height: '44%', borderRadius: '50% 50% 0 0/38% 38% 0 0', background: '#BECB9C' }} />
-            <div data-pxa="pin" data-pxa-y="-140" data-pxa-x="-22" className="pxa-layer" style={{ bottom: '-8%', left: '-18%', right: '12%', height: '36%', borderRadius: '50% 50% 0 0/44% 44% 0 0', background: '#93A96D' }} />
-            <div data-pxa="pin" data-pxa-y="-210" data-pxa-x="26" className="pxa-layer" style={{ bottom: '-10%', left: '8%', right: '-18%', height: '28%', borderRadius: '50% 50% 0 0/48% 48% 0 0', background: '#5B6C3D' }} />
-            <div data-pxa="pin" data-pxa-y="-60" data-pxa-rotate="14" className="pxa-layer" style={{ top: '16%', left: '50%', width: 'min(180px,26vw)', height: 'min(180px,26vw)', marginLeft: 'min(-90px,-13vw)', border: '1px solid rgba(76,92,56,.28)', borderRadius: '50%' }} />
-            <span style={{ position: 'absolute', bottom: '26px', left: 0, right: 0, textAlign: 'center', fontFamily: "'Newsreader',serif", fontStyle: 'italic', color: '#3A4629' }}>{tr('phil.eyebrow')}</span>
+          <div className="pxa-scene-sticky">
+            <MindfulBreathing lang={lang} title={tr('phil.eyebrow')} />
           </div>
           <div className="pxa-card-stack">
             <div data-pxa="flow" data-pxa-y="-28" style={{ padding: 'clamp(26px,4vw,42px) 0 12px' }}><span style={EYEBROW}>{tr('why.eyebrow')}</span><h2 style={TITLE}>{tr('why.title')}</h2></div>
@@ -174,7 +170,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </div>
       </section>
 
-      <section className="pxa-close"><div className="pxa-shell"><div data-pxa="flow" data-pxa-y="-40" className="pxa-close-card"><h2 style={{ ...TITLE, fontSize: 'clamp(2rem,4.5vw,3.2rem)', margin: '0 0 16px' }}>{tr('cta.title')}</h2><p style={{ maxWidth: '520px', margin: '0 auto 30px', color: '#5C6349', fontSize: '1.06rem' }}>{tr('cta.body')}</p><Link href={`/${lang}/lien-he`} style={{ ...PILL, background: 'linear-gradient(100deg,#42502F,#6E8049)', color: '#F7F5EA' }}>{tr('cta.btn')} <span style={{ display: 'grid', width: '38px', height: '38px', placeItems: 'center', borderRadius: '50%', background: 'rgba(247,245,234,.2)' }}><ArrowRight size={16} /></span></Link></div></div></section>
+      <section className="pxa-close"><div className="pxa-shell"><div data-pxa="flow" data-pxa-y="-40" className="pxa-close-card"><h2 style={{ ...TITLE, fontSize: 'clamp(2rem,4.5vw,3.2rem)', margin: '0 0 16px', whiteSpace: 'pre-line' }}>{tr('cta.title')}</h2><p style={{ maxWidth: '520px', margin: '0 auto 30px', color: '#5C6349', fontSize: '1.06rem' }}>{tr('cta.body')}</p><Link href={`/${lang}/lien-he`} style={{ ...PILL, background: 'linear-gradient(100deg,#42502F,#6E8049)', color: '#F7F5EA' }}>{tr('cta.btn')} <span style={{ display: 'grid', width: '38px', height: '38px', placeItems: 'center', borderRadius: '50%', background: 'rgba(247,245,234,.2)' }}><ArrowRight size={16} /></span></Link></div></div></section>
     </ParallaxA>
   )
 }

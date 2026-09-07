@@ -1,6 +1,5 @@
 import { supabase } from './supabase'
 import type { Service, Therapist } from './types'
-import therapistsJson from '../data/therapists.json'
 import servicesJson from '../data/services.json'
 import faqJson from '../data/faq.json'
 
@@ -37,7 +36,7 @@ export async function getTherapists(): Promise<Therapist[]> {
     return data as Therapist[]
   } catch (err) {
     fallbackWarning('therapists', err)
-    return therapistsJson.entries as Therapist[]
+    return []
   }
 }
 
@@ -49,7 +48,7 @@ export async function getTherapistsByName(names: string[]): Promise<Therapist[]>
     return data as Therapist[]
   } catch (err) {
     fallbackWarning('therapists-by-name', err)
-    return (therapistsJson.entries as Therapist[]).filter((t) => names.includes(t.name))
+    return []
   }
 }
 

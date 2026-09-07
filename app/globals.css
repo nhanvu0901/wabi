@@ -172,7 +172,35 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
 .pxa-stat span{display:block;margin-top:8px;color:#6B7355;font-size:.88rem}
 .pxa-values{position:relative;z-index:3;padding:0 0 clamp(64px,9vw,104px);background:#F3F0E2}
 .pxa-value-grid{display:grid;grid-template-columns:repeat(2,minmax(320px,1fr));gap:clamp(24px,4vw,56px);align-items:start}
-.pxa-scene-sticky{position:sticky;top:12vh;height:min(76vh,680px);overflow:hidden;border-radius:34px;background:linear-gradient(180deg,#E4EAD1,#EFEDDF)}
+.pxa-scene-sticky{position:sticky;top:10vh;height:min(78vh,690px);overflow:hidden;border-radius:34px;background:linear-gradient(180deg,#E5EBD3 0%,#EFECE1 52%,#F4F1E6 100%);border:1px solid #DDE4C5;box-shadow:0 30px 60px -34px rgba(44,51,32,.25);display:flex;flex-direction:column}
+.wabi-breathing-card{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:clamp(28px,4vw,38px) clamp(20px,3vw,32px);text-align:center;overflow:hidden;z-index:1}
+.wabi-breathing-card__header{display:flex;flex-direction:column;align-items:center;gap:8px}
+.wabi-breathing-card__eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:100px;background:rgba(251,249,240,.92);border:1px solid rgba(76,92,56,.2);color:#4C5C38;font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;box-shadow:0 6px 16px -8px rgba(44,51,32,.18)}
+.wabi-breathing-card__spark{color:#6E8049;font-size:.75rem}
+.wabi-breathing-card__title{margin:0;font-family:'Newsreader',serif;font-size:clamp(1.15rem,1.9vw,1.4rem);font-weight:400;font-style:italic;color:#3A4629;line-height:1.2}
+.wabi-breathing-orb-wrap{position:relative;width:clamp(170px,24vw,224px);aspect-ratio:1;margin:16px 0;display:grid;place-items:center}
+.wabi-breathing-aura{position:absolute;inset:-24px;border-radius:50%;background:radial-gradient(circle,rgba(110,128,73,.35) 0%,rgba(110,128,73,.12) 58%,transparent 74%);filter:blur(14px);transform:scale(.92);opacity:.3;pointer-events:none}
+.wabi-breathing-aura--inhale{transform:scale(1.18);opacity:.9;transition:transform 4s cubic-bezier(.4,0,.2,1),opacity 4s cubic-bezier(.4,0,.2,1)}
+.wabi-breathing-aura--hold{transform:scale(1.18);opacity:.9;transition:none}
+.wabi-breathing-aura--exhale{transform:scale(.92);opacity:.3;transition:transform 6s var(--exhale),opacity 6s var(--exhale)}
+.wabi-breathing-ring{position:absolute;inset:-12px;border-radius:50%;border:1.5px dashed rgba(76,92,56,.28);animation:zenRingSpin 50s linear infinite;pointer-events:none}
+@keyframes zenRingSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.wabi-breathing-portal{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;box-shadow:0 24px 50px -16px rgba(35,46,22,.4),0 0 0 6px rgba(251,249,240,.85),0 0 0 7.5px rgba(76,92,56,.22);transform:scale(1)}
+.wabi-breathing-portal--inhale{transform:scale(1.05);transition:transform 4s cubic-bezier(.4,0,.2,1)}
+.wabi-breathing-portal--hold{transform:scale(1.05);transition:none}
+.wabi-breathing-portal--exhale{transform:scale(1);transition:transform 6s var(--exhale)}
+.wabi-breathing-portal__glare{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.45) 0%,transparent 58%),linear-gradient(180deg,transparent 60%,rgba(35,46,22,.2) 100%);pointer-events:none}
+.wabi-breathing-guide{display:flex;flex-direction:column;align-items:center;gap:6px}
+.wabi-breathing-guide__phase{display:inline-flex;align-items:center;gap:9px}
+.wabi-breathing-guide__dot{width:8px;height:8px;border-radius:50%;background:#6E8049;box-shadow:0 0 10px rgba(110,128,73,.8);transition:transform 4s ease,background-color 4s ease}
+.wabi-breathing-guide__dot--inhale{transform:scale(1.6);background:#5B6F3D}
+.wabi-breathing-guide__dot--hold{transform:scale(1.6);background:#3A4629}
+.wabi-breathing-guide__dot--exhale{transform:scale(1);background:#8CA064}
+.wabi-breathing-guide__text{font-family:'Newsreader',serif;font-size:clamp(1.18rem,2vw,1.38rem);font-style:italic;font-weight:500;color:#2C3320;transition:opacity var(--micro) ease}
+.wabi-breathing-guide__sub{margin:0;font-size:.82rem;color:#6B7355}
+.wabi-breathing-card__footer{margin-top:auto;padding-top:12px}
+.wabi-breathing-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:100px;background:rgba(231,236,216,.75);border:1px solid rgba(76,92,56,.16);color:#4C5C38;font-size:.78rem;font-weight:500}
+.wabi-breathing-pill__leaf{font-size:.85rem}
 .pxa-card-stack{display:flex;flex-direction:column;gap:clamp(16px,2.4vw,24px);padding-top:clamp(24px,6vh,64px)}
 .pxa-value-card{position:relative;min-height:230px;overflow:hidden;padding:clamp(26px,3vw,36px);border-radius:28px}
 .pxa-value-card--2{border:1px solid #D8E0C2}
@@ -195,7 +223,9 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
 
 @media(max-width:860px){
   .pxa-value-grid{grid-template-columns:1fr}
-  .pxa-scene-sticky{position:relative;top:auto;height:min(62vw,440px)}
+  .pxa-scene-sticky{position:relative;top:auto;height:auto;min-height:400px}
+  .wabi-breathing-card{padding:32px 20px}
+  .wabi-breathing-orb-wrap{width:clamp(150px,34vw,190px);margin:14px 0}
   .pxa-service-grid{grid-template-columns:1fr}
   .pxa-service-card{min-height:220px}
   .pxa-team-grid{grid-template-columns:repeat(2,1fr)}
@@ -203,6 +233,9 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
 @media(max-width:560px){
   .pxa-stage{height:190vh}
   .pxa-stage--quote{height:145vh}
+  .pxa-scene-sticky{min-height:360px;border-radius:26px}
+  .wabi-breathing-card{padding:24px 16px}
+  .wabi-breathing-orb-wrap{width:140px;margin:10px 0}
   .pxa-hero-content{padding-top:72px}
   .pxa-stat-grid{grid-template-columns:repeat(2,1fr);gap:22px 14px}
   .pxa-team-grid{grid-template-columns:1fr}
@@ -212,6 +245,7 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
   .pxa-stage__inner{position:relative;height:max(640px,86vh);transform:none !important}
   .pxa-layer{transform:none !important}
   .pxa-hero-title__motion,.pxa-scroll-line{animation:none !important}
+  .wabi-breathing-aura,.wabi-breathing-portal,.wabi-breathing-ring,.wabi-breathing-guide__dot{animation:none !important;transition:none !important}
 }
 
 /* Services + team — mapped from the bundled Wabi Therapy design. Content is

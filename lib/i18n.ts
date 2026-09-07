@@ -60,7 +60,7 @@ export const DICT: Record<string, { vi: string; en: string }> = {
   "tg.r2": { vi: "Thạc sĩ Tâm lý Lâm sàng · ĐH Xã hội Nga", en: "MSc Clinical Psychology · Russian State Social Univ." },
   "tg.r3": { vi: "Thạc sĩ Tâm lý", en: "MSc Psychology" },
   "tg.r4": { vi: "Trị liệu & Tư vấn · ĐH Western Sydney", en: "Therapy & Counseling · Western Sydney Univ." },
-  "cta.title": { vi: "Bạn không cần phải chờ đến khi “đủ tệ”.", en: "You don't have to wait until things feel “bad enough.”" },
+  "cta.title": { vi: "Bạn không cần phải chờ đến khi\n“đủ tệ”.", en: "You don't have to wait until things feel\n“bad enough.”" },
   "cta.body": { vi: "Hãy đi therapy khi bạn sẵn sàng. Nhắn cho tụi mình bất cứ khi nào bạn muốn bắt đầu.", en: "Come to therapy when you are ready. Message us whenever you would like to begin." },
   "cta.btn": { vi: "Bắt đầu ngay", en: "Start now" },
   "sv.title": { vi: "Chọn hình thức phù hợp với bạn", en: "Choose what fits you" },
