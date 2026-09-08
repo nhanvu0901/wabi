@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Users,
 } from 'lucide-react'
-import MindfulBreathing from '../../components/MindfulBreathing'
+import WabiSpiritCard from '../../components/WabiSpiritCard'
 import ParallaxA from '../../components/ParallaxA'
 import ParallaxHeroTitle from '../../components/ParallaxHeroTitle'
 import ParallaxIntro from '../../components/ParallaxIntro'
@@ -124,7 +124,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <section data-pxa-stage className="pxa-values">
         <div className="pxa-shell pxa-shell--wide pxa-value-grid">
           <div className="pxa-scene-sticky">
-            <MindfulBreathing lang={lang} title={tr('phil.eyebrow')} />
+            <WabiSpiritCard lang={lang} title={tr('phil.eyebrow')} />
           </div>
           <div className="pxa-card-stack">
             <div data-pxa="flow" data-pxa-y="-28" style={{ padding: 'clamp(26px,4vw,42px) 0 12px' }}><span style={EYEBROW}>{tr('why.eyebrow')}</span><h2 style={TITLE}>{tr('why.title')}</h2></div>
