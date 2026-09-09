@@ -1,5 +1,6 @@
 import { LifeBuoy, MapPin } from 'lucide-react'
 import ContactForm from './ContactForm'
+import { InstagramIcon, FacebookIcon } from './SocialIcons'
 import { t, type Lang } from '../lib/i18n'
 
 const HOTLINES = [
@@ -32,15 +33,15 @@ export default function ContactPageContent({ lang }: { lang: Lang }) {
               <p>{tr('ct.connect.b')}</p>
               <div className="contact-connect-card__links">
                 <a href="https://www.instagram.com/wabi.therapy/" target="_blank" rel="noopener">
-                  <i className="fa-brands fa-instagram" aria-hidden="true" />
+                  <InstagramIcon size={20} />
                   <span><b>wabi.therapy</b><small>Instagram</small></span>
                 </a>
                 <a href="https://www.facebook.com/profile.php?id=61556380754645" target="_blank" rel="noopener">
-                  <i className="fa-brands fa-facebook" aria-hidden="true" />
+                  <FacebookIcon size={20} />
                   <span><b>Wabi Therapy</b><small>Facebook</small></span>
                 </a>
                 <div className="contact-connect-card__address">
-                  <i className="fa-solid fa-location-dot" aria-hidden="true" />
+                  <MapPin size={20} aria-hidden="true" />
                   <span><b>4 Ngõ 46A Phạm Ngọc Thạch</b><small>Onion Cafe · Hà Nội</small></span>
                 </div>
               </div>

@@ -37,7 +37,7 @@ const EYEBROW: React.CSSProperties = {
 }
 
 const TITLE: React.CSSProperties = {
-  fontFamily: "'Newsreader',serif",
+  fontFamily: "var(--font-serif)",
   fontWeight: 400,
   fontSize: 'clamp(2rem,4vw,2.8rem)',
   letterSpacing: '-.015em',
@@ -128,7 +128,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           </div>
           <div className="pxa-card-stack">
             <div data-pxa="flow" data-pxa-y="-28" style={{ padding: 'clamp(26px,4vw,42px) 0 12px' }}><span style={EYEBROW}>{tr('why.eyebrow')}</span><h2 style={TITLE}>{tr('why.title')}</h2></div>
-            {whyCards.map(({ key, Icon, background, color, iconBg, iconColor, y }, index) => <article key={key} data-pxa="flow" data-pxa-y={y} className={`pxa-value-card pxa-value-card--${index + 1}`} style={{ background, color }}>{index === 0 && <Icon className="pxa-value-card__watermark" aria-hidden="true" />}<div className="pxa-icon" style={{ background: iconBg, color: iconColor }}><Icon size={24} /></div><h3 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.5rem', marginBottom: '10px' }}>{tr(`${key}.t`)}</h3><p style={{ color: color === '#F4F1E4' ? 'rgba(244,241,228,.78)' : '#6B7355' }}>{tr(`${key}.b`)}</p></article>)}
+            {whyCards.map(({ key, Icon, background, color, iconBg, iconColor, y }, index) => <article key={key} data-pxa="flow" data-pxa-y={y} className={`pxa-value-card pxa-value-card--${index + 1}`} style={{ background, color }}>{index === 0 && <Icon className="pxa-value-card__watermark" aria-hidden="true" />}<div className="pxa-icon" style={{ background: iconBg, color: iconColor }}><Icon size={24} /></div><h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 500, fontSize: '1.5rem', marginBottom: '10px' }}>{tr(`${key}.t`)}</h3><p style={{ color: color === '#F4F1E4' ? 'rgba(244,241,228,.78)' : '#6B7355' }}>{tr(`${key}.b`)}</p></article>)}
           </div>
         </div>
       </section>
@@ -137,7 +137,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         <div className="pxa-shell">
           <div data-pxa="flow" data-pxa-y="-32" style={{ maxWidth: '640px', marginBottom: '42px' }}><span style={EYEBROW}>{tr('sp.eyebrow')}</span><h2 style={TITLE}>{tr('sp.title')}</h2></div>
           <div className="pxa-service-grid">
-            {serviceCards.map(({ key, Icon, background, color = '#2C3320', iconBg, iconColor, y }) => <Link key={key} href={`/${lang}/dich-vu`} data-pxa="flow" data-pxa-y={y} className="pxa-service-card" style={{ background, color }}><div className="pxa-icon" style={{ marginBottom: 'auto', background: iconBg, color: iconColor }}><Icon size={24} /></div><h3 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.5rem', marginBottom: '10px' }}>{tr(`${key}.t`)}</h3><p style={{ color: color === '#F4F1E4' ? 'rgba(244,241,228,.78)' : '#6B7355' }}>{tr(`${key}.b`)}</p><span style={{ alignSelf: 'flex-end', display: 'grid', width: '42px', height: '42px', marginTop: '18px', placeItems: 'center', borderRadius: '50%', background: color === '#F4F1E4' ? '#F4F1E4' : '#6E8049', color: color === '#F4F1E4' ? '#42502F' : '#F7F5EA' }}><ArrowRight size={18} /></span></Link>)}
+            {serviceCards.map(({ key, Icon, background, color = '#2C3320', iconBg, iconColor, y }) => <Link key={key} href={`/${lang}/dich-vu`} data-pxa="flow" data-pxa-y={y} className="pxa-service-card" style={{ background, color }}><div className="pxa-icon" style={{ marginBottom: 'auto', background: iconBg, color: iconColor }}><Icon size={24} /></div><h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 500, fontSize: '1.5rem', marginBottom: '10px' }}>{tr(`${key}.t`)}</h3><p style={{ color: color === '#F4F1E4' ? 'rgba(244,241,228,.78)' : '#6B7355' }}>{tr(`${key}.b`)}</p><span style={{ alignSelf: 'flex-end', display: 'grid', width: '42px', height: '42px', marginTop: '18px', placeItems: 'center', borderRadius: '50%', background: color === '#F4F1E4' ? '#F4F1E4' : '#6E8049', color: color === '#F4F1E4' ? '#42502F' : '#F7F5EA' }}><ArrowRight size={18} /></span></Link>)}
           </div>
         </div>
       </section>
@@ -149,7 +149,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <div data-pxa="pin" data-pxa-y="-110" className="pxa-layer" style={{ bottom: '-6%', left: '-14%', right: '-14%', height: '40%', borderRadius: '50% 50% 0 0/38% 38% 0 0', background: '#39472A' }} />
             <div data-pxa="pin" data-pxa-y="-190" data-pxa-x="-30" className="pxa-layer" style={{ bottom: '-10%', left: '-18%', right: '16%', height: '30%', borderRadius: '50% 50% 0 0/46% 46% 0 0', background: '#2C3720' }} />
           </div>
-          <div data-pxa="pin" data-pxa-y="-140" data-pxa-scale="0.06" className="pxa-quote-orb"><div><span style={EYEBROW}>{tr('phil.eyebrow')}</span><Rich as="p" html={tr('phil.body')} style={{ fontFamily: "'Newsreader',serif", fontWeight: 400, fontSize: 'clamp(1.45rem,3.3vw,2.2rem)', lineHeight: 1.35, color: '#2C3320', marginTop: '18px' }} /></div></div>
+          <div data-pxa="pin" data-pxa-y="-140" data-pxa-scale="0.06" className="pxa-quote-orb"><div><span style={EYEBROW}>{tr('phil.eyebrow')}</span><Rich as="p" html={tr('phil.body')} style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: 'clamp(1.45rem,3.3vw,2.2rem)', lineHeight: 1.35, color: '#2C3320', marginTop: '18px' }} /></div></div>
         </div>
       </section>
 
@@ -162,7 +162,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 <div style={{ width: '104px', height: '104px', margin: '0 auto 16px', borderRadius: '50%', overflow: 'hidden', border: '1px solid #E7DECE' }}>
                   <Image src={therapist.photo_url} alt={therapist.name} width={208} height={208} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
-                <h3 style={{ fontFamily: "'Newsreader',serif", fontWeight: 500, fontSize: '1.2rem' }}>{therapist.name}</h3>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 500, fontSize: '1.2rem' }}>{therapist.name}</h3>
                 <p style={{ marginTop: '4px', fontSize: '.82rem', color: '#8A8072' }}>{pickTitle(therapist, lang)}</p>
               </article>
             ))}

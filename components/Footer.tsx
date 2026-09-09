@@ -1,4 +1,5 @@
 import { type Lang, t } from '../lib/i18n'
+import { InstagramIcon, FacebookIcon } from './SocialIcons'
 
 export default function Footer({ lang }: { lang: Lang }) {
   const tr = t(lang)
@@ -16,10 +17,10 @@ export default function Footer({ lang }: { lang: Lang }) {
         </div>
         <div className="wabi-footer__socials">
           <a href="https://www.instagram.com/wabi.therapy/" target="_blank" rel="noopener" aria-label="Instagram">
-            <i className="fa-brands fa-instagram" aria-hidden="true" />
+            <InstagramIcon size={19} />
           </a>
           <a href="https://www.facebook.com/profile.php?id=61556380754645" target="_blank" rel="noopener" aria-label="Facebook">
-            <i className="fa-brands fa-facebook" aria-hidden="true" />
+            <FacebookIcon size={19} />
           </a>
         </div>
       </div>
