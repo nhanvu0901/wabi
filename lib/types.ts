@@ -65,12 +65,12 @@ export const pickServiceName = (s: Service, lang: Lang) => pick(s.name, s.name_e
 export const pickServiceDescription = (s: Service, lang: Lang) => pick(s.description, s.description_en, lang)
 
 export function pickProfileContent(profile: TherapistProfile, lang: Lang) {
-  const hasEnglish = Boolean(profile.bio_en?.trim())
+  const hasEnglishBio = Boolean(profile.bio_en?.trim())
+  const hasEnglishQuote = Boolean(profile.quote_en?.trim())
+  const isEnglish = lang === 'en'
   return {
-    bio: lang === 'en' && hasEnglish ? profile.bio_en! : profile.bio_vi,
-    quote: lang === 'en' && hasEnglish
-      ? (profile.quote_en ?? profile.quote_vi)
-      : profile.quote_vi,
-    isFallback: lang === 'en' && !hasEnglish,
+    bio: isEnglish && hasEnglishBio ? profile.bio_en! : profile.bio_vi,
+    quote: isEnglish && hasEnglishQuote ? profile.quote_en! : profile.quote_vi,
+    isFallback: isEnglish && (!hasEnglishBio || (!hasEnglishQuote && Boolean(profile.quote_vi?.trim()))),
   }
 }

@@ -41,4 +41,29 @@ describe('pickProfileContent', () => {
       isFallback: false,
     })
   })
+
+  it('marks fallback when English bio is present but quote falls back to Vietnamese', () => {
+    expect(pickProfileContent({
+      ...profile,
+      bio_en: 'English biography.',
+      quote_en: null,
+    }, 'en')).toEqual({
+      bio: 'English biography.',
+      quote: profile.quote_vi,
+      isFallback: true,
+    })
+  })
+
+  it('does not mark fallback when both quotes are absent', () => {
+    expect(pickProfileContent({
+      ...profile,
+      bio_en: 'English biography.',
+      quote_vi: null,
+      quote_en: null,
+    }, 'en')).toEqual({
+      bio: 'English biography.',
+      quote: null,
+      isFallback: false,
+    })
+  })
 })
