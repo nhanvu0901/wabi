@@ -1,7 +1,15 @@
 import { supabase } from './supabase'
-import type { Service, Therapist } from './types'
+import type {
+  Service,
+  Therapist,
+  TherapistDetail,
+  TherapistProfile,
+  TherapistProfileSnapshot,
+} from './types'
 import servicesJson from '../data/services.json'
 import faqJson from '../data/faq.json'
+import profilesJson from '../data/therapist-profiles.json'
+import therapistsJson from '../data/therapists.json'
 
 // Content reads, with a local fallback.
 //
@@ -49,6 +57,60 @@ export async function getTherapistsByName(names: string[]): Promise<Therapist[]>
   } catch (err) {
     fallbackWarning('therapists-by-name', err)
     return []
+  }
+}
+
+export function normalizeTherapistDetail(row: Therapist & {
+  therapist_profiles?: TherapistProfile | TherapistProfile[] | null
+}): TherapistDetail {
+  const relation = row.therapist_profiles
+  const profile = Array.isArray(relation) ? (relation[0] ?? null) : (relation ?? null)
+  const { therapist_profiles: _relation, ...therapist } = row
+  return { ...therapist, profile }
+}
+
+export function findLocalTherapistDetail(
+  id: number,
+  therapists: Therapist[],
+  profiles: TherapistProfileSnapshot[],
+): TherapistDetail | null {
+  const therapist = therapists.find((item) => item.id === id)
+  if (!therapist) return null
+
+  const snapshot = profiles.find(
+    (item) => item.therapist_name === therapist.name && item.is_published,
+  )
+  const profile = snapshot ? {
+    therapist_id: therapist.id,
+    full_name: snapshot.full_name,
+    bio_vi: snapshot.bio_vi,
+    bio_en: snapshot.bio_en,
+    quote_vi: snapshot.quote_vi,
+    quote_en: snapshot.quote_en,
+    is_published: snapshot.is_published,
+    created_at: null,
+    updated_at: null,
+  } : null
+
+  return { ...therapist, profile }
+}
+
+export async function getTherapistDetail(id: number): Promise<TherapistDetail | null> {
+  try {
+    const { data, error } = await supabase()
+      .from('therapists')
+      .select('*, therapist_profiles(*)')
+      .eq('id', id)
+      .maybeSingle()
+    if (error) throw error
+    return data ? normalizeTherapistDetail(data) : null
+  } catch (err) {
+    fallbackWarning('therapist-detail', err)
+    return findLocalTherapistDetail(
+      id,
+      therapistsJson.entries as Therapist[],
+      profilesJson.entries as TherapistProfileSnapshot[],
+    )
   }
 }
 
