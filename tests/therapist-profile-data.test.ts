@@ -52,9 +52,17 @@ describe('therapist profile source data', () => {
     expect(actualParagraphCounts).toEqual(expectedParagraphCounts)
   })
 
-  it('keeps untranslated English content null and extracts only approved quotes', () => {
-    expect(profilesJson.entries.every((item) => item.bio_en === null)).toBe(true)
-    expect(profilesJson.entries.every((item) => item.quote_en === null)).toBe(true)
+  it('provides a complete English biography with matching paragraph boundaries', () => {
+    for (const profile of profilesJson.entries) {
+      expect(profile.bio_en, `${profile.therapist_name} bio_en`).toEqual(expect.any(String))
+      expect((profile.bio_en as string).trim().length).toBeGreaterThan(0)
+      expect((profile.bio_en as string).split(/\n\n+/)).toHaveLength(
+        profile.bio_vi.split(/\n\n+/).length,
+      )
+    }
+  })
+
+  it('translates only the two approved quotes and keeps them out of the biographies', () => {
 
     const quotedProfiles = profilesJson.entries.filter((item) => item.quote_vi !== null)
     expect(quotedProfiles.map((item) => item.therapist_name).sort()).toEqual([
@@ -63,7 +71,13 @@ describe('therapist profile source data', () => {
     ])
     for (const profile of quotedProfiles) {
       expect(profile.bio_vi).not.toContain(profile.quote_vi as string)
+      expect(profile.quote_en, `${profile.therapist_name} quote_en`).toEqual(expect.any(String))
+      expect((profile.quote_en as string).trim().length).toBeGreaterThan(0)
+      expect(profile.bio_en).not.toContain(profile.quote_en as string)
     }
+
+    expect(profilesJson.entries.filter((item) => item.quote_en !== null).map((item) => item.therapist_name).sort())
+      .toEqual(['ThS. Kim Ngân', 'ThS. Quỳnh Trang'])
   })
 
   it('creates the one-to-one table and published-only read policy', () => {

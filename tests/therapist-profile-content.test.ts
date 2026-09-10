@@ -105,6 +105,18 @@ describe('therapist detail content', () => {
 })
 
 describe('pickProfileContent', () => {
+  it('renders the current English snapshot without falling back to Vietnamese', () => {
+    const detail = findLocalTherapistDetail(2, therapistsJson.entries, profilesJson.entries)
+
+    expect(detail?.profile).not.toBeNull()
+    const content = pickProfileContent(detail!.profile!, 'en')
+    expect(content.isFallback).toBe(false)
+    expect(content.bio).toBe(profilesJson.entries.find(
+      (item) => item.therapist_name === 'ThS. Ngọc Mai',
+    )?.bio_en)
+    expect(content.bio).not.toContain('Xin chào')
+  })
+
   it('returns Vietnamese without a fallback marker on vi', () => {
     expect(pickProfileContent(profile, 'vi')).toEqual({
       bio: profile.bio_vi,
