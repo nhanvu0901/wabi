@@ -1,5 +1,7 @@
-import { execFileSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { execFileSync, spawnSync } from 'node:child_process'
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { dirname, join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import profilesJson from '../data/therapist-profiles.json'
 import therapistsJson from '../data/therapists.json'
@@ -92,7 +94,7 @@ describe('therapist profile source data', () => {
     expect(sql).toContain('on conflict (therapist_id) do update')
   })
 
-  it('allows an empty therapist table during migration but rejects partial or duplicate mappings', () => {
+  it('allows an empty therapist table during migration but rejects ID/name drift', () => {
     const sql = readFileSync(
       new URL('../supabase/migrations/0007_therapist_profiles.sql', import.meta.url),
       'utf8',
@@ -101,10 +103,13 @@ describe('therapist profile source data', () => {
     expect(sql).toContain('therapist_count > 0')
     expect(sql).toContain('mapped_profile_count <> 9')
     expect(sql).toContain('invalid_profile_match_count > 0')
+    expect(sql).toContain('expected_therapist_id')
+    expect(sql).toContain('t.id = v.expected_therapist_id')
+    expect(sql).toContain('t.name = v.therapist_name')
     expect(sql).toContain('raise exception')
   })
 
-  it('seeds profiles after therapists and requires all nine names to map', () => {
+  it('seeds stable therapist IDs before profiles and advances the identity sequence', () => {
     const sql = readFileSync(new URL('../supabase/seed.sql', import.meta.url), 'utf8')
     const therapistInsertStart = sql.indexOf('insert into therapists')
     const therapistInsertEnd = sql.indexOf(';', therapistInsertStart)
@@ -117,24 +122,75 @@ describe('therapist profile source data', () => {
     expect(blockEnd).toBeGreaterThan(blockStart)
     expect(sql.match(/-- BEGIN GENERATED THERAPIST PROFILES/g)).toHaveLength(1)
     expect(sql.match(/-- END GENERATED THERAPIST PROFILES/g)).toHaveLength(1)
+    expect(sql).toContain('insert into therapists (id, sort_order, name')
+    expect(sql).toContain('overriding system value')
+    for (const therapist of therapistsJson.entries) {
+      expect(sql).toContain(`(${therapist.id}, ${therapist.sort_order}, '${therapist.name}'`)
+    }
+    expect(sql).toContain("pg_get_serial_sequence('therapists', 'id')")
+    expect(sql).toContain('setval(')
     expect(generatedBlock).toContain('mapped_profile_count <> 9')
     expect(generatedBlock).toContain('invalid_profile_match_count > 0')
+    expect(generatedBlock).toContain('expected_therapist_id')
+    expect(generatedBlock).toContain('t.id = v.expected_therapist_id')
+    expect(generatedBlock).toContain('t.name = v.therapist_name')
     expect(generatedBlock).toContain('raise exception')
     expect(generatedBlock).toContain('on conflict (therapist_id) do update')
     expect(generatedBlock).not.toContain('therapist_count > 0')
   })
 
-  it('generates the migration and seed block deterministically', () => {
+  it('checks generated artifacts without mutating them', () => {
     const generator = new URL('../scripts/therapist-profile-sql.mjs', import.meta.url)
     const migration = new URL('../supabase/migrations/0007_therapist_profiles.sql', import.meta.url)
     const seed = new URL('../supabase/seed.sql', import.meta.url)
 
-    execFileSync(process.execPath, [generator.pathname])
-    const firstMigration = readFileSync(migration, 'utf8')
-    const firstSeed = readFileSync(seed, 'utf8')
-    execFileSync(process.execPath, [generator.pathname])
+    const migrationBefore = readFileSync(migration, 'utf8')
+    const seedBefore = readFileSync(seed, 'utf8')
+    const migrationMtimeBefore = statSync(migration).mtimeMs
+    const seedMtimeBefore = statSync(seed).mtimeMs
 
-    expect(readFileSync(migration, 'utf8')).toBe(firstMigration)
-    expect(readFileSync(seed, 'utf8')).toBe(firstSeed)
+    execFileSync(process.execPath, [generator.pathname, '--check'])
+
+    expect(readFileSync(migration, 'utf8')).toBe(migrationBefore)
+    expect(readFileSync(seed, 'utf8')).toBe(seedBefore)
+    expect(statSync(migration).mtimeMs).toBe(migrationMtimeBefore)
+    expect(statSync(seed).mtimeMs).toBe(seedMtimeBefore)
+  })
+
+  it('fails check mode clearly for a stale artifact without touching tracked files', () => {
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'therapist-profile-sql-'))
+    try {
+      const projectRoot = new URL('..', import.meta.url)
+      for (const relativePath of [
+        'scripts/therapist-profile-sql.mjs',
+        'data/therapist-profiles.json',
+        'data/therapists.json',
+        'supabase/migrations/0007_therapist_profiles.sql',
+        'supabase/seed.sql',
+      ]) {
+        const destination = join(fixtureRoot, relativePath)
+        mkdirSync(dirname(destination), { recursive: true })
+        cpSync(new URL(relativePath, projectRoot), destination, {
+          recursive: true,
+        })
+      }
+
+      const fixtureMigration = join(
+        fixtureRoot,
+        'supabase/migrations/0007_therapist_profiles.sql',
+      )
+      writeFileSync(fixtureMigration, `${readFileSync(fixtureMigration, 'utf8')}-- stale\n`)
+
+      const result = spawnSync(
+        process.execPath,
+        [join(fixtureRoot, 'scripts/therapist-profile-sql.mjs'), '--check'],
+        { encoding: 'utf8' },
+      )
+
+      expect(result.status).not.toBe(0)
+      expect(result.stderr).toContain('Stale generated therapist profile artifacts: migration')
+    } finally {
+      rmSync(fixtureRoot, { recursive: true, force: true })
+    }
   })
 })

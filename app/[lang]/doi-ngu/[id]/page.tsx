@@ -11,7 +11,9 @@ const loadTherapist = cache(getTherapistDetail)
 
 function parseParams(lang: string, id: string): { lang: Lang; id: number } | null {
   if (!isLang(lang) || !/^\d+$/.test(id)) return null
-  return { lang, id: Number(id) }
+  const numericId = Number(id)
+  if (!Number.isSafeInteger(numericId) || numericId <= 0) return null
+  return { lang, id: numericId }
 }
 
 export async function generateMetadata({

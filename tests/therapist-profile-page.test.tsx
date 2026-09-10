@@ -80,6 +80,15 @@ describe('therapist detail route', () => {
     expect(mocks.getTherapistDetail).not.toHaveBeenCalled()
   })
 
+  it.each(['0', '9007199254740992'])('returns not found for unsafe id %s', async (id) => {
+    await expect(TherapistDetailPage({
+      params: Promise.resolve({ lang: 'vi', id }),
+    })).rejects.toThrow('NEXT_NOT_FOUND')
+
+    expect(mocks.notFound).toHaveBeenCalledOnce()
+    expect(mocks.getTherapistDetail).not.toHaveBeenCalled()
+  })
+
   it('returns not found when the therapist does not exist', async () => {
     mocks.getTherapistDetail.mockResolvedValueOnce(null)
 
