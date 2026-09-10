@@ -32,6 +32,27 @@ export type Therapist = {
   photo_url: string | null
 }
 
+export type TherapistProfile = {
+  therapist_id: number
+  full_name: string | null
+  bio_vi: string
+  bio_en: string | null
+  quote_vi: string | null
+  quote_en: string | null
+  is_published: boolean
+  created_at: string | null
+  updated_at: string | null
+}
+
+export type TherapistProfileSnapshot = Omit<
+  TherapistProfile,
+  'therapist_id' | 'created_at' | 'updated_at'
+> & { therapist_name: string }
+
+export type TherapistDetail = Therapist & {
+  profile: TherapistProfile | null
+}
+
 function pick(vi: string, en: string | null | undefined, lang: Lang): string {
   return lang === 'en' && en ? en : vi
 }
@@ -42,3 +63,14 @@ export const pickTherapies = (t: Therapist, lang: Lang) => pick(t.therapies, t.t
 export const pickLocation = (t: Therapist, lang: Lang) => pick(t.location, t.location_en, lang)
 export const pickServiceName = (s: Service, lang: Lang) => pick(s.name, s.name_en, lang)
 export const pickServiceDescription = (s: Service, lang: Lang) => pick(s.description, s.description_en, lang)
+
+export function pickProfileContent(profile: TherapistProfile, lang: Lang) {
+  const hasEnglish = Boolean(profile.bio_en?.trim())
+  return {
+    bio: lang === 'en' && hasEnglish ? profile.bio_en! : profile.bio_vi,
+    quote: lang === 'en' && hasEnglish
+      ? (profile.quote_en ?? profile.quote_vi)
+      : profile.quote_vi,
+    isFallback: lang === 'en' && !hasEnglish,
+  }
+}
