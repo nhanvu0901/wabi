@@ -163,6 +163,16 @@ export const DICT: Record<string, { vi: string; en: string }> = {
   "card.ther": { vi: "Liệu pháp:", en: "Approaches:" },
   "card.ses": { vi: "/buổi", en: "/session" },
   "card.more": { vi: "Xem thêm", en: "View details" },
+  "profile.back": { vi: "Quay lại đội ngũ", en: "Back to our therapists" },
+  "profile.about": { vi: "Giới thiệu", en: "About" },
+  "profile.specialties": { vi: "Chuyên môn", en: "Focus" },
+  "profile.therapies": { vi: "Liệu pháp", en: "Approaches" },
+  "profile.price": { vi: "Chi phí", en: "Fee" },
+  "profile.location": { vi: "Hình thức", en: "Format" },
+  "profile.fallback": { vi: "", en: "This introduction is currently available in Vietnamese." },
+  "profile.pending": { vi: "Thông tin giới thiệu đang được cập nhật.", en: "This introduction is being updated." },
+  "profile.ctaLead": { vi: "Bạn muốn đồng hành cùng", en: "Would you like to work with" },
+  "profile.cta": { vi: "Liên hệ đặt lịch", en: "Contact us to book" },
 }
 
 export const SITE_URL = 'https://wabi-therapy.vercel.app'

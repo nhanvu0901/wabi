@@ -504,3 +504,41 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
 @media(prefers-reduced-motion:reduce){
   .wabi-chat-panel,.wabi-chat-message{animation:none}
 }
+
+/* Therapist profiles — readable on the server, using the shared cream/olive palette. */
+.therapist-profile{position:relative;z-index:1;padding:clamp(32px,5vw,64px) clamp(20px,5vw,40px) clamp(56px,8vw,96px);text-wrap:pretty;overflow-wrap:anywhere}
+.therapist-profile__shell{width:100%;max-width:1160px;margin:0 auto}
+.therapist-profile__back{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin-bottom:clamp(24px,4vw,44px);color:#4C5C38;font-size:.88rem}
+.therapist-profile__back svg,.therapist-profile__cta svg{flex-shrink:0}
+.therapist-profile__hero{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr);gap:clamp(32px,6vw,72px);align-items:center}
+.therapist-profile__portrait{aspect-ratio:4/5;overflow:hidden;border:1px solid #E1DECB;border-radius:clamp(28px,4vw,42px);background:#E7ECD8;box-shadow:0 30px 60px -40px rgba(44,51,32,.3)}
+.therapist-profile__portrait img{width:100%;height:100%;object-fit:cover}
+.therapist-profile__identity{min-width:0}
+.therapist-profile__eyebrow{display:inline-block;margin-bottom:20px;padding:6px 16px;border-radius:100px;background:#E7ECD8;color:#4C5C38;font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+.therapist-profile h1{color:#39452A;font-family:var(--font-serif);font-size:clamp(2.4rem,4.6vw,4rem);font-weight:400;letter-spacing:-.02em;line-height:1.12}
+.therapist-profile__title{margin-top:16px;color:#5C6349;font-size:1rem}
+.therapist-profile__facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:32px;padding-top:28px;border-top:1px solid #DDD9C4}
+.therapist-profile__facts>div{min-width:0}
+.therapist-profile__facts dt{margin-bottom:7px;color:#6B7355;font-size:.74rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+.therapist-profile__facts dd{color:#39452A;font-size:.94rem;line-height:1.65}
+.therapist-profile__article{max-width:760px;margin:clamp(48px,8vw,88px) auto}
+.therapist-profile h2{color:#39452A;font-family:var(--font-serif);font-size:clamp(1.9rem,3.5vw,2.7rem);font-weight:400;line-height:1.2}
+.therapist-profile__article h2{margin-bottom:28px}
+.therapist-profile__bio p,.therapist-profile__pending{color:#5C6349;font-size:clamp(1rem,1.6vw,1.08rem);line-height:1.9}
+.therapist-profile__bio p+p{margin-top:22px}
+.therapist-profile__notice{margin-bottom:24px;padding:14px 18px;border:1px solid #D8E0C2;border-radius:16px;background:#E7ECD8;color:#4C5C38;font-size:.86rem}
+.therapist-profile blockquote{margin-top:36px;padding:clamp(24px,4vw,36px);border-left:3px solid var(--accent,#6E8049);border-radius:0 24px 24px 0;background:#FBF9F0;color:#42502F;font-family:var(--font-serif);font-size:clamp(1.4rem,2.8vw,1.9rem);font-style:italic;line-height:1.5;white-space:pre-line}
+.therapist-profile__contact{display:flex;align-items:center;justify-content:space-between;gap:28px;padding:clamp(28px,4vw,44px);border:1px solid #D8E0C2;border-radius:32px;background:#E7ECD8}
+.therapist-profile__contact h2{max-width:620px;font-size:clamp(1.65rem,3vw,2.3rem)}
+.therapist-profile__contact em{color:var(--accent-deep,#42502F)}
+.therapist-profile__cta{display:inline-flex;flex-shrink:0;align-items:center;justify-content:center;gap:14px;min-height:48px;max-width:100%;padding:14px 24px;border-radius:100px;background:linear-gradient(100deg,var(--accent-deep,#42502F),var(--accent,#6E8049));color:#F7F5EA;font-size:.92rem;text-align:center}
+.therapist-profile__cta:hover{color:#fff;background:var(--accent-deep,#42502F)}
+.therapist-profile a:focus-visible{outline:3px solid var(--accent-deep,#42502F);outline-offset:5px;border-radius:8px}
+@media(max-width:759px){
+  .therapist-profile__hero{grid-template-columns:minmax(0,1fr);gap:32px}
+  .therapist-profile__portrait{width:100%;max-width:440px;margin-inline:auto}
+  .therapist-profile__contact{align-items:flex-start;flex-direction:column;border-radius:24px}
+}
+@media(max-width:380px){
+  .therapist-profile__facts{grid-template-columns:minmax(0,1fr);gap:20px}
+}
