@@ -1,8 +1,20 @@
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import TherapistProfileView from '../components/TherapistProfile'
 import type { TherapistDetail } from '../lib/types'
+
+const mocks = vi.hoisted(() => ({
+  getTherapistDetail: vi.fn(),
+  notFound: vi.fn(() => { throw new Error('NEXT_NOT_FOUND') }),
+}))
+
+vi.mock('../lib/content', () => ({ getTherapistDetail: mocks.getTherapistDetail }))
+vi.mock('next/navigation', () => ({ notFound: mocks.notFound }))
+
+import TherapistDetailPage, {
+  generateMetadata,
+} from '../app/[lang]/doi-ngu/[id]/page'
 
 const detail: TherapistDetail = {
   id: 2,
@@ -30,6 +42,69 @@ const detail: TherapistDetail = {
     updated_at: null,
   },
 }
+
+beforeEach(() => {
+  mocks.getTherapistDetail.mockReset()
+  mocks.notFound.mockReset()
+  mocks.notFound.mockImplementation(() => { throw new Error('NEXT_NOT_FOUND') })
+})
+
+describe('therapist detail route', () => {
+  it('loads one therapist and renders the profile component', async () => {
+    mocks.getTherapistDetail.mockResolvedValueOnce(detail)
+
+    const page = await TherapistDetailPage({
+      params: Promise.resolve({ lang: 'vi', id: '2' }),
+    })
+
+    expect(mocks.getTherapistDetail).toHaveBeenCalledWith(2)
+    expect(renderToStaticMarkup(page)).toContain('Nguyễn Ngọc Mai')
+  })
+
+  it('keeps an existing therapist without a profile as a valid page', async () => {
+    mocks.getTherapistDetail.mockResolvedValueOnce({ ...detail, profile: null })
+
+    const page = await TherapistDetailPage({
+      params: Promise.resolve({ lang: 'vi', id: '2' }),
+    })
+
+    expect(renderToStaticMarkup(page)).toContain('Thông tin giới thiệu đang được cập nhật.')
+    expect(mocks.notFound).not.toHaveBeenCalled()
+  })
+
+  it('returns not found for a malformed id', async () => {
+    await expect(TherapistDetailPage({
+      params: Promise.resolve({ lang: 'vi', id: '2abc' }),
+    })).rejects.toThrow('NEXT_NOT_FOUND')
+
+    expect(mocks.getTherapistDetail).not.toHaveBeenCalled()
+  })
+
+  it('returns not found when the therapist does not exist', async () => {
+    mocks.getTherapistDetail.mockResolvedValueOnce(null)
+
+    await expect(TherapistDetailPage({
+      params: Promise.resolve({ lang: 'vi', id: '999' }),
+    })).rejects.toThrow('NEXT_NOT_FOUND')
+  })
+
+  it('builds localized metadata and alternates', async () => {
+    mocks.getTherapistDetail.mockResolvedValueOnce(detail)
+
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ lang: 'en', id: '2' }),
+    })
+
+    expect(metadata).toMatchObject({
+      title: 'ThS. Ngọc Mai',
+      description: 'MSc Clinical Psychology',
+      alternates: {
+        canonical: '/en/doi-ngu/2',
+        languages: { vi: '/vi/doi-ngu/2', en: '/en/doi-ngu/2' },
+      },
+    })
+  })
+})
 
 describe('server-rendered therapist profile', () => {
   it('renders Vietnamese identity, facts, trimmed biography paragraphs and a quote', () => {
