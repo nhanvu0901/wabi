@@ -109,6 +109,30 @@ describe('therapist profile source data', () => {
     expect(sql).toContain('raise exception')
   })
 
+  it('validates stable ID/name mappings for all twelve therapists, including unprofiled entries', () => {
+    const migration = readFileSync(
+      new URL('../supabase/migrations/0007_therapist_profiles.sql', import.meta.url),
+      'utf8',
+    )
+    const seed = readFileSync(new URL('../supabase/seed.sql', import.meta.url), 'utf8')
+    const generatedSeed = seed.slice(
+      seed.indexOf('-- BEGIN GENERATED THERAPIST PROFILES'),
+      seed.indexOf('-- END GENERATED THERAPIST PROFILES'),
+    )
+
+    for (const therapist of [
+      { id: 1, name: 'ThS. Hà Trang' },
+      { id: 8, name: 'ThS. Mai Nguyen' },
+      { id: 12, name: 'Vi Vương' },
+    ]) {
+      const mapping = `(${therapist.id}, '${therapist.name}')`
+      expect(migration).toContain(mapping)
+      expect(generatedSeed).toContain(mapping)
+    }
+    expect(migration).toContain('mapped_therapist_count <> 12')
+    expect(generatedSeed).toContain('mapped_therapist_count <> 12')
+  })
+
   it('seeds stable therapist IDs before profiles and advances the identity sequence', () => {
     const sql = readFileSync(new URL('../supabase/seed.sql', import.meta.url), 'utf8')
     const therapistInsertStart = sql.indexOf('insert into therapists')

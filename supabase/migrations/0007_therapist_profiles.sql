@@ -21,10 +21,57 @@ using (is_published = true);
 do $$
 declare
   therapist_count bigint;
+  mapped_therapist_count bigint;
+  invalid_therapist_mapping_count bigint;
   mapped_profile_count bigint;
   invalid_profile_match_count bigint;
 begin
   select count(*) into therapist_count from therapists;
+
+  with therapist_identity_match_counts as (
+  select
+    v.expected_therapist_id,
+    v.therapist_name,
+    count(t.id) filter (
+      where t.id = v.expected_therapist_id and t.name = v.therapist_name
+    )::bigint as exact_match_count,
+    count(t.id) filter (where t.id = v.expected_therapist_id)::bigint as id_match_count,
+    count(t.id) filter (where t.name = v.therapist_name)::bigint as name_match_count
+  from (values
+  (1, 'ThS. Hà Trang'),
+  (2, 'ThS. Ngọc Mai'),
+  (3, 'ThS. Thu Thuỷ'),
+  (4, 'ThS. Ly Đinh'),
+  (5, 'ThS. Phương An'),
+  (6, 'ThS. Kim Ngân'),
+  (7, 'ThS. Gia Bảo'),
+  (8, 'ThS. Mai Nguyen'),
+  (9, 'ThS. Minh Châu'),
+  (10, 'ThS. Đức Minh'),
+  (11, 'ThS. Quỳnh Trang'),
+  (12, 'Vi Vương')
+  ) as v(expected_therapist_id, therapist_name)
+  left join therapists t
+    on t.id = v.expected_therapist_id or t.name = v.therapist_name
+  group by v.expected_therapist_id, v.therapist_name
+)
+select
+  coalesce(sum(exact_match_count), 0)::bigint,
+  count(*) filter (
+    where exact_match_count <> 1 or id_match_count <> 1 or name_match_count <> 1
+  )::bigint
+into mapped_therapist_count, invalid_therapist_mapping_count
+from therapist_identity_match_counts;
+
+  if therapist_count > 0 and (
+    mapped_therapist_count <> 12
+    or invalid_therapist_mapping_count > 0
+  ) then
+    raise exception
+      'Expected exactly 12 therapist ID/name mappings; found % mapping rows and % invalid mappings',
+      mapped_therapist_count,
+      invalid_therapist_mapping_count;
+  end if;
 
   with profile_match_counts as (
   select

@@ -19,6 +19,7 @@ const profilesWithIds = profiles.map((profile) => {
 })
 
 const expectedProfileCount = profiles.length
+const expectedTherapistCount = therapists.length
 const seedBlockStart = '-- BEGIN GENERATED THERAPIST PROFILES'
 const seedBlockEnd = '-- END GENERATED THERAPIST PROFILES'
 
@@ -34,6 +35,10 @@ const values = profilesWithIds.map((profile) => `  (${profile.expected_therapist
   profile.quote_vi,
   profile.quote_en,
 ].map(q).join(', ')}, ${profile.is_published})`).join(',\n')
+
+const therapistIdentityValues = therapists
+  .map((therapist) => `  (${therapist.id}, ${q(therapist.name)})`)
+  .join(',\n')
 
 const schemaSql = `create table therapist_profiles (
   therapist_id bigint primary key
@@ -79,6 +84,30 @@ select
 into mapped_profile_count, invalid_profile_match_count
 from profile_match_counts;`
 
+const therapistIdentityStatsSql = `with therapist_identity_match_counts as (
+  select
+    v.expected_therapist_id,
+    v.therapist_name,
+    count(t.id) filter (
+      where t.id = v.expected_therapist_id and t.name = v.therapist_name
+    )::bigint as exact_match_count,
+    count(t.id) filter (where t.id = v.expected_therapist_id)::bigint as id_match_count,
+    count(t.id) filter (where t.name = v.therapist_name)::bigint as name_match_count
+  from (values
+${therapistIdentityValues}
+  ) as v(expected_therapist_id, therapist_name)
+  left join therapists t
+    on t.id = v.expected_therapist_id or t.name = v.therapist_name
+  group by v.expected_therapist_id, v.therapist_name
+)
+select
+  coalesce(sum(exact_match_count), 0)::bigint,
+  count(*) filter (
+    where exact_match_count <> 1 or id_match_count <> 1 or name_match_count <> 1
+  )::bigint
+into mapped_therapist_count, invalid_therapist_mapping_count
+from therapist_identity_match_counts;`
+
 const profileUpsertSql = `insert into therapist_profiles (
   therapist_id, full_name, bio_vi, bio_en,
   quote_vi, quote_en, is_published, updated_at
@@ -103,10 +132,24 @@ on conflict (therapist_id) do update set
 const migrationValidationSql = `do $$
 declare
   therapist_count bigint;
+  mapped_therapist_count bigint;
+  invalid_therapist_mapping_count bigint;
   mapped_profile_count bigint;
   invalid_profile_match_count bigint;
 begin
   select count(*) into therapist_count from therapists;
+
+  ${therapistIdentityStatsSql}
+
+  if therapist_count > 0 and (
+    mapped_therapist_count <> ${expectedTherapistCount}
+    or invalid_therapist_mapping_count > 0
+  ) then
+    raise exception
+      'Expected exactly ${expectedTherapistCount} therapist ID/name mappings; found % mapping rows and % invalid mappings',
+      mapped_therapist_count,
+      invalid_therapist_mapping_count;
+  end if;
 
   ${mappingStatsSql}
 
@@ -124,9 +167,22 @@ $$;`
 
 const seedValidationSql = `do $$
 declare
+  mapped_therapist_count bigint;
+  invalid_therapist_mapping_count bigint;
   mapped_profile_count bigint;
   invalid_profile_match_count bigint;
 begin
+  ${therapistIdentityStatsSql}
+
+  if mapped_therapist_count <> ${expectedTherapistCount}
+    or invalid_therapist_mapping_count > 0
+  then
+    raise exception
+      'Expected exactly ${expectedTherapistCount} therapist ID/name mappings; found % mapping rows and % invalid mappings',
+      mapped_therapist_count,
+      invalid_therapist_mapping_count;
+  end if;
+
   ${mappingStatsSql}
 
   if mapped_profile_count <> ${expectedProfileCount}
