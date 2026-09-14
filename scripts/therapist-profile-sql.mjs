@@ -23,18 +23,32 @@ const expectedTherapistCount = therapists.length
 const seedBlockStart = '-- BEGIN GENERATED THERAPIST PROFILES'
 const seedBlockEnd = '-- END GENERATED THERAPIST PROFILES'
 
+const normalizeApostrophes = (value) => String(value).replace(/\u2019/g, "'")
+
 const q = (value) => value == null
   ? 'null'
-  : `'${String(value).replace(/'/g, "''")}'`
+  : `'${normalizeApostrophes(value).replace(/'/g, "''")}'`
 
-const values = profilesWithIds.map((profile) => `  (${profile.expected_therapist_id}, ${[
-  profile.therapist_name,
+// Long biography text is dollar-quoted so a truncated or partially pasted script
+// can never let prose escape its literal and be parsed as SQL identifiers.
+const bodyTag = '$wabi$'
+
+const qBody = (value) => {
+  if (value == null) return 'null'
+  const text = normalizeApostrophes(value)
+  if (text.includes('$')) {
+    throw new Error('Therapist profile text may not contain "$"; dollar quoting would break')
+  }
+  return `${bodyTag}${text}${bodyTag}`
+}
+
+const values = profilesWithIds.map((profile) => `  (${profile.expected_therapist_id}, ${q(profile.therapist_name)}, ${[
   profile.full_name,
   profile.bio_vi,
   profile.bio_en,
   profile.quote_vi,
   profile.quote_en,
-].map(q).join(', ')}, ${profile.is_published})`).join(',\n')
+].map(qBody).join(', ')}, ${profile.is_published})`).join(',\n')
 
 const therapistIdentityValues = therapists
   .map((therapist) => `  (${therapist.id}, ${q(therapist.name)})`)
@@ -132,24 +146,10 @@ on conflict (therapist_id) do update set
 const migrationValidationSql = `do $$
 declare
   therapist_count bigint;
-  mapped_therapist_count bigint;
-  invalid_therapist_mapping_count bigint;
   mapped_profile_count bigint;
   invalid_profile_match_count bigint;
 begin
   select count(*) into therapist_count from therapists;
-
-  ${therapistIdentityStatsSql}
-
-  if therapist_count > 0 and (
-    mapped_therapist_count <> ${expectedTherapistCount}
-    or invalid_therapist_mapping_count > 0
-  ) then
-    raise exception
-      'Expected exactly ${expectedTherapistCount} therapist ID/name mappings; found % mapping rows and % invalid mappings',
-      mapped_therapist_count,
-      invalid_therapist_mapping_count;
-  end if;
 
   ${mappingStatsSql}
 

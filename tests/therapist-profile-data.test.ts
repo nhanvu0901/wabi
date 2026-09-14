@@ -109,7 +109,7 @@ describe('therapist profile source data', () => {
     expect(sql).toContain('raise exception')
   })
 
-  it('validates stable ID/name mappings for all twelve therapists, including unprofiled entries', () => {
+  it('validates stable ID/name mappings for all twelve therapists in seed while migration focuses on profiled entries', () => {
     const migration = readFileSync(
       new URL('../supabase/migrations/0007_therapist_profiles.sql', import.meta.url),
       'utf8',
@@ -126,10 +126,10 @@ describe('therapist profile source data', () => {
       { id: 12, name: 'Vi Vương' },
     ]) {
       const mapping = `(${therapist.id}, '${therapist.name}')`
-      expect(migration).toContain(mapping)
       expect(generatedSeed).toContain(mapping)
     }
-    expect(migration).toContain('mapped_therapist_count <> 12')
+    expect(migration).not.toContain('mapped_therapist_count')
+    expect(migration).toContain('mapped_profile_count <> 9')
     expect(generatedSeed).toContain('mapped_therapist_count <> 12')
   })
 
