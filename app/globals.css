@@ -140,7 +140,9 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
   .wabi-pulse::after,
   .wabi-ambient .a1,.wabi-ambient .a2,
   .wabi-breath-rings i,
-  .wabi-dots i{animation:none !important}
+  .wabi-dots i,
+  .wabi-chat-panel__avatar::before,.wabi-chat-panel__avatar::after,
+  .wabi-chat-panel__avatar>span{animation:none !important}
   .wabi-breath-rings{display:none}
   .wabi-pulse::after{transform:scale(1);opacity:.9}
   .wabi-rise > *{transform:none;transition:none}
@@ -474,8 +476,12 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
 .wabi-chat-panel{display:none;width:min(380px,calc(100vw - 32px));height:540px;max-height:calc(100vh - 130px);overflow:hidden;flex-direction:column;border:1px solid #E6E3D0;border-radius:28px;background:#FBF9F0;box-shadow:0 44px 90px -34px rgba(44,51,32,.6);animation:wabiPop .3s ease both}
 .wabi-chat-panel.is-open{display:flex}
 .wabi-chat-panel__header{display:flex;align-items:center;gap:12px;background:linear-gradient(120deg,var(--accent-deep,#42502F),#37432A);padding:16px 18px;color:#F4F1E4}
-.wabi-chat-panel__avatar{display:grid;width:42px;height:42px;flex-shrink:0;place-items:center;border-radius:50%;background:rgba(244,241,228,.14)}
-.wabi-chat-panel__avatar>span{width:9px;height:9px;border-radius:50%;background:#DDE6C4;box-shadow:0 0 0 4px rgba(221,230,196,.26)}
+.wabi-chat-panel__avatar{position:relative;display:grid;width:42px;height:42px;flex-shrink:0;place-items:center;border-radius:50%;background:rgba(244,241,228,.14);isolation:isolate}
+.wabi-chat-panel__avatar::before,.wabi-chat-panel__avatar::after{position:absolute;inset:8px;z-index:0;border:1px solid rgba(221,230,196,.68);border-radius:50%;content:"";animation:wabiChatAvatarRing 2.8s var(--exhale) infinite}
+.wabi-chat-panel__avatar::after{animation-delay:-1.4s}
+.wabi-chat-panel__avatar>span{position:relative;z-index:1;width:9px;height:9px;border-radius:50%;background:#DDE6C4;box-shadow:0 0 0 4px rgba(221,230,196,.26);animation:wabiChatAvatarCore 2.8s ease-in-out infinite}
+@keyframes wabiChatAvatarRing{0%,100%{transform:scale(.62);opacity:0}42%{opacity:.54}78%{transform:scale(2.35);opacity:0}}
+@keyframes wabiChatAvatarCore{0%,100%{transform:scale(.9)}42%{transform:scale(1.12)}78%{transform:scale(.96)}}
 .wabi-chat-panel__identity{display:flex;min-width:0;flex:1;flex-direction:column;line-height:1.35}
 .wabi-chat-panel__identity strong{font-family:var(--font-serif);font-size:1.14rem;font-weight:400;line-height:1.1}
 .wabi-chat-panel__identity small{display:flex;align-items:center;gap:6px;margin-top:2px;color:rgba(244,241,228,.72);font-size:.76rem}
