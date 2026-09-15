@@ -410,7 +410,9 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
 /* Global shell — mapped from Wabi Therapy.dc.html. */
 .wabi-nav{position:sticky;top:0;z-index:200;padding:12px clamp(12px,3vw,26px);pointer-events:none}
 .wabi-nav__frame{position:relative;width:min(1300px,100%);margin:0 auto;pointer-events:auto}
-.wabi-nav-shell{height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 8px 0 22px;border:1px solid rgba(76,92,56,.16);border-radius:100px;background:rgba(251,249,240,.88);box-shadow:0 20px 44px -34px rgba(44,51,32,.7);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.wabi-nav-shell{height:68px;display:flex;position:relative;isolation:isolate;width:100%;align-items:center;justify-content:space-between;gap:16px;padding:0 8px 0 22px}
+.wabi-nav-shell::before{position:absolute;z-index:0;inset:0;border:1px solid rgba(76,92,56,.16);border-radius:100px;background:rgba(251,249,240,.88);box-shadow:0 20px 44px -34px rgba(44,51,32,.7);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);clip-path:inset(0 round 100px);content:"";pointer-events:none}
+.wabi-nav__content{display:flex;position:relative;z-index:1;min-width:0;width:100%;align-items:center;justify-content:space-between;gap:16px}
 .wabi-nav__brand{display:inline-flex;flex-shrink:0;align-items:center;gap:11px;color:#2C3320;font-family:var(--font-serif);font-size:1.5rem;font-weight:400;letter-spacing:-.01em;line-height:1}
 .wabi-nav__brand:hover{color:#2C3320}
 .wabi-nav__brand em{color:#7C8459;font-size:.92em;font-weight:400}
@@ -426,8 +428,34 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
 .wabi-nav__booking:hover{color:#fff}
 .wabi-nav__booking span{display:grid;width:34px;height:34px;place-items:center;border-radius:50%;background:rgba(247,245,234,.18)}
 .wabi-nav__booking svg{width:15px;height:15px}
-.wabi-nav-burger{display:none;width:46px;height:46px;margin-right:6px;place-items:center;border:0;border-radius:50%;background:#E7ECD8;color:#3A4629;cursor:pointer}
-.wabi-nav-burger svg{width:20px;height:20px}
+.wabi-nav-burger{display:none;z-index:2;width:46px;height:46px;margin-right:6px;place-items:center;border:0;border-radius:50%;background:#E7ECD8;color:#3A4629;cursor:pointer}
+.wabi-nav-burger svg{position:absolute;width:20px;height:20px;transition:opacity .15s ease,transform .15s cubic-bezier(.4,0,.2,1)}
+.wabi-nav-burger__menu{opacity:1;transform:rotate(0) scale(1)}
+.wabi-nav-burger__close{opacity:0;transform:rotate(90deg) scale(.76)}
+.wabi-nav.is-open .wabi-nav-burger__menu{opacity:0;transform:rotate(-90deg) scale(.76)}
+.wabi-nav.is-open .wabi-nav-burger__close{opacity:1;transform:rotate(0) scale(1)}
+
+@media(min-width:941px){
+  .wabi-nav-shell::before{transition:clip-path .23s cubic-bezier(.05,.7,.1,1),box-shadow .23s ease}
+  .wabi-nav__content{opacity:1;visibility:visible;transform:none;transition:opacity .1s ease .13s,transform .23s cubic-bezier(.05,.7,.1,1),visibility 0s linear}
+  .wabi-nav-burger{display:grid;position:absolute;top:50%;right:4px;margin:0;opacity:0;visibility:hidden;transform:translateY(-50%) scale(.9);pointer-events:none;transition:opacity .12s ease,transform .16s cubic-bezier(.4,0,.2,1),visibility 0s linear .12s}
+  .wabi-nav.is-collapsed .wabi-nav-shell{pointer-events:none}
+  .wabi-nav.is-collapsed .wabi-nav-shell::before{clip-path:inset(7px 0 7px calc(100% - 54px) round 27px);box-shadow:0 18px 34px -20px rgba(44,51,32,.75);transition-duration:.16s;transition-timing-function:cubic-bezier(.3,0,.8,.15)}
+  .wabi-nav.is-collapsed .wabi-nav__content{opacity:0;visibility:hidden;transform:translateX(12px);pointer-events:none;transition:opacity .07s ease,transform .16s cubic-bezier(.3,0,.8,.15),visibility 0s linear .07s}
+  .wabi-nav.is-scrolled .wabi-nav-burger{opacity:1;visibility:visible;transform:translateY(-50%) scale(1);pointer-events:auto;transition-delay:.07s,0s,0s}
+  .wabi-nav.is-scrolled.is-open .wabi-nav-shell{padding-right:62px}
+}
+[data-nav-resizing] .wabi-nav-shell::before,
+[data-nav-resizing] .wabi-nav__content,
+[data-nav-resizing] .wabi-nav-links,
+[data-nav-resizing] .wabi-nav-burger,
+[data-nav-resizing] .wabi-nav-burger svg{transition:none!important}
+@media(min-width:941px) and (max-width:1100px){
+  .wabi-nav.is-scrolled.is-open .wabi-nav__content{gap:8px}
+  .wabi-nav.is-scrolled.is-open .wabi-nav__brand{gap:8px;font-size:1.25rem}
+  .wabi-nav.is-scrolled.is-open .wabi-nav-links a{padding-inline:10px;font-size:.82rem}
+  .wabi-nav.is-scrolled.is-open .wabi-nav__booking{gap:8px;padding-left:14px;font-size:.82rem}
+}
 
 .wabi-footer{position:relative;overflow:hidden;background:linear-gradient(170deg,var(--accent-deep,#42502F),#2F3A24);margin-top:clamp(20px,3vw,32px);padding:clamp(48px,7vw,80px) clamp(20px,5vw,40px) 36px;border-radius:clamp(28px,4vw,46px) clamp(28px,4vw,46px) 0 0;color:#F4F1E4}
 .wabi-footer__watermark{position:absolute;right:50%;bottom:-.14em;transform:translateX(50%);color:rgba(244,241,228,.055);font-family:var(--font-serif);font-size:clamp(5rem,16vw,15rem);line-height:.8;white-space:nowrap;pointer-events:none}
@@ -475,14 +503,16 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
 .wabi-chat-launch svg{width:26px;height:26px}
 
 @media(max-width:940px){
+  .wabi-nav__content{padding-right:54px}
   .wabi-nav-links{display:none;position:absolute;top:calc(100% + 10px);right:0;left:0;flex-direction:column;align-items:stretch;gap:6px;padding:14px;border:1px solid #E6E3D0;border-radius:24px;background:#FBF9F0;box-shadow:0 28px 50px -30px rgba(44,51,32,.5)}
   .wabi-nav-links.is-open{display:flex}
   .wabi-nav-links a{width:100%;padding:11px 15px;text-align:left}
-  .wabi-nav-burger{display:grid}
+  .wabi-nav-burger{display:grid;position:absolute;top:50%;right:8px;margin:0;transform:translateY(-50%)}
   .wabi-nav__booking{display:none}
 }
 @media(max-width:940px) and (scripting:none){
   .wabi-nav-shell{height:auto;min-height:68px;flex-wrap:wrap;padding-block:10px;border-radius:34px}
+  .wabi-nav__content{flex-wrap:wrap;padding-right:0}
   .wabi-nav-links{position:static;display:flex!important;width:100%;order:3;box-shadow:none}
   .wabi-nav-burger{display:none!important}
 }
@@ -493,15 +523,19 @@ input,textarea,button,select{font-family:inherit;font-size:1rem}
 @media(max-width:380px){
   .wabi-nav{padding-inline:8px}
   .wabi-nav-shell{gap:8px;padding:0 5px 0 12px}
+  .wabi-nav__content{gap:8px;padding-right:47px}
   .wabi-nav__brand{gap:8px;font-size:1.3rem}
   .wabi-nav__dot{width:9px;height:9px}
   .wabi-nav__actions{gap:5px}
   .wabi-language-switch a{min-width:25px;height:26px}
-  .wabi-nav-burger{width:42px;height:42px;margin-right:0}
+  .wabi-nav-burger{right:5px;width:42px;height:42px}
   .wabi-chat{right:8px;bottom:8px}
   .wabi-chat-panel{width:min(380px,calc(100vw - 32px));height:min(540px,calc(100dvh - 166px));max-height:none;border-radius:24px}
 }
 @media(prefers-reduced-motion:reduce){
+  .wabi-nav-shell::before,.wabi-nav-burger,.wabi-nav-burger svg{transition:none!important}
+  .wabi-nav__content{transition:none!important}
+  .wabi-nav-links{transition:none!important}
   .wabi-chat-panel,.wabi-chat-message{animation:none}
 }
 
