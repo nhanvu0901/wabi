@@ -1,121 +1,166 @@
-'use client'
-import { useState, useTransition, useEffect } from 'react'
-import { Send, Check } from 'lucide-react'
-import { submitContact } from '../lib/actions'
-import { t, type Lang } from '../lib/i18n'
+import { ExternalLink, FileText, ShieldCheck, Clock, HeartHandshake } from 'lucide-react'
+import type { Lang } from '../lib/i18n'
 
 export default function ContactForm({ lang }: { lang: Lang }) {
-  const [state, setState] = useState<'idle' | 'ok' | 'error'>('idle')
-  const [submittedName, setSubmittedName] = useState('')
-  const [renderedAt, setRenderedAt] = useState<number>(0)
-  const [pending, startTransition] = useTransition()
-  const tr = t(lang)
-
-  useEffect(() => {
-    setRenderedAt(Date.now())
-  }, [])
-
-  if (state === 'ok') {
-    return (
-      <div id="cform-ok" className="contact-form__success">
-        <div className="contact-form__success-icon">
-          <Check style={{ width: '28px', height: '28px' }} />
-        </div>
-        <h2>
-          {submittedName
-            ? lang === 'vi'
-              ? `Cảm ơn ${submittedName} đã kết nối.`
-              : `Thank you, ${submittedName}.`
-            : tr('ct.ok.t')}
-        </h2>
-        <p>{tr('ct.ok.b')}</p>
-        <p className="contact-form__note" style={{ marginTop: '12px', fontSize: '0.85rem' }}>
-          {lang === 'vi'
-            ? 'Tụi mình cũng đã gửi một email xác nhận tự động tới hộp thư của bạn.'
-            : 'A confirmation email has also been sent to your inbox.'}
-        </p>
-      </div>
-    )
-  }
+  const isVi = lang === 'vi'
 
   return (
-    <form
-      id="cform"
-      className="contact-form"
-      onSubmit={(e) => {
-        e.preventDefault()
-        if (pending) return
-        const fd = new FormData(e.currentTarget)
-        const clientName = fd.get('name')?.toString() || ''
-        startTransition(async () => {
-          // Catches a network failure reaching the server action, not just a
-          // Supabase-side { ok: false } — both must surface the same error line.
-          try {
-            const res = await submitContact(fd)
-            if (res.ok) {
-              setSubmittedName(clientName)
-              setState('ok')
-            } else {
-              setState('error')
-            }
-          } catch {
-            setState('error')
-          }
-        })
-      }}
-    >
-      {/* LỚP 1 BẢO VỆ: Honeypot ẩn với người dùng nhưng bẫy bot spam */}
-      <div style={{ display: 'none', position: 'absolute', left: '-9999px' }} aria-hidden="true">
-        <label htmlFor="user_verification_field">Do not fill this field</label>
-        <input
-          id="user_verification_field"
-          name="user_verification_field"
-          type="text"
-          tabIndex={-1}
-          autoComplete="off"
-        />
+    <div className="contact-intake-card">
+      <div style={{ marginBottom: '16px' }}>
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 14px',
+            borderRadius: '100px',
+            background: '#E7ECD8',
+            color: '#4C5C38',
+            fontSize: '0.74rem',
+            fontWeight: 600,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+          }}
+        >
+          <FileText style={{ width: '14px', height: '14px' }} />
+          <span>{isVi ? 'Phiếu thông tin' : 'Intake Form'}</span>
+        </span>
       </div>
 
-      {/* LỚP 2 BẢO VỆ: Timestamp thời điểm render form trên browser */}
-      <input type="hidden" name="_form_rendered_at" value={renderedAt || ''} />
-      <div>
-        <label htmlFor="f-name">
-          {tr('ct.f.name')}
-        </label>
-        <input id="f-name" name="name" type="text" required autoComplete="name" />
-      </div>
-      <div>
-        <label htmlFor="f-contact">
-          {tr('ct.f.contact')}
-        </label>
-        <input id="f-contact" name="contact" type="text" required autoComplete="email" />
-      </div>
-      <div>
-        <label htmlFor="f-msg">
-          {tr('ct.f.msg')}
-        </label>
-        <textarea id="f-msg" name="message" rows={4} />
-      </div>
-      <button
-        type="submit"
-        disabled={pending}
-        className="contact-form__submit"
+      <h2
+        style={{
+          fontFamily: 'var(--font-serif)',
+          fontSize: 'clamp(1.5rem, 2.5vw, 1.85rem)',
+          fontWeight: 500,
+          color: '#39452A',
+          margin: '0 0 12px',
+          lineHeight: 1.25,
+        }}
       >
-        {pending ? (
-          <span className="wabi-dots" style={{ color: '#FCFAF4' }} aria-label={tr('ct.f.sending')}>
-            <i />
-            <i />
-            <i />
-          </span>
-        ) : (
-          <Send style={{ width: '17px', height: '17px' }} />
-        )}{' '}
-        <span>{tr('ct.f.btn')}</span>
-      </button>
-      <p className="contact-form__note">{tr('ct.f.note')}</p>
-      {state === 'error' && (
-        <p className="contact-form__error">{tr('ct.f.err')}</p>
-      )}
-    </form>
+        {isVi ? 'Đăng ký tham vấn cùng Wabi' : 'Register for Consultation'}
+      </h2>
+
+      <p
+        style={{
+          color: '#5C6349',
+          fontSize: '0.95rem',
+          lineHeight: 1.65,
+          margin: '0 0 24px',
+        }}
+      >
+        {isVi
+          ? 'Để Wabi thấu hiểu nguyện vọng và sắp xếp nhà tham vấn phù hợp nhất với nhu cầu của bạn, xin vui lòng dành 3–5 phút hoàn thành phiếu đăng ký chi tiết qua Google Form.'
+          : 'To help Wabi understand your needs and match you with the most suitable therapist, please take 3–5 minutes to complete our detailed intake form via Google Forms.'}
+      </p>
+
+      {/* CÁC ĐIỂM BẢO CHỨNG / THÔNG TIN HỖ TRỢ */}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          marginBottom: '26px',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '12px 16px',
+            borderRadius: '14px',
+            background: '#FFFFFF',
+            border: '1px solid #EDE8DA',
+          }}
+        >
+          <Clock style={{ width: '18px', height: '18px', color: '#6E8049', flexShrink: 0 }} />
+          <div style={{ fontSize: '0.88rem', color: '#39452A' }}>
+            <strong>{isVi ? 'Thời gian điền: ' : 'Completion time: '}</strong>
+            <span style={{ color: '#6B7355' }}>{isVi ? 'Khoảng 3–5 phút' : 'About 3–5 minutes'}</span>
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '12px 16px',
+            borderRadius: '14px',
+            background: '#FFFFFF',
+            border: '1px solid #EDE8DA',
+          }}
+        >
+          <ShieldCheck style={{ width: '18px', height: '18px', color: '#6E8049', flexShrink: 0 }} />
+          <div style={{ fontSize: '0.88rem', color: '#39452A' }}>
+            <strong>{isVi ? 'Bảo mật: ' : 'Confidentiality: '}</strong>
+            <span style={{ color: '#6B7355' }}>
+              {isVi ? 'Tuyệt đối theo đạo đức nghề nghiệp tâm lý' : '100% strictly confidential'}
+            </span>
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '12px 16px',
+            borderRadius: '14px',
+            background: '#FFFFFF',
+            border: '1px solid #EDE8DA',
+          }}
+        >
+          <HeartHandshake style={{ width: '18px', height: '18px', color: '#6E8049', flexShrink: 0 }} />
+          <div style={{ fontSize: '0.88rem', color: '#39452A' }}>
+            <strong>{isVi ? 'Phản hồi: ' : 'Follow-up: '}</strong>
+            <span style={{ color: '#6B7355' }}>
+              {isVi ? 'Chuyên viên liên hệ trong vòng 24 giờ' : 'Response within 24 business hours'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* NÚT MỞ GOOGLE FORM */}
+      <a
+        href="https://forms.gle/Mx1K7Dq2YK8JG8fUA"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="wabi-lift"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '10px',
+          width: '100%',
+          padding: '15px 24px',
+          borderRadius: '100px',
+          background: 'linear-gradient(100deg, var(--accent-deep, #42502F), var(--accent, #6E8049))',
+          boxShadow: '0 16px 32px -12px rgba(44, 51, 32, 0.45)',
+          color: '#F7F5EA',
+          fontWeight: 500,
+          fontSize: '0.98rem',
+          textDecoration: 'none',
+          boxSizing: 'border-box',
+        }}
+      >
+        <span>{isVi ? 'Điền phiếu đăng ký tham vấn' : 'Complete Intake Form'}</span>
+        <ExternalLink style={{ width: '18px', height: '18px', flexShrink: 0 }} />
+      </a>
+
+      <p
+        style={{
+          textAlign: 'center',
+          fontSize: '0.78rem',
+          color: '#8A8072',
+          marginTop: '14px',
+          marginBottom: 0,
+        }}
+      >
+        {isVi
+          ? 'Biểu mẫu an toàn mở trên Google Forms trong tab mới.'
+          : 'Opens securely via Google Forms in a new tab.'}
+      </p>
+    </div>
   )
 }
