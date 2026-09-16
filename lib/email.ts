@@ -66,9 +66,15 @@ export async function sendAdminNotification({ name, contact, message }: ContactE
       subject: `[Wabi] Yêu cầu tư vấn từ ${name}`,
       html,
     })
-    return { ok: !res.error }
+
+    if (res.error) {
+      console.error('[Email] Lỗi từ Resend API khi gửi Admin:', res.error)
+      return { ok: false }
+    }
+
+    return { ok: true }
   } catch (error) {
-    console.error('[Email] Lỗi gửi Resend tới Admin:', error)
+    console.error('[Email] Lỗi kết nối Resend tới Admin:', error)
     return { ok: false }
   }
 }
@@ -114,9 +120,15 @@ export async function sendClientAutoReply({ name, contact }: ContactEmailPayload
       subject: `Wabi đã nhận được lời nhắn của bạn, ${name}`,
       html,
     })
-    return { ok: !res.error }
+
+    if (res.error) {
+      console.error('[Email] Lỗi từ Resend API khi gửi Auto-reply:', res.error)
+      return { ok: false }
+    }
+
+    return { ok: true }
   } catch (error) {
-    console.error('[Email] Lỗi gửi Resend auto-reply cho khách:', error)
+    console.error('[Email] Lỗi kết nối Resend auto-reply cho khách:', error)
     return { ok: false }
   }
 }
