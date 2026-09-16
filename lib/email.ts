@@ -1,8 +1,23 @@
 import { Resend } from 'resend'
 
-const resendApiKey = process.env.RESEND_API_KEY
-const resend = resendApiKey ? new Resend(resendApiKey) : null
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Wabi Therapy <onboarding@resend.dev>'
+function getResend(): Resend | null {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) return null
+  // Xóa khoảng trắng thừa hoặc xuống dòng vô tình bị dính khi copy-paste
+  return new Resend(apiKey.trim())
+}
+
+function getFromEmail(): string {
+  const raw = process.env.RESEND_FROM_EMAIL
+  if (!raw) return 'Wabi Therapy <onboarding@resend.dev>'
+  // Tự động xóa dấu ngoặc kép ("...") nếu người dùng lỡ dán cả dấu ngoặc trên giao diện Vercel
+  return raw.replace(/^["']|["']$/g, '').trim()
+}
+
+function getAdminEmail(): string | null {
+  const email = process.env.ADMIN_NOTIFICATION_EMAIL
+  return email ? email.trim() : null
+}
 
 export type ContactEmailPayload = {
   name: string
@@ -15,10 +30,17 @@ export type ContactEmailPayload = {
  * Cài đặt replyTo = email của khách để Admin bấm "Trả lời" là gửi thẳng cho khách.
  */
 export async function sendAdminNotification({ name, contact, message }: ContactEmailPayload): Promise<{ ok: boolean }> {
-  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL
+  const resend = getResend()
+  const adminEmail = getAdminEmail()
+  const fromEmail = getFromEmail()
 
-  if (!resend || !adminEmail) {
-    console.warn('[Email] Bỏ qua gửi thông báo Admin: Thiếu RESEND_API_KEY hoặc ADMIN_NOTIFICATION_EMAIL.')
+  if (!resend) {
+    console.error('[Email] Thất bại: Biến môi trường RESEND_API_KEY không tồn tại trên server.')
+    return { ok: false }
+  }
+
+  if (!adminEmail) {
+    console.error('[Email] Thất bại: Biến môi trường ADMIN_NOTIFICATION_EMAIL chưa được cấu hình.')
     return { ok: false }
   }
 
@@ -60,7 +82,7 @@ export async function sendAdminNotification({ name, contact, message }: ContactE
 
   try {
     const res = await resend.emails.send({
-      from: FROM_EMAIL,
+      from: fromEmail,
       to: adminEmail,
       replyTo: isEmail ? contact : undefined,
       subject: `[Wabi] Yêu cầu tư vấn từ ${name}`,
@@ -68,7 +90,7 @@ export async function sendAdminNotification({ name, contact, message }: ContactE
     })
 
     if (res.error) {
-      console.error('[Email] Lỗi từ Resend API khi gửi Admin:', res.error)
+      console.error('[Email] Lỗi từ Resend API khi gửi Admin:', JSON.stringify(res.error, null, 2))
       return { ok: false }
     }
 
@@ -84,7 +106,15 @@ export async function sendAdminNotification({ name, contact, message }: ContactE
  * Lưu ý: Để gửi được cho khách vãng lai, tài khoản Resend cần verify custom domain.
  */
 export async function sendClientAutoReply({ name, contact }: ContactEmailPayload): Promise<{ ok: boolean }> {
-  if (!contact.includes('@') || !resend) {
+  if (!contact.includes('@')) {
+    return { ok: false }
+  }
+
+  const resend = getResend()
+  const fromEmail = getFromEmail()
+
+  if (!resend) {
+    console.error('[Email] Bỏ qua Auto-reply: Thiếu RESEND_API_KEY.')
     return { ok: false }
   }
 
@@ -115,14 +145,14 @@ export async function sendClientAutoReply({ name, contact }: ContactEmailPayload
 
   try {
     const res = await resend.emails.send({
-      from: FROM_EMAIL,
+      from: fromEmail,
       to: contact,
       subject: `Wabi đã nhận được lời nhắn của bạn, ${name}`,
       html,
     })
 
     if (res.error) {
-      console.error('[Email] Lỗi từ Resend API khi gửi Auto-reply:', res.error)
+      console.error('[Email] Lỗi từ Resend API khi gửi Auto-reply:', JSON.stringify(res.error, null, 2))
       return { ok: false }
     }
 

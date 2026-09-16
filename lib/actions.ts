@@ -48,13 +48,11 @@ export async function submitContact(formData: FormData): Promise<{ ok: boolean }
     console.warn('[DB] Bỏ qua lưu Supabase (chưa cấu hình hoặc kết nối gián đoạn):', err)
   }
 
-  // 2. GỬI EMAIL THÔNG BÁO CHO ADMIN QUA RESEND (KÈM NÚT REPLY-TO KHÁCH)
-  await sendAdminNotification(valid)
-
-  // 3. GỬI EMAIL CẢM ƠN TỰ ĐỘNG CHO KHÁCH QUA GMAIL SMTP (CÁCH B)
-  if (valid.contact.includes('@')) {
-    sendClientAutoReply(valid).catch(console.error)
-  }
+  // 2. GỬI EMAIL QUA RESEND (Chạy song song và await để Serverless Lambda không bị terminate giữa chừng)
+  await Promise.allSettled([
+    sendAdminNotification(valid),
+    valid.contact.includes('@') ? sendClientAutoReply(valid) : Promise.resolve({ ok: false }),
+  ])
 
   return { ok: true }
 }
