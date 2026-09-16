@@ -1,20 +1,8 @@
 import { Resend } from 'resend'
-import nodemailer from 'nodemailer'
 
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
-
-function getGmailTransporter() {
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-    return null
-  }
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
-    },
-  })
-}
+const resendApiKey = process.env.RESEND_API_KEY
+const resend = resendApiKey ? new Resend(resendApiKey) : null
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Wabi Therapy <onboarding@resend.dev>'
 
 export type ContactEmailPayload = {
   name: string
@@ -23,11 +11,13 @@ export type ContactEmailPayload = {
 }
 
 /**
- * 1. Gửi thông báo đến Admin qua Resend (dùng domain mặc định onboarding@resend.dev)
+ * 1. Gửi thông báo đến Admin qua Resend API
  * Cài đặt replyTo = email của khách để Admin bấm "Trả lời" là gửi thẳng cho khách.
  */
 export async function sendAdminNotification({ name, contact, message }: ContactEmailPayload): Promise<{ ok: boolean }> {
-  if (!resend || !process.env.ADMIN_NOTIFICATION_EMAIL) {
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL
+
+  if (!resend || !adminEmail) {
     console.warn('[Email] Bỏ qua gửi thông báo Admin: Thiếu RESEND_API_KEY hoặc ADMIN_NOTIFICATION_EMAIL.')
     return { ok: false }
   }
@@ -39,11 +29,11 @@ export async function sendAdminNotification({ name, contact, message }: ContactE
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 580px; margin: auto; padding: 28px; border: 1px solid #E6E3D0; border-radius: 18px; background: #FBF9F0; color: #2C3320;">
       <div style="margin-bottom: 20px;">
         <span style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #6E7A50; font-weight: 600;">Wabi Therapy · Thông báo mới</span>
-        <h2 style="color: #39452A; margin: 6px 0 0; font-size: 22px; font-weight: 500;">Yêu cầu kết nối từ website</h2>
+        <h2 style="color: #39452A; margin: 6px 0 0; font-size: 22px; font-weight: 500;">Yêu cầu tư vấn</h2>
       </div>
 
       <div style="background: #FFFFFF; border: 1px solid #EDE8DA; border-radius: 14px; padding: 20px; margin: 18px 0;">
-        <p style="margin: 0 0 10px; font-size: 15px;"><strong>Thân chủ:</strong> ${escapeHtml(name)}</p>
+        <p style="margin: 0 0 10px; font-size: 15px;"><strong>Khách:</strong> ${escapeHtml(name)}</p>
         <p style="margin: 0 0 10px; font-size: 15px;"><strong>Liên hệ:</strong> <a href="${isEmail ? `mailto:${escapeHtml(contact)}` : `tel:${escapeHtml(contact)}`}" style="color: #6E8049; font-weight: 600; text-decoration: none;">${escapeHtml(contact)}</a></p>
         <p style="margin: 0 0 14px; font-size: 13px; color: #8A8072;"><strong>Thời gian:</strong> ${timeString}</p>
         
@@ -57,7 +47,7 @@ export async function sendAdminNotification({ name, contact, message }: ContactE
         <div style="text-align: center; margin-top: 24px;">
           <a href="mailto:${escapeHtml(contact)}?subject=Wabi%20Therapy%20h%E1%BB%93i%20%C4%91%C3%A1p%20y%C3%AAu%20c%E1%BA%A7u%20c%E1%BB%A7a%20b%E1%BA%A1n" 
              style="display: inline-block; background: #42502F; color: #F7F5EA; padding: 11px 26px; border-radius: 100px; text-decoration: none; font-weight: 500; font-size: 14px;">
-            Trả lời thân chủ ngay
+            Trả lời khách ngay
           </a>
         </div>
       ` : ''}
@@ -70,10 +60,10 @@ export async function sendAdminNotification({ name, contact, message }: ContactE
 
   try {
     const res = await resend.emails.send({
-      from: 'Wabi Therapy <onboarding@resend.dev>',
-      to: process.env.ADMIN_NOTIFICATION_EMAIL,
+      from: FROM_EMAIL,
+      to: adminEmail,
       replyTo: isEmail ? contact : undefined,
-      subject: `[Wabi] Yêu cầu kết nối mới từ ${name}`,
+      subject: `[Wabi] Yêu cầu tư vấn từ ${name}`,
       html,
     })
     return { ok: !res.error }
@@ -84,17 +74,11 @@ export async function sendAdminNotification({ name, contact, message }: ContactE
 }
 
 /**
- * 2. Gửi email xác nhận tự động (Auto-reply) cho khách hàng qua Gmail SMTP (Cách B)
- * Chỉ gửi nếu thông tin liên hệ là một email hợp lệ.
+ * 2. Gửi email xác nhận tự động (Auto-reply) cho khách hàng qua Resend API
+ * Lưu ý: Để gửi được cho khách vãng lai, tài khoản Resend cần verify custom domain.
  */
 export async function sendClientAutoReply({ name, contact }: ContactEmailPayload): Promise<{ ok: boolean }> {
-  if (!contact.includes('@')) {
-    return { ok: false }
-  }
-
-  const transporter = getGmailTransporter()
-  if (!transporter || !process.env.GMAIL_USER) {
-    console.warn('[Email] Bỏ qua gửi Auto-reply cho khách: Thiếu GMAIL_USER hoặc GMAIL_APP_PASSWORD.')
+  if (!contact.includes('@') || !resend) {
     return { ok: false }
   }
 
@@ -124,15 +108,15 @@ export async function sendClientAutoReply({ name, contact }: ContactEmailPayload
   `
 
   try {
-    await transporter.sendMail({
-      from: `"Wabi Therapy" <${process.env.GMAIL_USER}>`,
+    const res = await resend.emails.send({
+      from: FROM_EMAIL,
       to: contact,
       subject: `Wabi đã nhận được lời nhắn của bạn, ${name}`,
       html,
     })
-    return { ok: true }
+    return { ok: !res.error }
   } catch (error) {
-    console.error('[Email] Lỗi gửi Gmail auto-reply cho khách:', error)
+    console.error('[Email] Lỗi gửi Resend auto-reply cho khách:', error)
     return { ok: false }
   }
 }
